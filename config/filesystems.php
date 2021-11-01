@@ -53,6 +53,16 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'spaces' => [
+            'driver' => 's3',
+            'key' => 'DB6EK4UBHOB2IQ7N2WTK',
+            'secret' => 'jX7c2/dEgBD/68RyUYjROpcbMQKkg+ONqKR4Q2oMtjY',
+            'endpoint' => 'https://sfo3.digitaloceanspaces.com',
+            'region' => 'us-east-1',
+            'bucket' => 'amera-test',
+            'visibility' => 'public'
+        ],
+
     ],
 
     /*

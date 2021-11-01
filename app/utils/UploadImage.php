@@ -2,13 +2,16 @@
 
 namespace App\utils;
 
+use Illuminate\Support\Facades\Storage;
+
 class UploadImage
 {
-    public static function UploadProfileImage($image, $number)
+    public static function UploadProfileImage($image, $number): string
     {
-        $profileImage = $number . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('profiles'), $profileImage);
+        $filename = "$number.{$image->getClientOriginalExtension()}";
 
-        return asset('profiles/' . $number . '.' . $image->getClientOriginalExtension());
+        Storage::disk('spaces')->putFileAs('profiles', $image, $filename);
+
+        return Storage::disk('spaces')->url("profiles/$filename");
     }
 }

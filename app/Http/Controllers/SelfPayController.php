@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\SelfPay;
 use App\utils\UploadImage;
+use Aws\S3\S3Client;
 use http\Client\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Exception;
 
 class SelfPayController extends Controller
 {
 
     // Login para selfpay
-    public function SelfPaySignIn(Request $request)
+    public function SelfPaySignIn(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
