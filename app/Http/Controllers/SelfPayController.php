@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SelfPay;
+use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
 use http\Client\Response;
@@ -37,15 +38,30 @@ class SelfPayController extends Controller
 
             $selfpay->save();
 
-            return \response()->json(['message' => 'Cliente registrado'], 200);
+            return CustomHttpResponse::HttpReponse('Client register', '', 200);
 
         } catch (Exception $exception) {
-            return \response()->json(['message' => $exception->getMessage()], 500);
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
         }
     }
 
     public function VerifyCode()
     {
         return \response()->json(['message' => 'Cliente registrado'], 200);
+    }
+
+    public function UserLogin(Request $request)
+    {
+        try {
+            $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
+
+            if (!$cliente) {
+                return CustomHttpResponse::HttpReponse('User not found', $cliente, 404);
+            }
+
+            return CustomHttpResponse::HttpReponse('OK', $cliente, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+        }
     }
 }
