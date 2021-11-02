@@ -21,5 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1'], function () {
     Route::post('client/register', [\App\Http\Controllers\SelfPayController::class, 'SelfPaySignIn']);
     Route::get('/', [\App\Http\Controllers\SelfPayController::class, 'VerifyCode']);
-    Route::get('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin']);
+    Route::post('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin']);
 });
