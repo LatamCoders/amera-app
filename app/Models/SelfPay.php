@@ -12,10 +12,12 @@ class SelfPay extends Model
     public $table = 'selfpay';
 
     protected $fillable = [
+        'client_id',
         'name',
         'lastname',
         'phone_number',
         'email',
+        'address',
         'profile_picture'
     ];
 }

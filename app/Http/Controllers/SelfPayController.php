@@ -32,6 +32,7 @@ class SelfPayController extends Controller
 
             $profile = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
 
+            $selfpay->client_id = 'SP' . rand(100, 999);
             $selfpay->name = $request->name;
             $selfpay->lastname = $request->lastname;
             $selfpay->phone_number = $request->phone_number;
@@ -76,10 +77,10 @@ class SelfPayController extends Controller
     /*
      * Actualizar datos de perfil
      */
-    public function UpdateProfileData(Request $request)
+    public function UpdateProfileData(Request $request, $clientId)
     {
         try {
-            $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
+            $cliente = SelfPay::where('client_id', $clientId)->first();
 
             $cliente->name = $request->name;
             $cliente->lastname = $request->lastname;
@@ -97,10 +98,10 @@ class SelfPayController extends Controller
     /*
      * Actualizar imagen de perfil
      */
-    public function UpdateProfileImage(Request $request)
+    public function UpdateProfileImage(Request $request, $clientId)
     {
         try {
-            $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
+            $cliente = SelfPay::where('client_id', $clientId)->first();
 
             $profileImage = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
 

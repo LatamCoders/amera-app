@@ -15,6 +15,7 @@ class CreateSelfPaysTable extends Migration
     {
         Schema::create('selfpay', function (Blueprint $table) {
             $table->id();
+            $table->string('client_id', 50);
             $table->string('name', 50);
             $table->string('lastname', 50);
             $table->string('phone_number', 50);
