@@ -8,7 +8,7 @@ class UploadImage
 {
     public static function UploadProfileImage($image, $number): ?string
     {
-        if ($image == null) {
+        if ($image == null || $image == '') {
             return null;
         }
 
