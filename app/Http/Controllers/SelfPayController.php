@@ -14,7 +14,9 @@ use PHPUnit\Exception;
 class SelfPayController extends Controller
 {
 
-    // Login para selfpay
+    /*
+     * Login para selfpay
+     */
     public function SelfPaySignIn(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
@@ -45,11 +47,17 @@ class SelfPayController extends Controller
         }
     }
 
+    /*
+     * TEst
+     */
     public function VerifyCode()
     {
         return \response()->json(['message' => 'Cliente registrado'], 200);
     }
 
+    /*
+     * Devolver datos de usuario logeado
+     */
     public function UserLogin(Request $request)
     {
         try {
@@ -60,6 +68,47 @@ class SelfPayController extends Controller
             }
 
             return CustomHttpResponse::HttpReponse('OK', $cliente, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Actualizar datos de perfil
+     */
+    public function UpdateProfileData(Request $request)
+    {
+        try {
+            $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
+
+            $cliente->name = $request->name;
+            $cliente->lastname = $request->lastname;
+            $cliente->email = $request->email;
+            $cliente->address = $request->address;
+
+            $cliente->save();
+
+            return CustomHttpResponse::HttpReponse('Client update', null, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Actualizar imagen de perfil
+     */
+    public function UpdateProfileImage(Request $request)
+    {
+        try {
+            $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
+
+            $profileImage = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
+
+            $cliente->profile_picture = $profileImage;
+
+            $cliente->save();
+
+            return CustomHttpResponse::HttpReponse('Profile image update', null, 200);
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
         }

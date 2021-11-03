@@ -19,7 +19,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function () {
+    /*
+     * Controller: SelfPay
+     * Method: Post
+     */
     Route::post('client/register', [\App\Http\Controllers\SelfPayController::class, 'SelfPaySignIn']);
-    Route::get('/', [\App\Http\Controllers\SelfPayController::class, 'VerifyCode']);
     Route::post('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin']);
+    Route::post('client/profile/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileData']);
+    Route::post('client/profile/image/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileImage']);
+
+    /*
+     * Controller: SelfPay
+     * Method: Get
+     */
+    Route::get('/', [\App\Http\Controllers\SelfPayController::class, 'VerifyCode']);
 });

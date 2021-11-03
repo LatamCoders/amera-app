@@ -19,7 +19,8 @@ class CreateSelfPaysTable extends Migration
             $table->string('lastname', 50);
             $table->string('phone_number', 50);
             $table->string('email', 50);
-            $table->string('profile_picture', 255)->nullable();
+            $table->text('address')->nullable();
+            $table->text('profile_picture')->nullable();
             $table->timestamps();
         });
     }

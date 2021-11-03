@@ -6,8 +6,12 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadImage
 {
-    public static function UploadProfileImage($image, $number): string
+    public static function UploadProfileImage($image, $number): ?string
     {
+        if ($image == null) {
+            return null;
+        }
+
         $filename = "$number.{$image->getClientOriginalExtension()}";
 
         Storage::disk('spaces')->putFileAs('profiles', $image, $filename);
