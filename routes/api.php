@@ -19,18 +19,36 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function () {
-    /*
-     * Controller: SelfPay
-     * Method: Post
-     */
-    Route::post('client/register', [\App\Http\Controllers\SelfPayController::class, 'SelfPaySignIn']);
-    Route::post('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin']);
-    Route::post('client/{clientId}/profile/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileData']);
-    Route::post('client/{clientId}/profile/image/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileImage']);
+    Route::group(['prefix' => 'auth'], function () {
+        /*
+         * Method: Get
+         */
+        Route::middleware('auth:selfpay')->get('client/logout', [\App\Http\Controllers\SelfPayController::class, 'LogOut']);
+
+        /*
+         * Method: Post
+         */
+        Route::post('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin'])->name('login');
+        Route::post('client/register', [\App\Http\Controllers\SelfPayController::class, 'SelfPaySignIn']);
+    });
 
     /*
      * Controller: SelfPay
-     * Method: Get
      */
-    Route::get('/', [\App\Http\Controllers\SelfPayController::class, 'VerifyCode']);
+    Route::group(['prefix' => 'client'], function () {
+        Route::group(['middleware' => 'auth:selfpay'], function () {
+            /*
+             * Method: Get
+             */
+            Route::get('{clientId}/profile/data', [\App\Http\Controllers\SelfPayController::class, 'getClientData']);
+            Route::get('logout', [\App\Http\Controllers\SelfPayController::class, 'LogOut']);
+
+            /*
+             * Method: Post
+             */
+            Route::post('{clientId}/profile/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileData']);
+            Route::post('{clientId}/profile/image/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileImage']);
+        });
+    });
+
 });

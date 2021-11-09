@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'selfpay',
+        'passwords' => 'selfpay',
     ],
 
     /*
@@ -36,9 +36,9 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
+        'selfpay' => [
+            'driver' => 'jwt',
+            'provider' => 'selfpay',
         ],
     ],
 
@@ -60,9 +60,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'selfpay' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\SelfPay::class,
         ],
 
         // 'users' => [
@@ -89,6 +89,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'selfpay' => [
+            'provider' => 'selfpay',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
