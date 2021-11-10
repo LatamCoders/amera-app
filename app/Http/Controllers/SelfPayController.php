@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreditCard;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
@@ -9,6 +10,7 @@ use Aws\S3\S3Client;
 use http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Exception;
 use Tymon\JWTAuth\JWTAuth;
@@ -18,7 +20,7 @@ class SelfPayController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'TestEncipt']]);
     }
 
     /*
@@ -133,11 +135,9 @@ class SelfPayController extends Controller
         }
     }
 
-    public function login()
-    {
-
-    }
-
+    /*
+     * Cerrar sesión
+     */
     public function LogOut(): \Illuminate\Http\JsonResponse
     {
         try {
@@ -149,6 +149,9 @@ class SelfPayController extends Controller
         }
     }
 
+    /*
+     * Retornar el token JWT
+     */
     protected function RespondWithToken($token, $client): array
     {
         return [
@@ -157,5 +160,39 @@ class SelfPayController extends Controller
             'token_type' => 'Bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
         ];
+    }
+
+    /*
+     * Agregar tarjeta de credito
+     */
+    public function AddCreditCard(Request $request, $clientId)
+    {
+        try {
+            $client = SelfPay::where('client_id', $clientId)->first();
+
+            $credit_card = new CreditCard();
+
+            $credit_card->name = $request->name;
+            $credit_card->number = $request->number;
+            $credit_card->ccv = $request->ccv;
+            $credit_card->date = $request->date;
+            $credit_card->selfpay_id = $client->id;
+
+            return CustomHttpResponse::HttpReponse('Credit card add successfully', '', 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Test encrupt
+     */
+    public function TestEncipt()
+    {
+        try {
+            return CustomHttpResponse::HttpReponse('Credit card add successfully', Crypt::encryptString('hola'), 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+        }
     }
 }

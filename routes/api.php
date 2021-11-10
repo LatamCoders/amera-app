@@ -36,6 +36,9 @@ Route::group(['prefix' => 'v1'], function () {
      * Controller: SelfPay
      */
     Route::group(['prefix' => 'client'], function () {
+        /*
+         * Auth required
+         */
         Route::group(['middleware' => 'auth:selfpay'], function () {
             /*
              * Method: Get
@@ -48,7 +51,10 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('{clientId}/profile/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileData']);
             Route::post('{clientId}/profile/image/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileImage']);
+            Route::post('{clientId}/profile/payment/creditcard/add', [\App\Http\Controllers\SelfPayController::class, 'AddCreditCard']);
         });
+
+        Route::post('encrypt', [\App\Http\Controllers\SelfPayController::class, 'TestEncipt']);
     });
 
 });
