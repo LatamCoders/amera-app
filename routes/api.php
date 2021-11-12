@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SelfPayController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,13 +24,13 @@ Route::group(['prefix' => 'v1'], function () {
         /*
          * Method: Get
          */
-        Route::middleware('auth:selfpay')->get('client/logout', [\App\Http\Controllers\SelfPayController::class, 'LogOut']);
+        Route::middleware('auth:selfpay')->get('client/logout', [SelfPayController::class, 'LogOut']);
 
         /*
          * Method: Post
          */
-        Route::post('client/login', [\App\Http\Controllers\SelfPayController::class, 'UserLogin'])->name('login');
-        Route::post('client/register', [\App\Http\Controllers\SelfPayController::class, 'SelfPaySignIn']);
+        Route::post('client/login', [SelfPayController::class, 'UserLogin'])->name('login');
+        Route::post('client/register', [SelfPayController::class, 'SelfPaySignIn']);
     });
 
     /*
@@ -43,18 +44,18 @@ Route::group(['prefix' => 'v1'], function () {
             /*
              * Method: Get
              */
-            Route::get('{clientId}/profile/data', [\App\Http\Controllers\SelfPayController::class, 'getClientData']);
-            Route::get('logout', [\App\Http\Controllers\SelfPayController::class, 'LogOut']);
+            Route::get('{clientId}/profile/data', [SelfPayController::class, 'getClientData']);
+            Route::get('logout', [SelfPayController::class, 'LogOut']);
 
             /*
              * Method: Post
              */
-            Route::post('{clientId}/profile/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileData']);
-            Route::post('{clientId}/profile/image/update', [\App\Http\Controllers\SelfPayController::class, 'UpdateProfileImage']);
-            Route::post('{clientId}/profile/payment/creditcard/add', [\App\Http\Controllers\SelfPayController::class, 'AddCreditCard']);
+            Route::post('{clientId}/profile/update', [SelfPayController::class, 'UpdateProfileData']);
+            Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
+            Route::post('{clientId}/profile/payment/creditcard/add', [SelfPayController::class, 'AddCreditCard']);
         });
 
-        Route::post('encrypt', [\App\Http\Controllers\SelfPayController::class, 'TestEncipt']);
+        Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
     });
 
 });

@@ -8,6 +8,7 @@ use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
 use http\Client\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
@@ -26,7 +27,7 @@ class SelfPayController extends Controller
     /*
      * Login para selfpay
      */
-    public function SelfPaySignIn(Request $request): \Illuminate\Http\JsonResponse
+    public function SelfPaySignIn(Request $request): JsonResponse
     {
         try {
 
@@ -61,7 +62,7 @@ class SelfPayController extends Controller
     /*
      * Devolver datos de usuario logeado
      */
-    public function UserLogin(Request $request, JWTAuth $auth): \Illuminate\Http\JsonResponse
+    public function UserLogin(Request $request, JWTAuth $auth): JsonResponse
     {
         try {
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
@@ -81,7 +82,7 @@ class SelfPayController extends Controller
     /*
      * Actualizar datos de perfil
      */
-    public function UpdateProfileData(Request $request, $clientId): \Illuminate\Http\JsonResponse
+    public function UpdateProfileData(Request $request, $clientId): JsonResponse
     {
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
@@ -102,7 +103,7 @@ class SelfPayController extends Controller
     /*
      * Actualizar imagen de perfil
      */
-    public function UpdateProfileImage(Request $request, $clientId): \Illuminate\Http\JsonResponse
+    public function UpdateProfileImage(Request $request, $clientId): JsonResponse
     {
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
@@ -122,7 +123,7 @@ class SelfPayController extends Controller
     /*
      * Obtener datos de cliente selfpay
      */
-    public function getClientData($clientId): \Illuminate\Http\JsonResponse
+    public function getClientData($clientId): JsonResponse
     {
 
         try {
@@ -137,7 +138,7 @@ class SelfPayController extends Controller
     /*
      * Cerrar sesión
      */
-    public function LogOut(): \Illuminate\Http\JsonResponse
+    public function LogOut(): JsonResponse
     {
         try {
             Auth::guard('selfpay')->logout(true);
