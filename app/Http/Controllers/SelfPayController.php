@@ -66,13 +66,11 @@ class SelfPayController extends Controller
         try {
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
 
-            $token = $auth->fromUser($cliente);
-
             if (!$cliente) {
                 return CustomHttpResponse::HttpReponse('User not found', $cliente, 404);
-            } else if (!$token) {
-                return CustomHttpResponse::HttpReponse('Unauthorized', null, 401);
             }
+
+            $token = $auth->fromUser($cliente);
 
             return CustomHttpResponse::HttpReponse('OK', $this->RespondWithToken($token, $cliente), 200);
         } catch (Exception $exception) {
@@ -126,6 +124,7 @@ class SelfPayController extends Controller
      */
     public function getClientData($clientId): \Illuminate\Http\JsonResponse
     {
+
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
 
