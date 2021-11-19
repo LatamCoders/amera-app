@@ -34,16 +34,14 @@ class SelfPayController extends Controller
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
             if ($clienteExistente) {
-                $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
-
-                return \response()->json(['data' => $cliente], 200);
+                return CustomHttpResponse::HttpReponse('Client exist', '', 200);
             }
 
             $selfpay = new SelfPay();
 
             $profile = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
 
-            $selfpay->client_id = 'SP' . rand(100, 999);
+            $selfpay->client_id = 'SP' . rand(100, 9999);
             $selfpay->name = $request->name;
             $selfpay->lastname = $request->lastname;
             $selfpay->phone_number = $request->phone_number;

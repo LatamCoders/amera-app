@@ -15,10 +15,12 @@ class CreateSelfPaysTable extends Migration
     {
         Schema::create('selfpay', function (Blueprint $table) {
             $table->id();
-            $table->string('client_id', 50);
+            $table->string('client_id', 50)->unique();
             $table->string('name', 50);
             $table->string('lastname', 50);
-            $table->string('phone_number', 50);
+            $table->string('gender', 50)->nullable();
+            $table->date('birthday')->nullable();
+            $table->string('phone_number', 50)->unique()->nullable();
             $table->string('email', 50);
             $table->text('address')->nullable();
             $table->text('profile_picture')->nullable();
