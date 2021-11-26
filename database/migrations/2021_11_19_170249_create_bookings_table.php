@@ -20,7 +20,7 @@ class CreateBookingsTable extends Migration
             $table->dateTime('start_date');
             $table->dateTime('from');
             $table->dateTime('to');
-            $table->timestamps();
+            $table->foreignId('driver_id')->constrained('drivers');
         });
     }
 

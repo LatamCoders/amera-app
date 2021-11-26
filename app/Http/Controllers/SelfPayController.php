@@ -87,6 +87,8 @@ class SelfPayController extends Controller
 
             $cliente->name = $request->name;
             $cliente->lastname = $request->lastname;
+            $cliente->gender = $request->gender;
+            $cliente->birthday = $request->birthday;
             $cliente->email = $request->email;
             $cliente->address = $request->address;
 

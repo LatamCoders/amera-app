@@ -15,7 +15,10 @@ class CreateCancellationsTable extends Migration
     {
         Schema::create('cancellations', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('booking_id')->constrained('bookings');
+            $table->string('status', 10);
+            $table->integer('fee')->default(0);
+            $table->dateTime('cancellation_date');
         });
     }
 

@@ -16,7 +16,7 @@ class MyTrip extends Model
         'from',
         'to',
         'trip_start',
-        'trip_end',
+        'trip_end'
     ];
 
     public function SelfPay(): BelongsTo
