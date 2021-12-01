@@ -20,6 +20,8 @@ class SelfPay extends Authenticatable implements JWTSubject
         'client_id',
         'name',
         'lastname',
+        'gender',
+        'birthday',
         'phone_number',
         'email',
         'address',
@@ -49,11 +51,6 @@ class SelfPay extends Authenticatable implements JWTSubject
     public function CreditCard(): HasOne
     {
         return $this->hasOne(CreditCard::class, 'selfpay_id');
-    }
-
-    public function MyTrip(): HasMany
-    {
-        return $this->hasMany(MyTrip::class, 'selfpay_id');
     }
 
     public function Booking(): HasMany

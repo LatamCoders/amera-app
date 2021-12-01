@@ -20,10 +20,12 @@ class CreateSelfPaysTable extends Migration
             $table->string('lastname', 50);
             $table->string('gender', 50)->nullable();
             $table->date('birthday')->nullable();
-            $table->string('phone_number', 50)->unique()->nullable();
+            $table->string('phone_number', 50)->unique();
             $table->string('email', 50);
             $table->text('address')->nullable();
             $table->text('profile_picture')->nullable();
+            $table->dateTime('email_verified_at')->nullable();
+            $table->dateTime('phone_number_verified_at')->nullable();
             $table->timestamps();
         });
     }

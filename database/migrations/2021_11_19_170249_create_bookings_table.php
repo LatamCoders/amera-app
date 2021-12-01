@@ -17,10 +17,11 @@ class CreateBookingsTable extends Migration
             $table->id();
             $table->foreignId('selfpay_id')->constrained('selfpay');
             $table->dateTime('booking_date');
-            $table->dateTime('start_date');
-            $table->dateTime('from');
-            $table->dateTime('to');
-            $table->foreignId('driver_id')->constrained('drivers');
+            $table->text('from');
+            $table->text('to');
+            $table->dateTime('trip_start');
+            $table->dateTime('trip_end');
+            $table->foreignId('driver_id')->nullable()->constrained('drivers');
         });
     }
 
