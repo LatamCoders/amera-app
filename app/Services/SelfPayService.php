@@ -26,10 +26,10 @@ class SelfPayService
 
             $selfpay->save();
 
-            return CustomHttpResponse::HttpReponse('Client register', '', 200);
+            return CustomHttpResponse::HttpResponse('Client register', '', 200);
 
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 

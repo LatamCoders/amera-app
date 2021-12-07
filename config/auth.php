@@ -40,6 +40,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'selfpay',
         ],
+        'driver' => [
+            'driver' => 'jwt',
+            'provider' => 'driver',
+        ],
     ],
 
     /*
@@ -63,6 +67,10 @@ return [
         'selfpay' => [
             'driver' => 'eloquent',
             'model' => App\Models\SelfPay::class,
+        ],
+        'driver' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Driver::class,
         ],
 
         // 'users' => [
@@ -95,6 +103,12 @@ return [
         ],
         'selfpay' => [
             'provider' => 'selfpay',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'driver' => [
+            'provider' => 'driver',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

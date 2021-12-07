@@ -24,12 +24,6 @@ class CreateDriversTable extends Migration
             $table->string('email', 50);
             $table->text('address')->nullable();
             $table->text('profile_picture')->nullable();
-            $table->text('vehicle_front_image');
-            $table->text('vehicle_rear_image');
-            $table->text('vehicle_side_image');
-            $table->text('vehicle_interior_image');
-            $table->text('driver_license');
-            $table->text('proof_of_insurance');
             $table->timestamps();
         });
     }

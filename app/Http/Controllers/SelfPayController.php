@@ -34,26 +34,26 @@ class SelfPayController extends Controller
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
             if ($clienteExistente) {
-                return CustomHttpResponse::HttpReponse('Client exist', '', 200);
+                return CustomHttpResponse::HttpResponse('Client exist', '', 200);
             }
 
             $selfpay = new SelfPay();
 
-            $profile = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
+            $selfPayId = 'SP' . rand(100, 9999);
 
-            $selfpay->client_id = 'SP' . rand(100, 9999);
+            $selfpay->client_id = $selfPayId;
             $selfpay->name = $request->name;
             $selfpay->lastname = $request->lastname;
             $selfpay->phone_number = $request->phone_number;
             $selfpay->email = $request->email;
-            $selfpay->profile_picture = $profile;
+            $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
 
             $selfpay->save();
 
-            return CustomHttpResponse::HttpReponse('Client register', '', 200);
+            return CustomHttpResponse::HttpResponse('Client register', '', 200);
 
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -66,14 +66,14 @@ class SelfPayController extends Controller
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
 
             if (!$cliente) {
-                return CustomHttpResponse::HttpReponse('User not found', $cliente, 404);
+                return CustomHttpResponse::HttpResponse('User not found', $cliente, 404);
             }
 
             $token = $auth->fromUser($cliente);
 
-            return CustomHttpResponse::HttpReponse('OK', $this->RespondWithToken($token, $cliente), 200);
+            return CustomHttpResponse::HttpResponse('OK', $this->RespondWithToken($token, $cliente), 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -94,9 +94,9 @@ class SelfPayController extends Controller
 
             $cliente->save();
 
-            return CustomHttpResponse::HttpReponse('Client update', null, 200);
+            return CustomHttpResponse::HttpResponse('Client update', null, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -114,9 +114,9 @@ class SelfPayController extends Controller
 
             $cliente->save();
 
-            return CustomHttpResponse::HttpReponse('Profile image update', null, 200);
+            return CustomHttpResponse::HttpResponse('Profile image updated', null, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -129,9 +129,9 @@ class SelfPayController extends Controller
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
 
-            return CustomHttpResponse::HttpReponse('OK', $cliente, 200);
+            return CustomHttpResponse::HttpResponse('OK', $cliente, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -143,9 +143,9 @@ class SelfPayController extends Controller
         try {
             Auth::guard('selfpay')->logout(true);
 
-            return CustomHttpResponse::HttpReponse('Client logout successfully', '', 200);
+            return CustomHttpResponse::HttpResponse('Client logout successfully', '', 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -178,11 +178,16 @@ class SelfPayController extends Controller
             $credit_card->date = $request->date;
             $credit_card->selfpay_id = $client->id;
 
-            return CustomHttpResponse::HttpReponse('Credit card add successfully', '', 200);
+            return CustomHttpResponse::HttpResponse('Credit card add successfully', '', 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    /*
+     * Verificar correo
+     */
+
 
     /*
      * Test encrupt
@@ -190,9 +195,9 @@ class SelfPayController extends Controller
     public function TestEncipt()
     {
         try {
-            return CustomHttpResponse::HttpReponse('Credit card add successfully', Crypt::encryptString('hola'), 200);
+            return CustomHttpResponse::HttpResponse('Credit card add successfully', Crypt::encryptString('hola'), 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 }
