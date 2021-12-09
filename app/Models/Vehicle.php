@@ -11,18 +11,11 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vehicle_front_image',
-        'vehicle_front_image_check',
-        'vehicle_rear_image',
-        'vehicle_rear_image_check',
-        'vehicle_side_image',
-        'vehicle_side_image_check',
-        'vehicle_interior_image',
-        'vehicle_interior_image_check',
-        'driver_license',
-        'driver_license_check',
-        'proof_of_insurance',
-        'proof_of_insurance_check'
+        'model',
+        'color',
+        'year',
+        'plate_number',
+        'vin_number'
     ];
 
     public function Driver(): BelongsTo

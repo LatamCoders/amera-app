@@ -113,7 +113,7 @@ class DriverController extends Controller
             Auth::guard('driver')->logout(true);
 
             return CustomHttpResponse::HttpResponse('Driver logout successfully', '', 200);
-        } catch (\PHPUnit\Exception $exception) {
+        } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
