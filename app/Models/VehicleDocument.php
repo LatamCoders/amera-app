@@ -10,6 +10,8 @@ class VehicleDocument extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'vehicle_front_image',
         'vehicle_front_image_check',
@@ -18,15 +20,11 @@ class VehicleDocument extends Model
         'vehicle_side_image',
         'vehicle_side_image_check',
         'vehicle_interior_image',
-        'vehicle_interior_image_check',
-        'driver_license',
-        'driver_license_check',
-        'proof_of_insurance',
-        'proof_of_insurance_check'
+        'vehicle_interior_image_check'
     ];
 
-    public function Driver(): BelongsTo
+    public function Vehicle(): BelongsTo
     {
-        return $this->belongsTo(Driver::class, 'driver_id');
+        return $this->belongsTo(Vehicle::class, 'vehicle_id');
     }
 }

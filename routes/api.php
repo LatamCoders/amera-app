@@ -51,7 +51,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          * Method: Post
          */
         Route::post('driver/login', [DriverController::class, 'DriverLogin']);
-        Route::post('driver/register', [DriverController::class, 'DriverSignIn']);
+        Route::post('driver/signup', [DriverController::class, 'DriverSignUp']);
     });
 
     /*
@@ -90,7 +90,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
             /*
              * Method: Get
              */
-            Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
+
             Route::get('logout', [DriverController::class, 'LogOut']);
 
             /*
@@ -101,6 +101,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
         });
     });
 
-
+    Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
     Route::post('images', [DriverController::class, 'TestImages']);
 });

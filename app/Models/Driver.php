@@ -56,8 +56,8 @@ class Driver extends Authenticatable implements JWTSubject
         return $this->hasOne(Vehicle::class, 'driver_id');
     }
 
-    public function VehicleDocument(): HasOne
+    public function DriverDocuments(): HasOne
     {
-        return $this->hasOne(VehicleDocument::class, 'driver_id');
+        return $this->hasOne(DriverDocument::class, 'driver_id');
     }
 }

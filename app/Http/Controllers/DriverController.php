@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\DriverDocument;
+use App\Models\Vehicle;
 use App\utils\CustomHttpResponse;
+use App\utils\UploadFiles;
 use App\utils\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,13 +18,13 @@ class DriverController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignIn', 'TestImages']]);
+        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp', 'GetDriverData']]);
     }
 
     /*
      * Driver SingIn
      */
-    public function DriverSingIn(Request $request): JsonResponse
+    public function DriverSignUp(Request $request): JsonResponse
     {
         try {
             $dirverExistente = Driver::where('phone_number', $request->phone_number)->exists();
@@ -30,23 +33,48 @@ class DriverController extends Controller
                 return CustomHttpResponse::HttpResponse('Driver exist', '', 200);
             }
 
-            $selfpay = new Driver();
+            $driver = new Driver();
 
-            $driverId = 'DV' . rand(100, 9999);
+            $driverId = 'DV' . rand(1000, 99999);
 
-            $selfpay->dirver_id = $driverId;
-            $selfpay->name = $request->name;
-            $selfpay->lastname = $request->lastname;
-            $selfpay->phone_number = $request->phone_number;
-            $selfpay->email = $request->email;
-            $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
+            $driver->driver_id = $driverId;
+            $driver->name = $request->name;
+            $driver->lastname = $request->lastname;
+            $driver->phone_number = $request->phone_number;
+            $driver->email = $request->email;
+            $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
 
-            $selfpay->save();
+            if ($driver->save()) {
+                $this->RegisterVehicleAndDocuments($request, $driver->id);
 
-            return CustomHttpResponse::HttpResponse('Driver register', '', 200);
+                UploadFiles::UploadDriverFile($request, $driverId, $driver->id);
+
+                return CustomHttpResponse::HttpResponse('Driver register', '', 200);
+            }
+
+            return CustomHttpResponse::HttpResponse('Error', '', 500);
 
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Registrar vehiculo y documentos
+     */
+    public function RegisterVehicleAndDocuments($request, $driverId, )
+    {
+        $vehicle = new Vehicle();
+
+        $vehicle->model = $request->model;
+        $vehicle->color = $request->color;
+        $vehicle->year = $request->year;
+        $vehicle->plate_number = $request->plate_number;
+        $vehicle->vin_number = $request->vin_number;
+        $vehicle->driver_id = $driverId;
+
+        if ($vehicle->save()) {
+            UploadFiles::UploadVehicleFile($request, $driverId, $vehicle->id);
         }
     }
 
@@ -157,7 +185,7 @@ class DriverController extends Controller
     public function GetDriverData($driverId): JsonResponse
     {
         try {
-            $driver = Driver::with('vehicle')->where('driver_id', $driverId)->first();
+            $driver = Driver::with('driverdocuments', 'vehicle', 'vehicle.vehicledocuments')->where('driver_id', $driverId)->first();
 
             return CustomHttpResponse::HttpResponse('OK', $driver, 200);
         } catch (Exception $exception) {

@@ -7,25 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Vehicle extends Model
+class DriverDocument extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'model',
-        'color',
-        'year',
-        'plate_number',
-        'vin_number'
+        'driver_license',
+        'driver_license_check',
+        'proof_of_insurance',
+        'proof_of_insurance_check'
     ];
 
     public function Driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class, 'driver_id');
-    }
-
-    public function VehicleDocuments(): HasOne
-    {
-        return $this->hasOne(VehicleDocument::class, 'vehicle_id');
     }
 }
