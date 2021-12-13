@@ -18,7 +18,7 @@ class DriverController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp', 'GetDriverData']]);
+        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp']]);
     }
 
     /*
@@ -45,7 +45,7 @@ class DriverController extends Controller
             $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
 
             if ($driver->save()) {
-                $this->RegisterVehicleAndDocuments($request, $driver->id);
+                $this->RegisterVehicleAndDocuments($request, $driver->id, $driverId);
 
                 UploadFiles::UploadDriverFile($request, $driverId, $driver->id);
 
@@ -62,7 +62,7 @@ class DriverController extends Controller
     /*
      * Registrar vehiculo y documentos
      */
-    public function RegisterVehicleAndDocuments($request, $driverId, )
+    public function RegisterVehicleAndDocuments($request, $driverId, $number)
     {
         $vehicle = new Vehicle();
 
@@ -74,7 +74,7 @@ class DriverController extends Controller
         $vehicle->driver_id = $driverId;
 
         if ($vehicle->save()) {
-            UploadFiles::UploadVehicleFile($request, $driverId, $vehicle->id);
+            UploadFiles::UploadVehicleFile($request, $number, $vehicle->id);
         }
     }
 
@@ -152,7 +152,7 @@ class DriverController extends Controller
     public function DriverLogin(Request $request, JWTAuth $auth): JsonResponse
     {
         try {
-            $driver = Driver::with('vehicle')->where('phone_number', $request->phone_number)->first();
+            $driver = Driver::with('vehicle', 'driverdocuments', 'vehicle.vehicledocuments')->where('phone_number', $request->phone_number)->first();
 
             if (!$driver) {
                 return CustomHttpResponse::HttpResponse('Driver not found', $driver, 404);

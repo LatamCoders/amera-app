@@ -37,12 +37,7 @@ class UploadFiles
             $documents->vehicle_side_image = Storage::disk('public')->url("vehicle/$vehicleSideImage");
             $documents->vehicle_interior_image = Storage::disk('public')->url("vehicle/$vehicleInteriorImage");
 
-            $driverDocument = new DriverDocument();
-
-            $driverDocument->driver_license = Storage::disk('public')->url("driver/$DriverLicense");
-            $driverDocument->proof_of_insurance = Storage::disk('public')->url("driver/$ProofOfInsurance");
-
-            if ($documents->save() && $driverDocument->save()) {
+            if ($documents->save()) {
                 return true;
             }
 

@@ -88,19 +88,13 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          */
         Route::group(['middleware' => 'auth:driver'], function () {
             /*
-             * Method: Get
-             */
-
-            Route::get('logout', [DriverController::class, 'LogOut']);
-
-            /*
              * Method: Post
              */
             Route::post('{driverId}/profile/update', [DriverController::class, 'UpdateProfileData']);
             Route::post('{driverId}/profile/image/update', [DriverController::class, 'UpdateProfileImage']);
         });
-    });
 
-    Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
+        Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
+    });
     Route::post('images', [DriverController::class, 'TestImages']);
 });
