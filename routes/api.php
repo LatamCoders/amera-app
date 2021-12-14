@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
+    /*
+     * Auth
+     */
     Route::group(['prefix' => 'auth'], function () {
         /*
          * Controller: SelfPay
