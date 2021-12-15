@@ -46,6 +46,9 @@ class Driver extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /*
+     * Relationships
+     */
     public function Booking(): HasMany
     {
         return $this->hasMany(Booking::class, 'driver_id');
@@ -59,5 +62,10 @@ class Driver extends Authenticatable implements JWTSubject
     public function DriverDocuments(): HasOne
     {
         return $this->hasOne(DriverDocument::class, 'driver_id');
+    }
+
+    public function Experiences(): HasMany
+    {
+        return $this->hasMany(Experience::class, 'driver_id');
     }
 }

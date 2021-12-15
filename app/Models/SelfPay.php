@@ -48,6 +48,9 @@ class SelfPay extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /*
+     * Relationships
+     */
     public function CreditCard(): HasOne
     {
         return $this->hasOne(CreditCard::class, 'selfpay_id');
@@ -61,5 +64,10 @@ class SelfPay extends Authenticatable implements JWTSubject
     public function AdditionalService(): HasMany
     {
         return $this->hasMany(AdditionalService::class, 'selfpay_id');
+    }
+
+    public function Experiences(): HasMany
+    {
+        return $this->hasMany(Experience::class, 'selfpay_id');
     }
 }

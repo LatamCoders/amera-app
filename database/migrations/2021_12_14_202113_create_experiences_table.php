@@ -15,7 +15,7 @@ class CreateExperiencesTable extends Migration
     {
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
-            $table->integer('amera_rate');
+            $table->decimal('amera_rate');
             $table->text('comments');
             $table->foreignId('driver_id')->nullable()->constrained('drivers');
             $table->foreignId('selfpay_id')->nullable()->constrained('selfpay');
