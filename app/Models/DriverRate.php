@@ -6,29 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Experience extends Model
+class DriverRate extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'amera_rate',
+        'rate',
         'comments',
         'driver_id',
-        'selfpay_id',
-        'booking_id',
+        'booking_id'
     ];
 
-    /*
-     * Relationships
-     */
     public function SelfPay(): BelongsTo
     {
         return $this->belongsTo(SelfPay::class, 'selfpay_id');
-    }
-
-    public function Driver(): BelongsTo
-    {
-        return $this->belongsTo(Driver::class, 'driver_id');
     }
 
     public function Booking(): BelongsTo
