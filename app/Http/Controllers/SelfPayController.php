@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreditCard;
+use App\Models\DriverRate;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
@@ -125,7 +126,6 @@ class SelfPayController extends Controller
      */
     public function getClientData($clientId): JsonResponse
     {
-
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
 
@@ -185,9 +185,16 @@ class SelfPayController extends Controller
     }
 
     /*
-     * Verificar correo
+     * Puntuar SelfPay
      */
+    public function RateDriver(Request $request, $booking, $driverId)
+    {
+        /*try {
+            $rate = new DriverRate();
 
+            $rate->
+        }*/
+    }
 
     /*
      * Test encrupt

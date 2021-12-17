@@ -33,9 +33,9 @@ class Booking extends Model
         return $this->belongsTo(Driver::class, 'driver_id');
     }
 
-    public function Cancellation(): HasMany
+    public function Cancellation(): HasOne
     {
-        return $this->hasMany(Cancellation::class, 'driver_id');
+        return $this->hasOne(Cancellation::class, 'driver_id');
     }
 
     public function AmeraRate(): HasOne

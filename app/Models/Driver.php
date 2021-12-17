@@ -68,4 +68,9 @@ class Driver extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Experience::class, 'driver_id');
     }
+
+    public function SelfPayRate(): HasMany
+    {
+        return $this->hasMany(SelfPayRate::class, 'driver_id');
+    }
 }
