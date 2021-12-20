@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use App\Models\DriverDocument;
+use App\Models\SelfPay;
 use App\Models\Vehicle;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadFiles;
@@ -188,6 +189,28 @@ class DriverController extends Controller
             $driver = Driver::with('driverdocuments', 'vehicle', 'vehicle.vehicledocuments')->where('driver_id', $driverId)->first();
 
             return CustomHttpResponse::HttpResponse('OK', $driver, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Puntuar Cliente
+     */
+    public function RateSelfPay(Request $request, $booking, $selfPayId, $driverId): JsonResponse
+    {
+        try {
+            $rate = new SelfPay();
+
+            $rate->rate = $request->rate;
+            $rate->comments = $request->comments;
+            $rate->driver_id = $driverId;
+            $rate->selfpay_id = $selfPayId;
+            $rate->booking_id = $booking;
+
+            $rate->save();
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

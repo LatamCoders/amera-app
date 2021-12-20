@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CreditCard;
 use App\Models\DriverRate;
 use App\Models\SelfPay;
+use App\Models\SelfPayRate;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
@@ -22,7 +23,7 @@ class SelfPayController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'TestEncipt']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn']]);
     }
 
     /*
@@ -185,15 +186,37 @@ class SelfPayController extends Controller
     }
 
     /*
-     * Puntuar SelfPay
+     * Puntuar Driver
      */
-    public function RateDriver(Request $request, $booking, $driverId)
+    public function RateDriver(Request $request, $booking, $selfPayId, $driverId): JsonResponse
     {
-        /*try {
+        try {
             $rate = new DriverRate();
 
-            $rate->
-        }*/
+            $rate->rate = $request->rate;
+            $rate->comments = $request->comments;
+            $rate->driver_id = $driverId;
+            $rate->selfpay_id = $selfPayId;
+            $rate->booking_id = $booking;
+
+            $rate->save();
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function GetClientRate($selfpayId): JsonResponse
+    {
+        try {
+            $data = SelfPay::with('selfpayrate.booking', 'selfpayrate.driver')->where('id', $selfpayId)->first();
+
+            return CustomHttpResponse::HttpResponse('OK', $data, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+
     }
 
     /*

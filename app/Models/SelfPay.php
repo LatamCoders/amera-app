@@ -75,4 +75,9 @@ class SelfPay extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(DriverRate::class, 'selfpay_id');
     }
+
+    public function SelfpayRate(): HasMany
+    {
+        return $this->hasMany(SelfPayRate::class, 'selfpay_id');
+    }
 }

@@ -69,14 +69,22 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Method: Get
              */
             Route::get('{clientId}/profile/data', [SelfPayController::class, 'getClientData']);
+            Route::get('{clientId}/rate/get', [SelfPayController::class, 'GetClientRate']);
             Route::get('logout', [SelfPayController::class, 'LogOut']);
 
             /*
              * Method: Post
+             * Profile
              */
             Route::post('{clientId}/profile/update', [SelfPayController::class, 'UpdateProfileData']);
             Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
             Route::post('{clientId}/profile/payment/creditcard/add', [SelfPayController::class, 'AddCreditCard']);
+
+            /*
+             * Method: Post
+             * Rate
+             */
+            Route::post('{clientId}/rate/driver/{driverId}/booking/{bookingId}', [SelfPayController::class, 'RateDriver']);
         });
 
         Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
@@ -95,6 +103,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              */
             Route::post('{driverId}/profile/update', [DriverController::class, 'UpdateProfileData']);
             Route::post('{driverId}/profile/image/update', [DriverController::class, 'UpdateProfileImage']);
+
+            /*
+             * Method: Post
+             * Rate
+             */
+            Route::post('{driverId}/rate/client/{clientId}/booking/{bookingId}', [DriverController::class, 'RateSelfPay']);
         });
 
         Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);

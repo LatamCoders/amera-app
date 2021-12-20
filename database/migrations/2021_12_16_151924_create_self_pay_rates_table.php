@@ -17,8 +17,9 @@ class CreateSelfPayRatesTable extends Migration
             $table->id();
             $table->decimal('rate');
             $table->text('comments');
+            $table->foreignId('selfpay_id')->nullable()->constrained('selfpay');
             $table->foreignId('driver_id')->nullable()->constrained('drivers');
-            $table->foreignId('booking_id')->nullable()->constrained('booking');
+            $table->foreignId('booking_id')->nullable()->constrained('bookings');
             $table->timestamps();
         });
     }

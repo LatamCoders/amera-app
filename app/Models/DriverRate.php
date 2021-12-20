@@ -14,12 +14,18 @@ class DriverRate extends Model
         'rate',
         'comments',
         'driver_id',
+        'selfpay_id',
         'booking_id'
     ];
 
     public function SelfPay(): BelongsTo
     {
         return $this->belongsTo(SelfPay::class, 'selfpay_id');
+    }
+
+    public function Driver(): BelongsTo
+    {
+        return $this->belongsTo(Driver::class, 'driver_id');
     }
 
     public function Booking(): BelongsTo

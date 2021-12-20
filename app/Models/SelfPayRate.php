@@ -12,14 +12,17 @@ class SelfPayRate extends Model
 
     protected $fillable = [
         'rate',
-        'comments',
-        'driver_id',
-        'booking_id'
+        'comments'
     ];
 
     public function Driver(): BelongsTo
     {
         return $this->belongsTo(Driver::class, 'driver_id');
+    }
+
+    public function SelfPay(): BelongsTo
+    {
+        return $this->belongsTo(SelfPay::class, 'selfpay_id');
     }
 
     public function Booking(): BelongsTo
