@@ -1,5 +1,6 @@
 <?php
 
+use App\utils\UniqueIdentifier;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->string('booking_id', 50)->unique()->default(Str::random(30));
+            $table->string('booking_id', 50)->unique()->default(UniqueIdentifier::GenerateUid());
             $table->foreignId('selfpay_id')->constrained('selfpay');
             $table->dateTime('booking_date');
             $table->text('from');

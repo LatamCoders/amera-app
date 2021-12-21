@@ -6,6 +6,7 @@ use App\Models\Driver;
 use App\Models\DriverDocument;
 use App\Models\SelfPay;
 use App\Models\Vehicle;
+use App\Services\ExperienceService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadFiles;
 use App\utils\UploadImage;
@@ -17,9 +18,12 @@ use Tymon\JWTAuth\JWTAuth;
 
 class DriverController extends Controller
 {
-    public function __construct()
+    protected $_ExperienceService;
+
+    public function __construct(ExperienceService $experienceService)
     {
         $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp']]);
+        $this->_ExperienceService = $experienceService;
     }
 
     /*
@@ -209,6 +213,17 @@ class DriverController extends Controller
             $rate->booking_id = $booking;
 
             $rate->save();
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function DriverRateAmeraExperience(Request $request, $bookingId, $driverId): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $this->_ExperienceService->RateAmera($request, $bookingId, $driverId, null);
 
             return CustomHttpResponse::HttpResponse('OK', '', 200);
         } catch (Exception $exception) {

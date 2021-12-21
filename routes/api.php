@@ -6,16 +6,6 @@ use App\Models\Driver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 /*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -70,7 +60,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              */
             Route::get('{clientId}/profile/data', [SelfPayController::class, 'getClientData']);
             Route::get('{clientId}/rate/get', [SelfPayController::class, 'GetClientRate']);
-            Route::get('logout', [SelfPayController::class, 'LogOut']);
 
             /*
              * Method: Post
@@ -85,6 +74,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Rate
              */
             Route::post('{clientId}/rate/driver/{driverId}/booking/{bookingId}', [SelfPayController::class, 'RateDriver']);
+            Route::post('{clientId}/rate/amera/booking/{bookingId}', [SelfPayController::class, 'ClientRateAmeraExperience']);
         });
 
         Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
@@ -100,18 +90,20 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
         Route::group(['middleware' => 'auth:driver'], function () {
             /*
              * Method: Post
+             * Profile
              */
             Route::post('{driverId}/profile/update', [DriverController::class, 'UpdateProfileData']);
             Route::post('{driverId}/profile/image/update', [DriverController::class, 'UpdateProfileImage']);
+            Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
 
             /*
              * Method: Post
              * Rate
              */
             Route::post('{driverId}/rate/client/{clientId}/booking/{bookingId}', [DriverController::class, 'RateSelfPay']);
+            Route::post('{driverId}/rate/amera/booking/{bookingId}', [DriverController::class, 'DriverRateAmeraExperience']);
         });
 
-        Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
     });
     Route::post('images', [DriverController::class, 'TestImages']);
 });
