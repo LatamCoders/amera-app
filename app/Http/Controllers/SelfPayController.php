@@ -6,6 +6,7 @@ use App\Models\CreditCard;
 use App\Models\DriverRate;
 use App\Models\SelfPay;
 use App\Models\SelfPayRate;
+use App\Services\BookingService;
 use App\Services\ExperienceService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
@@ -22,11 +23,13 @@ use Tymon\JWTAuth\JWTAuth;
 class SelfPayController extends Controller
 {
     protected $_ExperienceService;
+    protected $_BookingService;
 
-    public function __construct(ExperienceService $experienceService)
+    public function __construct(ExperienceService $experienceService, BookingService $bookingService)
     {
         $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn']]);
         $this->_ExperienceService = $experienceService;
+        $this->_BookingService = $bookingService;
     }
 
     /*
@@ -211,7 +214,7 @@ class SelfPayController extends Controller
     }
 
     /*
-     * Puntuar al driver
+     * Obtener puntuación
      */
     public function GetClientRate($selfpayId): JsonResponse
     {
@@ -225,6 +228,9 @@ class SelfPayController extends Controller
 
     }
 
+    /*
+     * Calificar a Amera
+     */
     public function ClientRateAmeraExperience(Request $request, $bookingId, $selfPayId): JsonResponse
     {
         try {
@@ -236,8 +242,19 @@ class SelfPayController extends Controller
         }
     }
 
+    public function AddReserve(Request $request, $clientId): JsonResponse
+    {
+        try {
+            $this->_BookingService->AddBooking($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('Reserve add successfully', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
     /*
-     * Test encrupt
+     * Test encrypt
      */
     public function TestEncipt()
     {

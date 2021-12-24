@@ -62,6 +62,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
             Route::get('{clientId}/rate/get', [SelfPayController::class, 'GetClientRate']);
 
             /*
+             * Method: Get
+             * Booking
+             */
+            Route::get('{clientId}/booking/reserve/add', [SelfPayController::class, 'AddReserve']);
+
+            /*
              * Method: Post
              * Profile
              */

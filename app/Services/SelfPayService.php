@@ -5,12 +5,13 @@ namespace App\Services;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
 
 class SelfPayService
 {
-    public function SelfPaySignIn(Request $request): \Illuminate\Http\JsonResponse
+    public function SelfPaySignIn(Request $request): JsonResponse
     {
         try {
             $selfpay = new SelfPay();

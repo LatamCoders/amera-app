@@ -23,4 +23,9 @@ class Cancellation extends Model
     {
         return $this->belongsTo(Booking::class, 'booking_id');
     }
+
+    public function StatusCode(): BelongsTo
+    {
+        return $this->belongsTo(StatusCode::class, 'status');
+    }
 }

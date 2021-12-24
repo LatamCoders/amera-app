@@ -33,6 +33,11 @@ class Booking extends Model
         return $this->belongsTo(Driver::class, 'driver_id');
     }
 
+    public function StatusCode(): BelongsTo
+    {
+        return $this->belongsTo(StatusCode::class, 'status');
+    }
+
     public function Cancellation(): HasOne
     {
         return $this->hasOne(Cancellation::class, 'driver_id');
