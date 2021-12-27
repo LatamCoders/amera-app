@@ -81,6 +81,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              */
             Route::post('{clientId}/rate/driver/{driverId}/booking/{bookingId}', [SelfPayController::class, 'RateDriver']);
             Route::post('{clientId}/rate/amera/booking/{bookingId}', [SelfPayController::class, 'ClientRateAmeraExperience']);
+
+            /*
+             * Method: Post
+             * Booking
+             */
+            Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
         });
 
         Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
