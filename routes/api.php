@@ -87,6 +87,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Booking
              */
             Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
+            Route::post('booking/{bookingId}/trip/{tripAction}', [SelfPayController::class, 'StartOrEndTrip']);
         });
 
         Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
