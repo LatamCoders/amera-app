@@ -18,7 +18,7 @@ class CreateAdditionalServicesTable extends Migration
             $table->text('service');
             $table->text('from');
             $table->text('to');
-            $table->foreignId('selfpay_id')->constrained('selfpay');
+            $table->foreignId('booking_id')->constrained('bookings');
             $table->timestamps();
         });
     }

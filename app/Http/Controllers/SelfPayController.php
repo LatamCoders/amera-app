@@ -6,6 +6,7 @@ use App\Models\CreditCard;
 use App\Models\DriverRate;
 use App\Models\SelfPay;
 use App\Models\SelfPayRate;
+use App\Services\AdditionalServicesService;
 use App\Services\BookingService;
 use App\Services\ExperienceService;
 use App\utils\CustomHttpResponse;
@@ -24,12 +25,14 @@ class SelfPayController extends Controller
 {
     protected $_ExperienceService;
     protected $_BookingService;
+    protected $_AdditionalServicesService;
 
-    public function __construct(ExperienceService $experienceService, BookingService $bookingService)
+    public function __construct(ExperienceService $experienceService, BookingService $bookingService, AdditionalServicesService $AdditionalServicesService)
     {
         $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn']]);
         $this->_ExperienceService = $experienceService;
         $this->_BookingService = $bookingService;
+        $this->_AdditionalServicesService = $AdditionalServicesService;
     }
 
     /*
@@ -225,7 +228,6 @@ class SelfPayController extends Controller
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
-
     }
 
     /*
@@ -275,6 +277,15 @@ class SelfPayController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    /*
+     *
+     */
+    public function AddAdditionalService(Request $request, $bookingId)
+    {
+
+    }
+
 
     /*
      * Test encrypt
