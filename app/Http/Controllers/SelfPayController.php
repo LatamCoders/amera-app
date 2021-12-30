@@ -279,11 +279,17 @@ class SelfPayController extends Controller
     }
 
     /*
-     *
+     * Agregar servicios adicionales
      */
-    public function AddAdditionalService(Request $request, $bookingId)
+    public function AddAdditionalService(Request $request, $bookingId): JsonResponse
     {
+        try {
+            $this->_AdditionalServicesService->Add($request, $bookingId);
 
+            return CustomHttpResponse::HttpResponse('Service added', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
     }
 
 
