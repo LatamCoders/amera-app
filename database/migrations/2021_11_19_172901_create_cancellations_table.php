@@ -16,7 +16,7 @@ class CreateCancellationsTable extends Migration
         Schema::create('cancellations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained('bookings');
-            $table->foreignId('status')->constrained('status_codes');
+            /*$table->foreignId('status')->constrained('status_codes');*/
             $table->integer('fee')->default(0);
             $table->dateTime('cancellation_date');
         });

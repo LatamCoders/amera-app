@@ -9,6 +9,7 @@ use App\Models\SelfPayRate;
 use App\Services\AdditionalServicesService;
 use App\Services\BookingService;
 use App\Services\ExperienceService;
+use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
@@ -26,13 +27,20 @@ class SelfPayController extends Controller
     protected $_ExperienceService;
     protected $_BookingService;
     protected $_AdditionalServicesService;
+    protected $_SmsService;
 
-    public function __construct(ExperienceService $experienceService, BookingService $bookingService, AdditionalServicesService $AdditionalServicesService)
+    public function __construct(
+        ExperienceService         $experienceService,
+        BookingService            $bookingService,
+        AdditionalServicesService $AdditionalServicesService,
+        SmsService                $SmsService
+    )
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode']]);
         $this->_ExperienceService = $experienceService;
         $this->_BookingService = $bookingService;
         $this->_AdditionalServicesService = $AdditionalServicesService;
+        $this->_SmsService = $SmsService;
     }
 
     /*
@@ -287,6 +295,20 @@ class SelfPayController extends Controller
             $this->_AdditionalServicesService->Add($request, $bookingId);
 
             return CustomHttpResponse::HttpResponse('Service added', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Enviar codigo SMS
+     */
+    public function SendSmsCode(Request $request): JsonResponse
+    {
+        try {
+            $resp = $this->_SmsService->SendSmsCode($request->number);
+
+            return CustomHttpResponse::HttpResponse($resp, '', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

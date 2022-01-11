@@ -7,6 +7,7 @@ use App\Models\DriverDocument;
 use App\Models\SelfPay;
 use App\Models\Vehicle;
 use App\Services\ExperienceService;
+use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadFiles;
 use App\utils\UploadImage;
@@ -19,11 +20,13 @@ use Tymon\JWTAuth\JWTAuth;
 class DriverController extends Controller
 {
     protected $_ExperienceService;
+    protected $_SmsService;
 
-    public function __construct(ExperienceService $experienceService)
+    public function __construct(ExperienceService $experienceService, SmsService $SmsService)
     {
-        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp']]);
+        $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp', 'SendSmsCode']]);
         $this->_ExperienceService = $experienceService;
+        $this->_SmsService = $SmsService;
     }
 
     /*
@@ -227,6 +230,20 @@ class DriverController extends Controller
 
             return CustomHttpResponse::HttpResponse('OK', '', 200);
         } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Enviar codigo SMS
+     */
+    public function SendSmsCode(Request $request): JsonResponse
+    {
+        try {
+            $resp = $this->_SmsService->SendSmsCode($request->number);
+
+            return CustomHttpResponse::HttpResponse($resp, '', 200);
+        } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }

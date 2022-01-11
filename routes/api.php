@@ -30,6 +30,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          */
         Route::post('client/login', [SelfPayController::class, 'UserLogin'])->name('login');
         Route::post('client/register', [SelfPayController::class, 'SelfPaySignIn']);
+        Route::post('client/sendsmscode', [SelfPayController::class, 'SendSmsCode']);
 
         /*
          * Controller: Driver
@@ -45,6 +46,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          */
         Route::post('driver/login', [DriverController::class, 'DriverLogin']);
         Route::post('driver/signup', [DriverController::class, 'DriverSignUp']);
+        Route::post('driver/sendsmscode', [DriverController::class, 'SendSmsCode']);
     });
 
     /*
@@ -120,4 +122,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
 
     });
     Route::post('images', [DriverController::class, 'TestImages']);
+    Route::post('ca/auth/register', [\App\Http\Controllers\CorporateAccountController::class, 'Register']);
+    Route::post('ca/auth/login', [\App\Http\Controllers\CorporateAccountController::class, 'CaLogin']);
 });

@@ -26,8 +26,8 @@ class CreateBookingsTable extends Migration
             $table->dateTime('trip_end');
             $table->foreignId('driver_id')->nullable()->constrained('drivers');
 
-            $table->unsignedBigInteger('status');
-            $table->foreign('status')->references('code')->on('status_codes');
+            /*$table->tinyInteger('status');
+            $table->foreign('status')->references('code')->on('status_codes');*/
         });
     }
 
