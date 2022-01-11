@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Booking extends Model
 {
@@ -32,8 +33,28 @@ class Booking extends Model
         return $this->belongsTo(Driver::class, 'driver_id');
     }
 
-    public function Cancellation(): HasMany
+    public function StatusCode(): BelongsTo
     {
-        return $this->hasMany(Cancellation::class, 'driver_id');
+        return $this->belongsTo(StatusCode::class, 'status');
+    }
+
+    public function Cancellation(): HasOne
+    {
+        return $this->hasOne(Cancellation::class, 'driver_id');
+    }
+
+    public function AmeraRate(): HasOne
+    {
+        return $this->hasOne(Experience::class, 'booking_id');
+    }
+
+    public function DriverRate(): HasOne
+    {
+        return $this->hasOne(Driver::class, 'booking_id');
+    }
+
+    public function SelfPayRate(): HasOne
+    {
+        return $this->hasOne(SelfPay::class, 'booking_id');
     }
 }

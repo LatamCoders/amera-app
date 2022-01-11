@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\CreditCard;
+use App\Models\DriverRate;
 use App\Models\SelfPay;
+use App\Models\SelfPayRate;
+use App\Services\AdditionalServicesService;
+use App\Services\BookingService;
+use App\Services\ExperienceService;
+use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
@@ -18,10 +24,23 @@ use Tymon\JWTAuth\JWTAuth;
 
 class SelfPayController extends Controller
 {
+    protected $_ExperienceService;
+    protected $_BookingService;
+    protected $_AdditionalServicesService;
+    protected $_SmsService;
 
-    public function __construct()
+    public function __construct(
+        ExperienceService         $experienceService,
+        BookingService            $bookingService,
+        AdditionalServicesService $AdditionalServicesService,
+        SmsService                $SmsService
+    )
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'TestEncipt']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode']]);
+        $this->_ExperienceService = $experienceService;
+        $this->_BookingService = $bookingService;
+        $this->_AdditionalServicesService = $AdditionalServicesService;
+        $this->_SmsService = $SmsService;
     }
 
     /*
@@ -34,26 +53,26 @@ class SelfPayController extends Controller
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
             if ($clienteExistente) {
-                return CustomHttpResponse::HttpReponse('Client exist', '', 200);
+                return CustomHttpResponse::HttpResponse('Client exist', '', 200);
             }
 
             $selfpay = new SelfPay();
 
-            $profile = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
+            $selfPayId = 'SP' . rand(100, 9999);
 
-            $selfpay->client_id = 'SP' . rand(100, 9999);
+            $selfpay->client_id = $selfPayId;
             $selfpay->name = $request->name;
             $selfpay->lastname = $request->lastname;
             $selfpay->phone_number = $request->phone_number;
             $selfpay->email = $request->email;
-            $selfpay->profile_picture = $profile;
+            $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
 
             $selfpay->save();
 
-            return CustomHttpResponse::HttpReponse('Client register', '', 200);
+            return CustomHttpResponse::HttpResponse('Client register', '', 200);
 
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -66,14 +85,14 @@ class SelfPayController extends Controller
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
 
             if (!$cliente) {
-                return CustomHttpResponse::HttpReponse('User not found', $cliente, 404);
+                return CustomHttpResponse::HttpResponse('User not found', $cliente, 404);
             }
 
             $token = $auth->fromUser($cliente);
 
-            return CustomHttpResponse::HttpReponse('OK', $this->RespondWithToken($token, $cliente), 200);
+            return CustomHttpResponse::HttpResponse('OK', $this->RespondWithToken($token, $cliente), 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -94,9 +113,9 @@ class SelfPayController extends Controller
 
             $cliente->save();
 
-            return CustomHttpResponse::HttpReponse('Client update', null, 200);
+            return CustomHttpResponse::HttpResponse('Client update', null, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -108,15 +127,15 @@ class SelfPayController extends Controller
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
 
-            $profileImage = UploadImage::UploadProfileImage($request->file('profile_picture'), $request->phone_number);
+            $profileImage = UploadImage::UploadProfileImage($request->file('profile_picture'), $cliente->phone_number);
 
             $cliente->profile_picture = $profileImage;
 
             $cliente->save();
 
-            return CustomHttpResponse::HttpReponse('Profile image update', null, 200);
+            return CustomHttpResponse::HttpResponse('Profile image updated', null, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -125,13 +144,12 @@ class SelfPayController extends Controller
      */
     public function getClientData($clientId): JsonResponse
     {
-
         try {
             $cliente = SelfPay::where('client_id', $clientId)->first();
 
-            return CustomHttpResponse::HttpReponse('OK', $cliente, 200);
+            return CustomHttpResponse::HttpResponse('OK', $cliente, 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -143,9 +161,9 @@ class SelfPayController extends Controller
         try {
             Auth::guard('selfpay')->logout(true);
 
-            return CustomHttpResponse::HttpReponse('Client logout successfully', '', 200);
+            return CustomHttpResponse::HttpResponse('Client logout successfully', '', 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
@@ -165,7 +183,7 @@ class SelfPayController extends Controller
     /*
      * Agregar tarjeta de credito
      */
-    public function AddCreditCard(Request $request, $clientId)
+    public function AddCreditCard(Request $request, $clientId): JsonResponse
     {
         try {
             $client = SelfPay::where('client_id', $clientId)->first();
@@ -178,21 +196,134 @@ class SelfPayController extends Controller
             $credit_card->date = $request->date;
             $credit_card->selfpay_id = $client->id;
 
-            return CustomHttpResponse::HttpReponse('Credit card add successfully', '', 200);
+            return CustomHttpResponse::HttpResponse('Credit card add successfully', '', 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 
     /*
-     * Test encrupt
+     * Puntuar Driver
+     */
+    public function RateDriver(Request $request, $booking, $selfPayId, $driverId): JsonResponse
+    {
+        try {
+            $rate = new DriverRate();
+
+            $rate->rate = $request->rate;
+            $rate->comments = $request->comments;
+            $rate->driver_id = $driverId;
+            $rate->selfpay_id = $selfPayId;
+            $rate->booking_id = $booking;
+
+            $rate->save();
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Obtener puntuación
+     */
+    public function GetClientRate($selfpayId): JsonResponse
+    {
+        try {
+            $data = SelfPay::with('selfpayrate.booking', 'selfpayrate.driver')->where('id', $selfpayId)->first();
+
+            return CustomHttpResponse::HttpResponse('OK', $data, 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Calificar a Amera
+     */
+    public function ClientRateAmeraExperience(Request $request, $bookingId, $selfPayId): JsonResponse
+    {
+        try {
+            $this->_ExperienceService->RateAmera($request, $bookingId, null, $selfPayId);
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Agregar reserva
+     */
+    public function AddReserve(Request $request, $clientId): JsonResponse
+    {
+        try {
+            $this->_BookingService->AddBooking($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('Booking add successfully', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Iniciar viaje
+     */
+    public function StartOrEndTrip($bookingId, $tripAction): JsonResponse
+    {
+        try {
+            if ($tripAction == 'start') {
+                $this->_BookingService->Start($bookingId);
+
+                return CustomHttpResponse::HttpResponse('Trip start', '', 200);
+            }
+
+            $this->_BookingService->End($bookingId);
+
+            return CustomHttpResponse::HttpResponse('Trip End', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Agregar servicios adicionales
+     */
+    public function AddAdditionalService(Request $request, $bookingId): JsonResponse
+    {
+        try {
+            $this->_AdditionalServicesService->Add($request, $bookingId);
+
+            return CustomHttpResponse::HttpResponse('Service added', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Enviar codigo SMS
+     */
+    public function SendSmsCode(Request $request): JsonResponse
+    {
+        try {
+            $resp = $this->_SmsService->SendSmsCode($request->number);
+
+            return CustomHttpResponse::HttpResponse($resp, '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+
+    /*
+     * Test encrypt
      */
     public function TestEncipt()
     {
         try {
-            return CustomHttpResponse::HttpReponse('Credit card add successfully', Crypt::encryptString('hola'), 200);
+            return CustomHttpResponse::HttpResponse('Credit card add successfully', Crypt::encryptString('hola'), 200);
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 }

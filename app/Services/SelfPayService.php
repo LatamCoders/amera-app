@@ -5,12 +5,13 @@ namespace App\Services;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
 
 class SelfPayService
 {
-    public function SelfPaySignIn(Request $request): \Illuminate\Http\JsonResponse
+    public function SelfPaySignIn(Request $request): JsonResponse
     {
         try {
             $selfpay = new SelfPay();
@@ -26,10 +27,10 @@ class SelfPayService
 
             $selfpay->save();
 
-            return CustomHttpResponse::HttpReponse('Client register', '', 200);
+            return CustomHttpResponse::HttpResponse('Client register', '', 200);
 
         } catch (Exception $exception) {
-            return CustomHttpResponse::HttpReponse('Error', $exception->getMessage(), 500);
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
 

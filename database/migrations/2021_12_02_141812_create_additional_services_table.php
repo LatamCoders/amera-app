@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCancellationsTable extends Migration
+class CreateAdditionalServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateCancellationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cancellations', function (Blueprint $table) {
+        Schema::create('additional_services', function (Blueprint $table) {
             $table->id();
+            $table->text('service');
+            $table->text('from');
+            $table->text('to');
             $table->foreignId('booking_id')->constrained('bookings');
-            /*$table->foreignId('status')->constrained('status_codes');*/
-            $table->integer('fee')->default(0);
-            $table->dateTime('cancellation_date');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateCancellationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cancellations');
+        Schema::dropIfExists('aditional_services');
     }
 }
