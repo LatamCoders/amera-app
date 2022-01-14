@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\AmeraAdmin;
 use App\Models\AmeraUser;
+use App\Models\CorporateAccount;
 use App\utils\UniqueIdentifier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -95,5 +96,10 @@ class AmeraAdminService
         } catch (\Exception $exception) {
             throw new HttpException(500, $exception->getMessage());
         }
+    }
+
+    public function GetCorporateAccountList()
+    {
+        return CorporateAccount::with('AmeraUser.Role')->get();
     }
 }
