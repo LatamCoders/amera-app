@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\AmeraAdminController;
+use App\Http\Controllers\CorporateAccountController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\SelfPayController;
-use App\Models\Driver;
-use Illuminate\Http\Request;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -47,6 +48,38 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
         Route::post('driver/login', [DriverController::class, 'DriverLogin']);
         Route::post('driver/signup', [DriverController::class, 'DriverSignUp']);
         Route::post('driver/sendsmscode', [DriverController::class, 'SendSmsCode']);
+
+        /*
+         * Controller: Corporate Account
+         *
+         * Method: Post
+         */
+        Route::post('ca/register', [CorporateAccountController::class, 'CaRegister']);
+        Route::post('ca/login', [CorporateAccountController::class, 'CaLogin']);
+        Route::middleware('auth:users')->post('ca/logout', [CorporateAccountController::class, 'CaLogout']);
+
+        /*
+         * Controller: Corporate Account
+         *
+         * Method: Get
+         */
+
+
+        /*
+         * Controller: Admins
+         *
+         * Method: Post
+         */
+        Route::post('admin/register', [AmeraAdminController::class, 'AdminRegister']);
+        Route::post('admin/login', [AmeraAdminController::class, 'AdminLogin']);
+        Route::middleware('auth:users')->post('admin/logout', [AmeraAdminController::class, 'AdminLogout']);
+
+        /*
+         * Controller: Admins
+         *
+         * Method: Get
+         */
+
     });
 
     /*
@@ -121,7 +154,41 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
         });
 
     });
+
+    /*
+     * Controller: Corporate account
+     */
+    Route::group(['prefix' => 'ca'], function () {
+        /*
+         * Auth required
+         */
+        Route::group(['middleware' => 'auth:users'], function () {
+            /*
+             * Method: Get
+             * Profile
+             */
+            Route::get('{CaId}/profile', [CorporateAccountController::class, 'CaProfile']);
+        });
+
+    });
+
+    /*
+     * Controller: Amera Admin
+     */
+    Route::group(['prefix' => 'admin'], function () {
+        /*
+         * Auth required
+         */
+        Route::group(['middleware' => 'auth:users'], function () {
+            /*
+             * Method: Get
+             * Profile
+             */
+            Route::get('{adminId}/profile', [AmeraAdminController::class, 'AdminProfile']);
+        });
+
+    });
+
+
     Route::post('images', [DriverController::class, 'TestImages']);
-    Route::post('ca/auth/register', [\App\Http\Controllers\CorporateAccountController::class, 'Register']);
-    Route::post('ca/auth/login', [\App\Http\Controllers\CorporateAccountController::class, 'CaLogin']);
 });

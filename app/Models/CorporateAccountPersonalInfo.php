@@ -12,6 +12,8 @@ class CorporateAccountPersonalInfo extends Model
 
     public $timestamps = false;
 
+    protected $hidden = ['corporate_account_id'];
+
     public function User(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');

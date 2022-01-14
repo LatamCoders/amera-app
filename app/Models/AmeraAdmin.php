@@ -10,8 +10,18 @@ class AmeraAdmin extends Model
 {
     use HasFactory;
 
-    public function User(): BelongsTo
+    public $timestamps = false;
+
+    protected $fillable = [
+        'name',
+        'user',
+        'email',
+        ];
+
+    protected $hidden = ['amera_user_id'];
+
+    public function AmeraUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(AmeraUser::class, 'amera_user_id');
     }
 }

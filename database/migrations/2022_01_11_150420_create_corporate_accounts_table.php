@@ -15,7 +15,7 @@ class CreateCorporateAccountsTable extends Migration
     {
         Schema::create('corporate_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('company_legal_name', 100);
+            $table->string('company_legal_name', 100)->unique();
             $table->string('dba', 100);
             $table->string('company_type', 100);
             $table->string('tin', 100);
@@ -23,7 +23,7 @@ class CreateCorporateAccountsTable extends Migration
             $table->date('contract_start_date');
             $table->string('office_location_address', 100);
             $table->string('billing_address', 100);
-            $table->timestamps();
+            $table->foreignId('amera_user_id')->constrained('amera_users')->onDelete('cascade');
         });
     }
 

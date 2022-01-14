@@ -14,7 +14,7 @@ class CreateStatusCodesTable extends Migration
     public function up()
     {
         Schema::create('status_codes', function (Blueprint $table) {
-            $table->tinyInteger('code');
+            $table->tinyInteger('code')->unique();
             $table->string('status','20');
         });
     }
