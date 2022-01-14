@@ -15,14 +15,17 @@ class CreateCorporateAccountPersonalInfosTable extends Migration
     {
         Schema::create('corporate_account_personal_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('telephone_number', 30);
-            $table->string('fax_number', 30)->nullable();
-            $table->string('email', 50);
-            $table->string('website', 50)->nullable();
+            $table->string('telephone_number', 30)->unique();
+            $table->string('fax_number', 30);
+            $table->string('email', 50)->unique();
+            $table->string('website', 50);
             $table->string('contact_name', 50);
             $table->string('contact_number', 50);
-            $table->foreignId('corporate_account_id')->nullable()->constrained('corporate_accounts');
-            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->string('additional_contact_name', 50);
+            $table->string('additional_contact_title', 50);
+            $table->string('additional_contact_number', 50);
+            $table->string('additional_contact_email', 50);
+            $table->foreignId('corporate_account_id')->constrained('corporate_accounts')->onDelete('cascade');
         });
     }
 

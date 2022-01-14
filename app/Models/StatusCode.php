@@ -11,6 +11,7 @@ class StatusCode extends Model
     use HasFactory;
 
     protected $primaryKey = null;
+    public $timestamps = false;
 
     protected $fillable = [
         'code',

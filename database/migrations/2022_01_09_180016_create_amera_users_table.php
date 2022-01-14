@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAmeraAdminsTable extends Migration
+class CreateAmeraUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateAmeraAdminsTable extends Migration
      */
     public function up()
     {
-        Schema::create('amera_admins', function (Blueprint $table) {
+        Schema::create('amera_users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('user');
             $table->string('email')->unique();
-            $table->foreignId('amera_user_id')->constrained('amera_users')->onDelete('cascade');
+            $table->string('password');
+            $table->foreignId('role')->constrained('roles');
+            $table->tinyInteger('status');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +31,6 @@ class CreateAmeraAdminsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('amera_admins');
+        Schema::dropIfExists('amera_users');
     }
 }
