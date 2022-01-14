@@ -60,4 +60,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function CorporateAccountList(): JsonResponse
+    {
+        try {
+            $response = $this->_AmeraAdminService->GetCorporateAccountList();
+
+            return CustomHttpResponse::HttpResponse('OK', $response, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
