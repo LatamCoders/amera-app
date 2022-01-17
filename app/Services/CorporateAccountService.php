@@ -20,7 +20,7 @@ class CorporateAccountService
         DB::transaction(function () use ($request) {
             $user = new AmeraUser();
 
-            $user->name = $request->name;
+            $user->name = $request->contact_name;
             $user->email = $request->email;
             $user->password = Hash::make('amera');
             $user->role = 3;
