@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Driver;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DriverService
@@ -31,7 +32,7 @@ class DriverService
 
             $data->save();
         } else {
-            throw new HttpException('Invalid verification type', 500);
+            throw new BadRequestException('Invalid verification type');
         }
     }
 }
