@@ -9,6 +9,7 @@ use App\Models\SelfPayRate;
 use App\Services\AdditionalServicesService;
 use App\Services\BookingService;
 use App\Services\ExperienceService;
+use App\Services\SelfPayService;
 use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
@@ -24,12 +25,14 @@ use Tymon\JWTAuth\JWTAuth;
 
 class SelfPayController extends Controller
 {
+    protected $_SelfPayService;
     protected $_ExperienceService;
     protected $_BookingService;
     protected $_AdditionalServicesService;
     protected $_SmsService;
 
     public function __construct(
+        SelfPayService            $selfPayService,
         ExperienceService         $experienceService,
         BookingService            $bookingService,
         AdditionalServicesService $AdditionalServicesService,
@@ -37,6 +40,7 @@ class SelfPayController extends Controller
     )
     {
         $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode']]);
+        $this->_SelfPayService = $selfPayService;
         $this->_ExperienceService = $experienceService;
         $this->_BookingService = $bookingService;
         $this->_AdditionalServicesService = $AdditionalServicesService;
@@ -309,6 +313,20 @@ class SelfPayController extends Controller
             $resp = $this->_SmsService->SendSmsCode($request->number);
 
             return CustomHttpResponse::HttpResponse($resp, '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Verificar numero o email
+     */
+    public function VerifyEmailOrNumber(Request $request, $selfpayId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->VerifyClientNumberOrEmail($selfpayId, $request->query('type'));
+
+            return CustomHttpResponse::HttpResponse('Ok', '', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

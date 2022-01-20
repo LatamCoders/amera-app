@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
-use App\Models\DriverDocument;
 use App\Models\SelfPay;
 use App\Models\Vehicle;
+use App\Services\DriverService;
 use App\Services\ExperienceService;
 use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
@@ -21,12 +21,14 @@ class DriverController extends Controller
 {
     protected $_ExperienceService;
     protected $_SmsService;
+    protected $_DriverService;
 
-    public function __construct(ExperienceService $experienceService, SmsService $SmsService)
+    public function __construct(ExperienceService $experienceService, SmsService $SmsService, DriverService $DriverService)
     {
         $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp', 'SendSmsCode']]);
         $this->_ExperienceService = $experienceService;
         $this->_SmsService = $SmsService;
+        $this->_DriverService = $DriverService;
     }
 
     /*
@@ -243,6 +245,20 @@ class DriverController extends Controller
             $resp = $this->_SmsService->SendSmsCode($request->number);
 
             return CustomHttpResponse::HttpResponse($resp, '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Verificar numero o email
+     */
+    public function VerifyEmailOrNumber(Request $request, $driverId): JsonResponse
+    {
+        try {
+            $this->_DriverService->VerifyDriverNumberOrEmail($driverId, $request->query('type'));
+
+            return CustomHttpResponse::HttpResponse('Ok', '', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

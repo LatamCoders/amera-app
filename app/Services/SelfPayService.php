@@ -8,6 +8,7 @@ use App\utils\UploadImage;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use PHPUnit\Exception;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SelfPayService
 {
@@ -31,6 +32,26 @@ class SelfPayService
 
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function VerifyClientNumberOrEmail($selfpayId, $verificationType)
+    {
+        if ($verificationType == 'phone_number') {
+
+            $data = SelfPay::where('selfpay_id', $selfpayId)->first();
+
+            $data->phone_number_verified_at = Carbon::now();
+
+            $data->save();
+        } else if ($verificationType == 'email') {
+            $data = SelfPay::where('selfpay_id', $selfpayId)->first();
+
+            $data->email_verified_at = Carbon::now();
+
+            $data->save();
+        } else {
+            throw new BadRequestException('Invalid verification type');
         }
     }
 

@@ -24,6 +24,8 @@ class CreateDriversTable extends Migration
             $table->string('email', 50);
             $table->text('address')->nullable();
             $table->text('profile_picture')->nullable();
+            $table->dateTime('email_verified_at')->nullable();
+            $table->dateTime('phone_number_verified_at')->nullable();
             $table->timestamps();
         });
     }

@@ -109,6 +109,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
             Route::post('{clientId}/profile/update', [SelfPayController::class, 'UpdateProfileData']);
             Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
             Route::post('{clientId}/profile/payment/creditcard/add', [SelfPayController::class, 'AddCreditCard']);
+            Route::post('{clientId}/profile/verify', [SelfPayController::class, 'VerifyEmailOrNumber']);
 
             /*
              * Method: Post
@@ -144,6 +145,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
             Route::post('{driverId}/profile/update', [DriverController::class, 'UpdateProfileData']);
             Route::post('{driverId}/profile/image/update', [DriverController::class, 'UpdateProfileImage']);
             Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
+            Route::post('{driverId}/profile/verify', [DriverController::class, 'VerifyEmailOrNumber']);
 
             /*
              * Method: Post
