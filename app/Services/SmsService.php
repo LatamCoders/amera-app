@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SmsService
 {
@@ -44,7 +45,7 @@ class SmsService
                 "data" => (object) ["code" => $code]
             ];
         } else {
-            return new BadRequestException($response['message']);
+            throw new BadRequestException($response['message']);
         }
     }
 }
