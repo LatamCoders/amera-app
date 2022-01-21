@@ -102,4 +102,13 @@ class AmeraAdminService
     {
         return CorporateAccount::with('AmeraUser.Role')->get();
     }
+
+    public function ChangeUserStatus($userId)
+    {
+        $user = AmeraUser::where('id', $userId)->first();
+
+        $user->status = !$user->satus;
+
+        $user->save();
+    }
 }

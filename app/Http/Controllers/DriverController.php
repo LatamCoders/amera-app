@@ -244,7 +244,7 @@ class DriverController extends Controller
         try {
             $resp = $this->_SmsService->SendSmsCode($request->number);
 
-            return CustomHttpResponse::HttpResponse($resp, '', 200);
+            return CustomHttpResponse::HttpResponse($resp['message'], $resp['data'], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

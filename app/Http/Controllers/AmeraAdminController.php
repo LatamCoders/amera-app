@@ -71,4 +71,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function UserStatus(Request $request): JsonResponse
+    {
+        try {
+            $this->_AmeraAdminService->ChangeUserStatus($request->userId);
+
+            return CustomHttpResponse::HttpResponse('User status change', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
