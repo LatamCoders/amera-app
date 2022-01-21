@@ -189,8 +189,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
             Route::get('{adminId}/profile', [AmeraAdminController::class, 'AdminProfile']);
         });
 
-
+        /*
+         * Method: Post
+         * Panel
+         */
         Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
+        Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
     });
 
 

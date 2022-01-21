@@ -20,7 +20,7 @@ class SmsService
         return $response['bearer_token'];
     }
 
-    public function SendSmsCode($number): string
+    public function SendSmsCode($number)
     {
         $token = $this->LoginSmsProvider();
 
@@ -39,7 +39,10 @@ class SmsService
             ]);
 
         if ($response['success'] == '1') {
-            return $response['message'];
+            return [
+                "message" => $response['message'],
+                "data" => (object) ["code" => $code]
+            ];
         } else {
             return new BadRequestException($response['message']);
         }
