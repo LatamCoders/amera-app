@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SmsService
 {
@@ -21,7 +20,7 @@ class SmsService
         return $response['bearer_token'];
     }
 
-    public function SendSmsCode($number)
+    public function SendSmsCode($number): array
     {
         $token = $this->LoginSmsProvider();
 
