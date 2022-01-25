@@ -20,6 +20,10 @@ class CreateBookingsTable extends Migration
             $table->string('booking_id', 50)->unique();
             $table->foreignId('selfpay_id')->constrained('selfpay');
             $table->dateTime('booking_date');
+            $table->time('pickup_time');
+            $table->text('city');
+            $table->string('surgery_type', 100);
+            $table->dateTime('appoinment_datetime');
             $table->text('from');
             $table->text('to');
             $table->dateTime('trip_start');

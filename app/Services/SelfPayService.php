@@ -54,5 +54,4 @@ class SelfPayService
             throw new BadRequestException('Invalid verification type');
         }
     }
-
 }

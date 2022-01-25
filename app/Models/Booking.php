@@ -18,6 +18,10 @@ class Booking extends Model
         'selfpay_id',
         'booking_date',
         'start_date',
+        'pickup_time',
+        'city',
+        'surgery_type',
+        'appoinment_datetime',
         'from',
         'to',
         'driver_id'

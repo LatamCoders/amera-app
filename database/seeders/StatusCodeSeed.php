@@ -22,10 +22,14 @@ class StatusCodeSeed extends Seeder
                 ],
                 [
                     'code' => 1,
-                    'status' => 'Completed',
+                    'status' => 'In progress',
                 ],
                 [
                     'code' => 2,
+                    'status' => 'Completed',
+                ],
+                [
+                    'code' => 3,
                     'status' => 'Cancelled',
                 ]
             ]

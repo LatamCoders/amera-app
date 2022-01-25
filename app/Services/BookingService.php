@@ -16,6 +16,10 @@ class BookingService
         $booking->booking_id = UniqueIdentifier::GenerateUid();
         $booking->selfpay_id = $clientId;
         $booking->booking_date = $request->booking_date;
+        $booking->pickup_time = $request->pickup_time;
+        $booking->city = $request->city;
+        $booking->surgery_type = $request->surgery_type;
+        $booking->appoinment_datetime = $request->appoinment_datetime;
         $booking->from = $request->from;
         $booking->to = $request->to;
         $booking->driver_id = $request->driver_id;
@@ -32,7 +36,7 @@ class BookingService
 
         if ($booking->driver_id == null) {
             throw new BadRequestException('Driver not assigned');
-        } else if ($booking->status == 2) {
+        } else if ($booking->status == 3) {
             throw new BadRequestException('Trip cancelled');
         } else if ($booking->trip_start != null) {
             throw new BadRequestException('Trip already start');
