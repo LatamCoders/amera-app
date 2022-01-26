@@ -170,6 +170,19 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Profile
              */
             Route::get('{CaId}/profile', [CorporateAccountController::class, 'CaProfile']);
+
+            /*
+             * Method: Post
+             * Panel
+             */
+            Route::post('panel/booking/add', [CorporateAccountController::class, 'BookingRegister']);
+            Route::post('panel/client/add', [CorporateAccountController::class, 'RegisterCaClient']);
+
+            /*
+             * Method: Get
+             * Panel
+             */
+            Route::get('{CaId}/panel/client/search', [CorporateAccountController::class, 'CaClientList']);
         });
 
     });

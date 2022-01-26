@@ -14,6 +14,7 @@ use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Aws\S3\S3Client;
+use Carbon\Carbon;
 use http\Client\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -54,26 +55,9 @@ class SelfPayController extends Controller
     {
         try {
 
-            $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
+            $response = $this->_SelfPayService->SelfPaySignIn($request, Carbon::now());
 
-            if ($clienteExistente) {
-                return CustomHttpResponse::HttpResponse('Client exist', '', 200);
-            }
-
-            $selfpay = new SelfPay();
-
-            $selfPayId = 'SP' . rand(100, 9999);
-
-            $selfpay->client_id = $selfPayId;
-            $selfpay->name = $request->name;
-            $selfpay->lastname = $request->lastname;
-            $selfpay->phone_number = $request->phone_number;
-            $selfpay->email = $request->email;
-            $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
-
-            $selfpay->save();
-
-            return CustomHttpResponse::HttpResponse('Client register', '', 200);
+            return CustomHttpResponse::HttpResponse($response, '', 200);
 
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);

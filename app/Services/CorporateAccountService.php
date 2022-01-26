@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Models\AmeraUser;
+use App\Models\Booking;
 use App\Models\CorporateAccount;
 use App\Models\CorporateAccountPersonalInfo;
 use App\Models\CorportateAccountPaymentMethod;
+use App\Models\SelfPay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -76,7 +78,7 @@ class CorporateAccountService
         $existUser = AmeraUser::with('CorporateAccount.CorporateAccountPersonalInfo', 'CorporateAccount.CorporateAccountPaymentMethod', 'Role')
             ->where('email', $request->email)->first();
 
-        if ($existUser != null && $existUser->status == 0 ) throw new HttpException(403, 'This user is not active');
+        if ($existUser != null && $existUser->status == 0) throw new HttpException(403, 'This user is not active');
 
         if (!$existUser) throw new HttpException(404, 'User not found');
 
@@ -123,5 +125,25 @@ class CorporateAccountService
         } catch (\Exception $exception) {
             throw new HttpException(500, $exception->getMessage());
         }
+    }
+
+    /*
+     * Registrar un booking
+     */
+    public function BookingRegister($request)
+    {
+
+        $booking = new Booking();
+
+
+
+    }
+
+    /*
+     * Obtener la lista de clientes de un CA
+     */
+    public function GetCaClientList($caId)
+    {
+        return SelfPay::where('ca_id', $caId)->get();
     }
 }
