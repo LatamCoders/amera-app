@@ -28,6 +28,11 @@ class SelfPayService
             $selfpay->lastname = $request->lastname;
             $selfpay->phone_number = $request->phone_number;
             $selfpay->email = $request->email;
+            $selfpay->gender = $request->gender;
+            $selfpay->birthday = $request->birthday;
+            $selfpay->address = $request->address;
+            $selfpay->city = $request->city;
+            $selfpay->note = $request->note;
             $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
             $selfpay->ca_id = $request->ca_id;
             $selfpay->phone_number_verified_at = $phoneVerify;

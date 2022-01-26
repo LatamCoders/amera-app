@@ -26,6 +26,8 @@ class SelfPay extends Authenticatable implements JWTSubject
         'phone_number',
         'email',
         'address',
+        'city',
+        'note',
         'profile_picture'
     ];
 

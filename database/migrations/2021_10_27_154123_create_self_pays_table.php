@@ -23,6 +23,8 @@ class CreateSelfPaysTable extends Migration
             $table->string('phone_number', 50)->unique();
             $table->string('email', 50);
             $table->text('address')->nullable();
+            $table->string('city', 100)->nullable();
+            $table->text('note')->nullable();
             $table->text('profile_picture')->nullable();
             $table->foreignId('ca_id')->nullable()->constrained('corporate_accounts')->nullOnDelete();
             $table->dateTime('email_verified_at')->nullable();
