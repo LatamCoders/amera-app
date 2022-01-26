@@ -140,24 +140,10 @@ class CorporateAccountService
     }
 
     /*
-     * Registrar un paciente/reservation code
+     * Obtener la lista de clientes de un CA
      */
-    public function ReservationCodeRegister($request)
+    public function GetCaClientList($caId)
     {
-        DB::transaction(function () use ($request) {
-            $client = new SelfPay();
-
-            $selfPayId = 'SP' . rand(100, 9999);
-
-            $client->client_id = $selfPayId;
-            $client->name = $request->name;
-            $client->lastname = $request->lastname;
-            $client->phone_number = $request->phone_number;
-            $client->email = $request->email;
-
-            $client->save();
-
-
-        });
+        return SelfPay::where('ca_id', $caId)->get();
     }
 }

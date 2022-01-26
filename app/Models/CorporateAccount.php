@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
@@ -29,5 +30,10 @@ class CorporateAccount extends Model
     public function AmeraUser(): BelongsTo
     {
         return $this->belongsTo(AmeraUser::class, 'amera_user_id');
+    }
+
+    public function SelfPay(): HasMany
+    {
+        return $this->hasMany(SelfPay::class, 'ca_id');
     }
 }

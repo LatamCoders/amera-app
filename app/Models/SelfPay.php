@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -27,6 +28,8 @@ class SelfPay extends Authenticatable implements JWTSubject
         'address',
         'profile_picture'
     ];
+
+    protected $hidden = ['ca_id'];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -79,5 +82,10 @@ class SelfPay extends Authenticatable implements JWTSubject
     public function SelfpayRate(): HasMany
     {
         return $this->hasMany(SelfPayRate::class, 'selfpay_id');
+    }
+
+    public function CorporateAccount(): BelongsTo
+    {
+        return $this->belongsTo(CorporateAccount::class, 'ca_id');
     }
 }
