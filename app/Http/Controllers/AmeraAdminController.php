@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AmeraAdminService;
+use App\Services\BookingService;
 use App\utils\CustomHttpResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,11 +11,13 @@ use Illuminate\Http\Request;
 class AmeraAdminController extends Controller
 {
     protected $_AmeraAdminService;
+    protected $_BookingService;
 
-    public function __construct(AmeraAdminService $AmeraAdminService)
+    public function __construct(AmeraAdminService $AmeraAdminService, BookingService $bookingService)
     {
         $this->middleware('auth:users', ['except' => ['AdminLogin', 'AdminRegister']]);
         $this->_AmeraAdminService = $AmeraAdminService;
+        $this->_BookingService = $bookingService;
     }
 
     public function AdminRegister(Request $request): JsonResponse
@@ -76,6 +79,17 @@ class AmeraAdminController extends Controller
     {
         try {
             $this->_AmeraAdminService->ChangeUserStatus($request->userId);
+
+            return CustomHttpResponse::HttpResponse('User status change', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function BookingPending(): JsonResponse
+    {
+        try {
+            $this->_BookingService->GetBookingList();
 
             return CustomHttpResponse::HttpResponse('User status change', '', 200);
         } catch (\Exception $exception) {

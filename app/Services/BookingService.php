@@ -60,4 +60,9 @@ class BookingService
 
         $booking->save();
     }
+
+    public function GetBookingList()
+    {
+        return Booking::with('SelfPay')->where('status', '0')->get();
+    }
 }

@@ -16,8 +16,9 @@ class CreateAdditionalServicesTable extends Migration
         Schema::create('additional_services', function (Blueprint $table) {
             $table->id();
             $table->text('service');
-            $table->text('from');
             $table->text('to');
+            $table->string('time', 20);
+            $table->string('price', 20);
             $table->foreignId('booking_id')->constrained('bookings');
             $table->timestamps();
         });
