@@ -246,9 +246,9 @@ class SelfPayController extends Controller
     public function AddReserve(Request $request, $clientId): JsonResponse
     {
         try {
-            $this->_BookingService->AddBooking($request, $clientId);
+           $res = $this->_BookingService->AddBooking($request, $clientId);
 
-            return CustomHttpResponse::HttpResponse('Booking add successfully', '', 200);
+            return CustomHttpResponse::HttpResponse('Booking add successfully', ['booking_id' => $res], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
