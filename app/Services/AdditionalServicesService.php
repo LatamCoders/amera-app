@@ -11,8 +11,9 @@ class AdditionalServicesService
         $services = new AdditionalService();
 
         $services->service = $request->service;
-        $services->from = $request->from;
         $services->to = $request->to;
+        $services->time = $request->time;
+        $services->price = $request->price;
         $services->booking_id = $bookingId;
 
         $services->save();
