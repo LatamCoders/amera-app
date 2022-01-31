@@ -27,7 +27,7 @@ class BookingService
 
         $booking->save();
 
-        return $booking->booking_id;
+        return $booking->id;
     }
 
     public function Start($bookingId)
