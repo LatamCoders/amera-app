@@ -12,8 +12,9 @@ class AdditionalService extends Model
 
     protected $fillable = [
         'service',
-        'from',
         'to',
+        'time',
+        'price',
     ];
 
     public function SelfPay() :BelongsTo
