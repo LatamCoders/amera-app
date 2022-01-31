@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BookingService
 {
-    public function AddBooking($request, $clientId): bool
+    public function AddBooking($request, $clientId)
     {
         $booking = new Booking();
 
@@ -27,7 +27,7 @@ class BookingService
 
         $booking->save();
 
-        return true;
+        return $booking->booking_id;
     }
 
     public function Start($bookingId)
