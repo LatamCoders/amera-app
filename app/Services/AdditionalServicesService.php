@@ -8,14 +8,19 @@ class AdditionalServicesService
 {
     public function Add($request, $bookingId)
     {
-        $services = new AdditionalService();
+        $data = json_decode($request->services);
 
-        $services->service = $request->service;
-        $services->to = $request->to;
-        $services->time = $request->time;
-        $services->price = $request->price;
-        $services->booking_id = $bookingId;
+        foreach ($data as $service) {
+            $services = new AdditionalService();
 
-        $services->save();
+            $services->service = $service->service;
+            $services->to = $service->to;
+            $services->time = $service->time;
+            $services->price = $service->price;
+            $services->booking_id = $bookingId;
+
+            $services->save();
+        }
+
     }
 }
