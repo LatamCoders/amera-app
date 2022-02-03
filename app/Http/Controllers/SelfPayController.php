@@ -344,6 +344,20 @@ class SelfPayController extends Controller
         }
     }
 
+    /*
+     * Eliminar un servicio
+     */
+    public function DeleteOneService($serviceId): JsonResponse
+    {
+        try {
+            $this->_AdditionalServicesService->DeleteService($serviceId);
+
+            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
 
     /*
      * Test encrypt

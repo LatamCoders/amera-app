@@ -23,4 +23,11 @@ class AdditionalServicesService
         }
 
     }
+
+    public function DeleteService($serviceId)
+    {
+        $service = AdditionalService::where('id', $serviceId)->first();
+
+        $service->delete();
+    }
 }

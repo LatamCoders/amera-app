@@ -24,7 +24,8 @@ class Booking extends Model
         'appoinment_datetime',
         'from',
         'to',
-        'driver_id'
+        'driver_id',
+        'status'
     ];
 
     public function SelfPay(): BelongsTo
@@ -39,7 +40,7 @@ class Booking extends Model
 
     public function StatusCode(): BelongsTo
     {
-        return $this->belongsTo(StatusCode::class, 'status');
+        return $this->belongsTo(StatusCode::class, 'status', 'status');
     }
 
     public function Cancellation(): HasOne

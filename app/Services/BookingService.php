@@ -13,6 +13,9 @@ class BookingService
     {
         $booking = new Booking();
 
+        $from = (object) ['from' => $request->from, 'coordinate' => $request->from_coordinates];
+        $to = (object) ['from' => $request->to, 'coordinate' => $request->to_coordinates];
+
         $booking->booking_id = UniqueIdentifier::GenerateUid();
         $booking->selfpay_id = $clientId;
         $booking->booking_date = $request->booking_date;
@@ -20,8 +23,8 @@ class BookingService
         $booking->city = $request->city;
         $booking->surgery_type = $request->surgery_type;
         $booking->appoinment_datetime = $request->appoinment_datetime;
-        $booking->from = $request->from;
-        $booking->to = $request->to;
+        $booking->from = json_encode($from);
+        $booking->to = json_encode($to);
         $booking->driver_id = $request->driver_id;
         $booking->status = 0;
 
@@ -69,7 +72,7 @@ class BookingService
     public function BookingList($clientId, $type)
     {
         if ($type == 'selfpay') {
-            return Booking::with('AdditionalService')->where('selfpay_id', $clientId)->get();
+            return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)->get();
         } else if ($type == 'driver') {
             return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)->get();
         } else {

@@ -20,7 +20,7 @@ class StatusCode extends Model
 
     public function Booking(): HasMany
     {
-        return $this->hasMany(Booking::class, 'status');
+        return $this->hasMany(Booking::class, 'status', 'status');
     }
 
     public function Cancellation(): HasMany
