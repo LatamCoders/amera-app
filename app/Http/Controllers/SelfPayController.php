@@ -40,7 +40,7 @@ class SelfPayController extends Controller
         SmsService                $SmsService
     )
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode', 'ActivateVerificationCode']]);
         $this->_SelfPayService = $selfPayService;
         $this->_ExperienceService = $experienceService;
         $this->_BookingService = $bookingService;
@@ -311,6 +311,34 @@ class SelfPayController extends Controller
             $this->_SelfPayService->VerifyClientNumberOrEmail($selfpayId, $request->query('type'));
 
             return CustomHttpResponse::HttpResponse('Ok', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Activar el verification code
+     */
+    public function ActivateVerificationCode($selfpayId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->ActivateReservationCodeSP($selfpayId);
+
+            return CustomHttpResponse::HttpResponse('Ok', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * My bookings
+     */
+    public function MyBookings(Request $request, $selfpayId): JsonResponse
+    {
+        try {
+            $res = $this->_BookingService->BookingList($selfpayId, $request->query('type'));
+
+            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

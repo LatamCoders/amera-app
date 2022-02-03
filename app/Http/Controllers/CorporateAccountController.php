@@ -81,7 +81,7 @@ class CorporateAccountController extends Controller
     public function RegisterCaClient(Request $request): JsonResponse
     {
         try {
-           $res = $this->_SelfPayService->SelfPaySignIn($request, null);
+           $res = $this->_SelfPayService->SelfPaySignIn($request, null, false);
 
             return CustomHttpResponse::HttpResponse($res, '', 200);
         } catch (\Exception $exception) {

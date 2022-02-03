@@ -29,6 +29,7 @@ class CreateSelfPaysTable extends Migration
             $table->foreignId('ca_id')->nullable()->constrained('corporate_accounts')->nullOnDelete();
             $table->dateTime('email_verified_at')->nullable();
             $table->dateTime('phone_number_verified_at')->nullable();
+            $table->boolean('active');
             $table->timestamps();
         });
     }

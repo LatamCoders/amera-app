@@ -87,6 +87,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
      */
     Route::group(['prefix' => 'client'], function () {
         /*
+         * Method: Post
+         * Reservation code
+         */
+        Route::post('{clientId}/account/activate', [SelfPayController::class, 'ActivateVerificationCode']);
+
+        /*
          * Auth required
          */
         Route::group(['middleware' => 'auth:selfpay'], function () {
@@ -100,7 +106,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Method: Get
              * Booking
              */
-            Route::get('{clientId}/booking/reserve/add', [SelfPayController::class, 'AddReserve']);
+            Route::get('{clientId}/bookings', [SelfPayController::class, 'MyBookings']);
 
             /*
              * Method: Post
@@ -138,6 +144,12 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          * Auth required
          */
         Route::group(['middleware' => 'auth:driver'], function () {
+            /*
+             * Method: Get
+             * Booking
+             */
+            Route::get('{driverId}/bookings', [DriverController::class, 'MyBookings']);
+
             /*
              * Method: Post
              * Profile
