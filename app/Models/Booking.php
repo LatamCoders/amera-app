@@ -61,4 +61,9 @@ class Booking extends Model
     {
         return $this->hasOne(SelfPay::class, 'booking_id');
     }
+
+    public function AdditionalService(): HasMany
+    {
+        return $this->hasMany(AdditionalService::class, 'booking_id');
+    }
 }

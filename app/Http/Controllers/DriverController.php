@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use App\Models\SelfPay;
 use App\Models\Vehicle;
+use App\Services\BookingService;
 use App\Services\DriverService;
 use App\Services\ExperienceService;
 use App\Services\SmsService;
@@ -13,6 +14,7 @@ use App\utils\UploadFiles;
 use App\utils\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Util\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\JWTAuth;
@@ -22,13 +24,15 @@ class DriverController extends Controller
     protected $_ExperienceService;
     protected $_SmsService;
     protected $_DriverService;
+    protected $_BookingService;
 
-    public function __construct(ExperienceService $experienceService, SmsService $SmsService, DriverService $DriverService)
+    public function __construct(ExperienceService $experienceService, SmsService $SmsService, DriverService $DriverService, BookingService $bookingService)
     {
         $this->middleware('auth:driver', ['except' => ['DriverLogin', 'DriverSignUp', 'SendSmsCode']]);
         $this->_ExperienceService = $experienceService;
         $this->_SmsService = $SmsService;
         $this->_DriverService = $DriverService;
+        $this->_BookingService = $bookingService;
     }
 
     /*
@@ -37,30 +41,33 @@ class DriverController extends Controller
     public function DriverSignUp(Request $request): JsonResponse
     {
         try {
-            $dirverExistente = Driver::where('phone_number', $request->phone_number)->exists();
+            DB::transaction(function () use ($request) {
+                $dirverExistente = Driver::where('phone_number', $request->phone_number)->exists();
 
-            if ($dirverExistente) {
-                return CustomHttpResponse::HttpResponse('Driver exist', '', 200);
-            }
+                if ($dirverExistente) {
+                    return CustomHttpResponse::HttpResponse('Driver exist', '', 200);
+                }
 
-            $driver = new Driver();
+                $driver = new Driver();
 
-            $driverId = 'DV' . rand(1000, 99999);
+                $driverId = 'DV' . rand(1000, 99999);
 
-            $driver->driver_id = $driverId;
-            $driver->name = $request->name;
-            $driver->lastname = $request->lastname;
-            $driver->phone_number = $request->phone_number;
-            $driver->email = $request->email;
-            $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
+                $driver->driver_id = $driverId;
+                $driver->name = $request->name;
+                $driver->lastname = $request->lastname;
+                $driver->phone_number = $request->phone_number;
+                $driver->email = $request->email;
+                $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
 
-            if ($driver->save()) {
+                $driver->save();
+
                 $this->RegisterVehicleAndDocuments($request, $driver->id, $driverId);
 
                 UploadFiles::UploadDriverFile($request, $driverId, $driver->id);
 
                 return CustomHttpResponse::HttpResponse('Driver register', '', 200);
-            }
+
+            });
 
             return CustomHttpResponse::HttpResponse('Error', '', 500);
 
@@ -225,7 +232,7 @@ class DriverController extends Controller
         }
     }
 
-    public function DriverRateAmeraExperience(Request $request, $bookingId, $driverId): \Illuminate\Http\JsonResponse
+    public function DriverRateAmeraExperience(Request $request, $bookingId, $driverId): JsonResponse
     {
         try {
             $this->_ExperienceService->RateAmera($request, $bookingId, $driverId, null);
@@ -259,6 +266,20 @@ class DriverController extends Controller
             $this->_DriverService->VerifyDriverNumberOrEmail($driverId, $request->query('type'));
 
             return CustomHttpResponse::HttpResponse('Ok', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * My Bookings
+     */
+    public function MyBookings(Request $request, $driverId): JsonResponse
+    {
+        try {
+            $res = $this->_BookingService->BookingList($driverId, $request->query('type'));
+
+            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

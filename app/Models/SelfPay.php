@@ -28,7 +28,8 @@ class SelfPay extends Authenticatable implements JWTSubject
         'address',
         'city',
         'note',
-        'profile_picture'
+        'profile_picture',
+        'active'
     ];
 
     protected $hidden = ['ca_id'];
@@ -64,11 +65,6 @@ class SelfPay extends Authenticatable implements JWTSubject
     public function Booking(): HasMany
     {
         return $this->hasMany(Booking::class, 'selfpay_id');
-    }
-
-    public function AdditionalService(): HasMany
-    {
-        return $this->hasMany(AdditionalService::class, 'selfpay_id');
     }
 
     public function Experiences(): HasMany

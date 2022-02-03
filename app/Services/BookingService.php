@@ -65,4 +65,15 @@ class BookingService
     {
         return Booking::with('SelfPay')->where('status', '0')->get();
     }
+
+    public function BookingList($clientId, $type)
+    {
+        if ($type == 'selfpay') {
+            return Booking::with('AdditionalService')->where('selfpay_id', $clientId)->get();
+        } else if ($type == 'driver') {
+            return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)->get();
+        } else {
+            throw new BadRequestException('Invalid option');
+        }
+    }
 }

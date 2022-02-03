@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Booking;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SelfPayService
 {
-    public function SelfPaySignIn(Request $request, $phoneVerify)
+    public function SelfPaySignIn(Request $request, $phoneVerify, $activatedUser = true)
     {
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
@@ -36,6 +37,7 @@ class SelfPayService
             $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
             $selfpay->ca_id = $request->ca_id;
             $selfpay->phone_number_verified_at = $phoneVerify;
+            $selfpay->active = $activatedUser;
 
             $selfpay->save();
 
@@ -60,5 +62,14 @@ class SelfPayService
         } else {
             throw new BadRequestException('Invalid verification type');
         }
+    }
+
+    public function ActivateReservationCodeSP($clientId)
+    {
+        $sp = SelfPay::where('client_id', $clientId)->first();
+
+        $sp->active = true;
+
+        $sp->save();
     }
 }

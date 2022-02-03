@@ -17,8 +17,8 @@ class AdditionalService extends Model
         'price',
     ];
 
-    public function SelfPay() :BelongsTo
+    public function Booking() :BelongsTo
     {
-        return $this->belongsTo(SelfPay::class, 'selfpay_id');
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 }
