@@ -347,12 +347,26 @@ class SelfPayController extends Controller
     /*
      * Eliminar un servicio
      */
-    public function DeleteOneService($serviceId): JsonResponse
+    public function DeleteOneService($bookingId, $serviceId): JsonResponse
     {
         try {
-            $this->_AdditionalServicesService->DeleteService($serviceId);
+            $this->_AdditionalServicesService->DeleteService($serviceId, $bookingId);
 
-            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
+            return CustomHttpResponse::HttpResponse('Service deleted', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Modificar un servicio
+     */
+    public function ModifyOneService(Request $request, $bookingId, $serviceId): JsonResponse
+    {
+        try {
+            $this->_AdditionalServicesService->ModifyServices($request, $serviceId, $bookingId);
+
+            return CustomHttpResponse::HttpResponse('Service modified', '', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
