@@ -65,11 +65,9 @@ class DriverController extends Controller
 
                 UploadFiles::UploadDriverFile($request, $driverId, $driver->id);
 
-                return CustomHttpResponse::HttpResponse('Driver register', '', 200);
-
             });
 
-            return CustomHttpResponse::HttpResponse('Error', '', 500);
+            return CustomHttpResponse::HttpResponse('Driver register', '', 200);
 
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
