@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\testBroadcast;
 use App\Http\Controllers\AmeraAdminController;
 use App\Http\Controllers\CorporateAccountController;
 use App\Http\Controllers\DriverController;
@@ -238,7 +239,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
 
     Route::post('images', [DriverController::class, 'TestImages']);
     Route::get('realtime', function () {
-        event(new \App\Events\testBroadcast('esto es real'));
+        event(new testBroadcast('esto es real'));
         return "Evento enviado";
     });
 });
