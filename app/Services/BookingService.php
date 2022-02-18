@@ -45,6 +45,7 @@ class BookingService
             throw new BadRequestException('Trip already start');
         }
 
+
         $booking->trip_start = Carbon::now();
 
         $booking->save();
