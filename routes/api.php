@@ -239,7 +239,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
 
     Route::post('images', [DriverController::class, 'TestImages']);
     Route::get('realtime', function () {
-        event(new testBroadcast('esto es real'));
+        broadcast(new testBroadcast('esto es real'));
         return "Evento enviado";
     });
 });
