@@ -6,6 +6,7 @@ use App\Http\Controllers\CorporateAccountController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\SelfPayController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 
@@ -236,10 +237,11 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
         Route::get('panel/booking/pending', [AmeraAdminController::class, 'BookingPending']);
     });
 
-
     Route::post('images', [DriverController::class, 'TestImages']);
-    Route::get('realtime', function () {
-        broadcast(new testBroadcast('esto es real'));
+    Route::get('realtime/{bookingId}', function ($bookingId) {
+        broadcast(new testBroadcast('esto es real', $bookingId));
         return "Evento enviado";
     });
+
+
 });
