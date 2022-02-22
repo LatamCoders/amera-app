@@ -2,11 +2,11 @@
 
 use App\Events\testBroadcast;
 use App\Http\Controllers\AmeraAdminController;
+use App\Http\Controllers\AmeraUserController;
 use App\Http\Controllers\CorporateAccountController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\SelfPayController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 
@@ -57,8 +57,14 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          * Method: Post
          */
         Route::post('ca/register', [CorporateAccountController::class, 'CaRegister']);
-        Route::post('ca/login', [CorporateAccountController::class, 'CaLogin']);
-        Route::middleware('auth:users')->post('ca/logout', [CorporateAccountController::class, 'CaLogout']);
+
+        /*
+         * Controller: Amera Users
+         *
+         * Method: Post
+         */
+        Route::post('users/login', [AmeraUserController::class, 'Login']);
+        Route::middleware('auth:users')->post('users/logout', [AmeraUserController::class, 'Logout']);
 
         /*
          * Controller: Corporate Account
@@ -73,8 +79,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
          * Method: Post
          */
         Route::post('admin/register', [AmeraAdminController::class, 'AdminRegister']);
-        Route::post('admin/login', [AmeraAdminController::class, 'AdminLogin']);
-        Route::middleware('auth:users')->post('admin/logout', [AmeraAdminController::class, 'AdminLogout']);
 
         /*
          * Controller: Admins
@@ -221,20 +225,23 @@ Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
              * Profile
              */
             Route::get('{adminId}/profile', [AmeraAdminController::class, 'AdminProfile']);
+
+            /*
+             * Method: Post
+             * Panel
+             */
+            Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
+            Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
+            Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
+
+            /*
+             * Method: get
+             * Panel
+             */
+            Route::get('panel/booking/pending', [AmeraAdminController::class, 'BookingPending']);
+            Route::get('panel/driver/list', [AmeraAdminController::class, 'DriverList']);
+
         });
-
-        /*
-         * Method: Post
-         * Panel
-         */
-        Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
-        Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
-
-        /*
-         * Method: get
-         * Panel
-         */
-        Route::get('panel/booking/pending', [AmeraAdminController::class, 'BookingPending']);
     });
 
     Route::post('images', [DriverController::class, 'TestImages']);

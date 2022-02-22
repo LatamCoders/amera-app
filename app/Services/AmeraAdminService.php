@@ -4,10 +4,13 @@ namespace App\Services;
 
 use App\Models\AmeraAdmin;
 use App\Models\AmeraUser;
+use App\Models\Booking;
 use App\Models\CorporateAccount;
+use App\Models\Driver;
 use App\utils\UniqueIdentifier;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AmeraAdminService
@@ -42,50 +45,6 @@ class AmeraAdminService
     }
 
     /*
-     * Iniciar la sesión
-     */
-    public function AdminLogin($request): array
-    {
-        $existUser = AmeraUser::with('AmeraAdmin', 'Role')
-            ->where('email', $request->email)->first();
-
-        if ($existUser != null && $existUser->status == 0) throw new HttpException(403, 'This user is not active');
-
-        if (!$existUser) throw new HttpException(404, 'User not found');
-
-        $credentials = $request->only('email', 'password');
-
-        $token = auth('users')->attempt($credentials);
-
-        if (!$token) throw new HttpException(500, 'password incorrect');
-
-        return $this->RespondWithToken($token, $existUser);
-    }
-
-    /*
-     * Cerrar la sesión
-     */
-    public function AdminLogOut(): string
-    {
-        auth()->logout(true);
-
-        return 'Admin logout successfully';
-    }
-
-    /*
-     * Retornar token con datos del usuario
-     */
-    protected function RespondWithToken($token, $client): array
-    {
-        return [
-            'user' => $client,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ];
-    }
-
-    /*
      * Devolver datos del administrador
      */
     public function GetAdminData($AdminId)
@@ -98,9 +57,26 @@ class AmeraAdminService
         }
     }
 
+    public function GetDriverList()
+    {
+        return Driver::with('Booking', 'Vehicle')->get();
+    }
+
     public function GetCorporateAccountList()
     {
         return CorporateAccount::with('AmeraUser.Role')->get();
+    }
+
+    public function AssignDriverToBooking($driverId, $bookingId)
+    {
+        $driver = Driver::with('Booking')->where('driver_id', $driverId)->first();
+
+        $booking = Booking::where('id', $bookingId)->first();
+
+        $booking->driver_id = $driver->id;
+
+        $booking->save();
+
     }
 
     public function ChangeUserStatus($userId)
