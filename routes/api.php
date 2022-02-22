@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
     return $request->user();
 });*/
 
-Route::group(['prefix' => 'v1', 'middleware' => 'onlyAjax'], function () {
+Route::group(['prefix' => 'v1'], function () {
     /*
      * Auth
      */
