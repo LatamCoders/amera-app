@@ -15,15 +15,17 @@ class testBroadcast implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $bookingId;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message)
+    public function __construct($message, $bookingId)
     {
         $this->message = $message;
+        $this->bookingId = $bookingId;
     }
 
     /**
@@ -33,6 +35,6 @@ class testBroadcast implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('private-testing'.'1');
+        return new PrivateChannel('testing.'.$this->bookingId);
     }
 }

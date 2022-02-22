@@ -96,4 +96,26 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function DriverList(): JsonResponse
+    {
+        try {
+            $drivers = $this->_AmeraAdminService->GetDriverList();
+
+            return CustomHttpResponse::HttpResponse('OK', $drivers, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function AssignDriver($bookingId, $driverId): JsonResponse
+    {
+        try {
+            $this->_AmeraAdminService->AssignDriverToBooking($driverId, $bookingId);
+
+            return CustomHttpResponse::HttpResponse('Driver assigned', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
