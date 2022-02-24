@@ -65,11 +65,14 @@ class BookingService
         $booking->save();
     }
 
-    public function GetBookingList()
+    public function GetBookingList($status)
     {
-        return Booking::with('SelfPay')->where('status', '0')->get();
+        return Booking::with('SelfPay', 'Driver', 'AdditionalService')->where('status', $status)->get();
     }
 
+    /*
+     * Listado de reservar para selfpay o driver
+     */
     public function BookingList($clientId, $type)
     {
         if ($type == 'selfpay') {

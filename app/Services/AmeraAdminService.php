@@ -73,10 +73,13 @@ class AmeraAdminService
 
         $booking = Booking::where('id', $bookingId)->first();
 
-        $booking->driver_id = $driver->id;
+        if ($booking->driver_id != $driver->id) {
+            $booking->driver_id = $driver->id;
 
-        $booking->save();
-
+            $booking->save();
+        } else {
+            throw new BadRequestException('The driver has already been assigned to this booking');
+        }
     }
 
     public function ChangeUserStatus($userId)

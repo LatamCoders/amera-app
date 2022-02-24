@@ -86,12 +86,12 @@ class AmeraAdminController extends Controller
         }
     }
 
-    public function BookingPending(): JsonResponse
+    public function BookingList(Request $request): JsonResponse
     {
         try {
-            $this->_BookingService->GetBookingList();
+           $list = $this->_BookingService->GetBookingList($request->query('status'));
 
-            return CustomHttpResponse::HttpResponse('User status change', '', 200);
+            return CustomHttpResponse::HttpResponse('OK', $list, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

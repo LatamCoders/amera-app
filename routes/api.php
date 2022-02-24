@@ -238,7 +238,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Method: get
              * Panel
              */
-            Route::get('panel/booking/pending', [AmeraAdminController::class, 'BookingPending']);
+            Route::get('panel/booking/list', [AmeraAdminController::class, 'BookingList']);
             Route::get('panel/driver/list', [AmeraAdminController::class, 'DriverList']);
 
         });
