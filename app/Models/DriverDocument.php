@@ -15,9 +15,9 @@ class DriverDocument extends Model
 
     protected $fillable = [
         'driver_license',
-        'driver_license_check',
+        'driver_license_verify_at',
         'proof_of_insurance',
-        'proof_of_insurance_check'
+        'proof_of_insurance_verify_at'
     ];
 
     public function Driver(): BelongsTo

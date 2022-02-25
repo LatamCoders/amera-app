@@ -169,8 +169,23 @@ class DriverController extends Controller
         try {
             $driver = Driver::with('vehicle', 'driverdocuments', 'vehicle.vehicledocuments')->where('phone_number', $request->phone_number)->first();
 
+            $vehicle_front_image_verify_at = $driver->vehicle->vehicledocuments->vehicle_front_image_verify_at;
+            $vehicle_rear_image_verify_at = $driver->vehicle->vehicledocuments->vehicle_rear_image_verify_at;
+            $vehicle_side_image_verify_at = $driver->vehicle->vehicledocuments->vehicle_side_image_verify_at;
+            $vehicle_interior_image_verify_at = $driver->vehicle->vehicledocuments->vehicle_interior_image_verify_at;
+            $driver_license_verify_at = $driver->driverdocuments->driver_license_verify_at;
+            $proof_of_insurance_verify_at = $driver->driverdocuments->proof_of_insurance_verify_at;
+
             if (!$driver) {
                 return CustomHttpResponse::HttpResponse('Driver not found', $driver, 404);
+            } else if ($vehicle_front_image_verify_at == null
+                || $vehicle_rear_image_verify_at == null
+                || $vehicle_side_image_verify_at == null
+                || $vehicle_interior_image_verify_at == null
+                || $driver_license_verify_at == null
+                || $proof_of_insurance_verify_at == null
+            ) {
+                return CustomHttpResponse::HttpResponse('Driver inactive', '', 500);
             }
 
             $token = $auth->fromUser($driver);
