@@ -345,6 +345,20 @@ class SelfPayController extends Controller
     }
 
     /*
+     * One booking
+     */
+    public function GetOneBooking(Request $request, $bookingId, $selfpayId): JsonResponse
+    {
+        try {
+            $res = $this->_BookingService->ShowOneBooking($selfpayId, $bookingId, $request->query('type'));
+
+            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
      * Eliminar un servicio
      */
     public function DeleteOneService($bookingId, $serviceId): JsonResponse

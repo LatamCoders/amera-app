@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 
 class CreateDriverDocumentsTable extends Migration
@@ -17,9 +18,9 @@ class CreateDriverDocumentsTable extends Migration
             $table->id();
             $table->foreignId('driver_id')->constrained('drivers');
             $table->text('driver_license');
-            $table->tinyInteger('driver_license_check')->default(0);
+            $table->dateTime('driver_license_verify_at')->nullable();
             $table->text('proof_of_insurance');
-            $table->tinyInteger('proof_of_insurance_check')->default(0);
+            $table->dateTime('proof_of_insurance_verify_at')->nullable();
         });
     }
 

@@ -13,8 +13,8 @@ class BookingService
     {
         $booking = new Booking();
 
-        $from = (object) ['from' => $request->from, 'coordinate' => $request->from_coordinates];
-        $to = (object) ['from' => $request->to, 'coordinate' => $request->to_coordinates];
+        $from = (object)['from' => $request->from, 'coordinate' => $request->from_coordinates];
+        $to = (object)['from' => $request->to, 'coordinate' => $request->to_coordinates];
 
         $booking->booking_id = UniqueIdentifier::GenerateUid();
         $booking->selfpay_id = $clientId;
@@ -79,6 +79,22 @@ class BookingService
             return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)->get();
         } else if ($type == 'driver') {
             return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)->get();
+        } else {
+            throw new BadRequestException('Invalid option');
+        }
+    }
+
+    /*
+     * obtener reservar especifica para selfpay o driver
+     */
+    public function ShowOneBooking($clientId, $bookingId, $type)
+    {
+        if ($type == 'selfpay') {
+            return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)
+                ->where('id', $bookingId)->first();
+        } else if ($type == 'driver') {
+            return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)
+                ->where('id', $bookingId)->first();
         } else {
             throw new BadRequestException('Invalid option');
         }

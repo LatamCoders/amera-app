@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Schema;
 
 class CreateVehicleDocumentsTable extends Migration
@@ -17,13 +18,13 @@ class CreateVehicleDocumentsTable extends Migration
             $table->id();
             $table->foreignId('vehicle_id')->constrained('vehicles');
             $table->text('vehicle_front_image');
-            $table->tinyInteger('vehicle_front_image_check')->default(0);
+            $table->dateTime('vehicle_front_image_verify_at')->nullable();
             $table->text('vehicle_rear_image');
-            $table->tinyInteger('vehicle_rear_image_check')->default(0);
+            $table->dateTime('vehicle_rear_image_verify_at')->nullable();
             $table->text('vehicle_side_image');
-            $table->tinyInteger('vehicle_side_image_check')->default(0);
+            $table->dateTime('vehicle_side_image_verify_at')->nullable();
             $table->text('vehicle_interior_image');
-            $table->tinyInteger('vehicle_interior_image_check')->default(0);
+            $table->dateTime('vehicle_interior_image_verify_at')->nullable();
         });
     }
 

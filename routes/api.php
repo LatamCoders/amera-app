@@ -113,6 +113,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::get('{clientId}/bookings', [SelfPayController::class, 'MyBookings']);
+            Route::get('{clientId}/bookings/{bookingId}', [SelfPayController::class, 'GetOneBooking']);
 
             /*
              * Method: Post
@@ -162,6 +163,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::get('{driverId}/bookings', [DriverController::class, 'MyBookings']);
+            Route::get('{driverId}/bookings/{bookingId}', [DriverController::class, 'GetOneBooking']);
 
             /*
              * Method: Post

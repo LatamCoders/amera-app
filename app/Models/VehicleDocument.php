@@ -14,13 +14,13 @@ class VehicleDocument extends Model
 
     protected $fillable = [
         'vehicle_front_image',
-        'vehicle_front_image_check',
+        'vehicle_front_image_cverify_at',
         'vehicle_rear_image',
-        'vehicle_rear_image_check',
+        'vehicle_rear_image_verify_at',
         'vehicle_side_image',
-        'vehicle_side_image_check',
+        'vehicle_side_image_verify_at',
         'vehicle_interior_image',
-        'vehicle_interior_image_check'
+        'vehicle_interior_image_verify_at'
     ];
 
     public function Vehicle(): BelongsTo
