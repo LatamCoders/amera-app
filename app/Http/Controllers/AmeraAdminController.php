@@ -143,4 +143,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function GetBookingInfo($bookingId): JsonResponse
+    {
+        try {
+           $bookingData = $this->_BookingService->GetBookingData($bookingId);
+
+            return CustomHttpResponse::HttpResponse('OK', $bookingData, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }

@@ -210,6 +210,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Panel
              */
             Route::get('{CaId}/panel/client/search', [CorporateAccountController::class, 'CaClientList']);
+            Route::get('{CaId}/panel/booking/list', [CorporateAccountController::class, 'GetCaBooking']);
         });
 
     });
@@ -235,6 +236,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
+            Route::post('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
             Route::post('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
 

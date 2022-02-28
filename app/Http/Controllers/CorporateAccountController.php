@@ -99,4 +99,15 @@ class CorporateAccountController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function GetCaBooking($caId): JsonResponse
+    {
+        try {
+            $res = $this->_BookingService->GetBookingCaData($caId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
