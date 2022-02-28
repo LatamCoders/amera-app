@@ -63,6 +63,11 @@ class AmeraAdminService
         return Driver::with('Booking', 'Vehicle')->get();
     }
 
+    public function GetDriverInfo($driverId)
+    {
+        return Driver::with('Booking', 'Vehicle')->where('id', $driverId)->first();
+    }
+
     public function GetCorporateAccountList()
     {
         return CorporateAccount::with('AmeraUser.Role', 'CorporateAccountPersonalInfo', 'CorporateAccountPaymentMethod')->get();
@@ -122,5 +127,12 @@ class AmeraAdminService
                 $user->save();
                 break;
         }
+    }
+
+    public function DeleteCaUser($ameraUserId)
+    {
+        $user = AmeraUser::where('id', $ameraUserId)->first();
+
+        $user->delete();
     }
 }

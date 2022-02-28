@@ -233,12 +233,9 @@ Route::group(['prefix' => 'v1'], function () {
              * Method: Post
              * Panel
              */
-            Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
-            Route::post('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
-            Route::post('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
 
             /*
              * Method: get
@@ -246,6 +243,10 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::get('panel/booking/list', [AmeraAdminController::class, 'BookingList']);
             Route::get('panel/driver/list', [AmeraAdminController::class, 'DriverList']);
+            Route::get('panel/driver/{driverId}/info', [AmeraAdminController::class, 'DriverInfo']);
+            Route::get('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
+            Route::get('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
+            Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
 
         });
     });
