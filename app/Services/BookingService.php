@@ -83,9 +83,17 @@ class BookingService
      */
     public function GetBookingCaData($caId)
     {
-        return Booking::with('SelfPay', 'Driver', 'AdditionalService', function ($query) use ($caId) {
-            $query->where('SelfPay.ca_id', $caId);
-        });
+        $newBookingList = [];
+
+        $booking = Booking::with('SelfPay', 'Driver', 'AdditionalService')->get();
+
+        foreach ($booking as $items) {
+            if ($items->selfpay->ca_id == $caId) {
+                $newBookingList[] = $items;
+            }
+        }
+
+        return $newBookingList;
     }
 
     /*
