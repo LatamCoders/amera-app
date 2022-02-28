@@ -235,6 +235,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
+            Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
 
             /*
              * Method: get

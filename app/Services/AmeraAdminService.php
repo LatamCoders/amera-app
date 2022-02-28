@@ -8,6 +8,7 @@ use App\Models\Booking;
 use App\Models\CorporateAccount;
 use App\Models\Driver;
 use App\utils\UniqueIdentifier;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -64,7 +65,7 @@ class AmeraAdminService
 
     public function GetCorporateAccountList()
     {
-        return CorporateAccount::with('AmeraUser.Role')->get();
+        return CorporateAccount::with('AmeraUser.Role', 'CorporateAccountPersonalInfo', 'CorporateAccountPaymentMethod')->get();
     }
 
     public function AssignDriverToBooking($driverId, $bookingId)
@@ -89,5 +90,37 @@ class AmeraAdminService
         $user->status = !$user->satus;
 
         $user->save();
+    }
+
+    public function ApproveDriverDocuments($driverId, $document)
+    {
+        $user = Driver::where('id', $driverId)->first();
+
+        switch ($document) {
+            case 'driver_license_verify_at':
+                $user->driver_license_verify_at = Carbon::now();
+                $user->save();
+                break;
+            case 'proof_of_insurance_verify_at':
+                $user->proof_of_insurance_verify_at = Carbon::now();
+                $user->save();
+                break;
+            case 'vehicle_front_image_verify_at':
+                $user->vehicle_front_image_verify_at = Carbon::now();
+                $user->save();
+                break;
+            case 'vehicle_rear_image_verify_at':
+                $user->vehicle_rear_image_verify_at = Carbon::now();
+                $user->save();
+                break;
+            case 'vehicle_side_image_verify_at':
+                $user->vehicle_side_image_verify_at = Carbon::now();
+                $user->save();
+                break;
+            case 'vehicle_interior_image_verify_at':
+                $user->vehicle_interior_image_verify_at = Carbon::now();
+                $user->save();
+                break;
+        }
     }
 }
