@@ -118,4 +118,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function ApproveDocuments($driverId, Request $request): JsonResponse
+    {
+        try {
+            $this->_AmeraAdminService->ApproveDriverDocuments($driverId, $request->query('document'));
+
+            return CustomHttpResponse::HttpResponse('Document approved', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
