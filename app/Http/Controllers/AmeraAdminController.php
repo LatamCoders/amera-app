@@ -154,4 +154,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function DriverInfo($driverId): JsonResponse
+    {
+        try {
+           $bookingData = $this->_AmeraAdminService->GetDriverInfo($driverId);
+
+            return CustomHttpResponse::HttpResponse('OK', $bookingData, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
