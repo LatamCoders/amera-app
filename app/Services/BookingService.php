@@ -71,6 +71,24 @@ class BookingService
     }
 
     /*
+     * Obtener la información de una reserva
+     */
+    public function GetBookingData($bookingId)
+    {
+        return Booking::with('SelfPay', 'Driver', 'AdditionalService')->where('id', $bookingId)->first();
+    }
+
+    /*
+     * Obtener reservas del CA
+     */
+    public function GetBookingCaData($caId)
+    {
+        return Booking::with('SelfPay', 'Driver', 'AdditionalService', function ($query) use ($caId) {
+            $query->where('SelfPay.ca_id', $caId);
+        });
+    }
+
+    /*
      * Listado de reservar para selfpay o driver
      */
     public function BookingList($clientId, $type)
