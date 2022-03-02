@@ -17,7 +17,7 @@ class SelfPayService
             $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
             if ($clienteExistente) {
-                return CustomHttpResponse::HttpResponse('Client exist', '', 200);
+                return CustomHttpResponse::HttpResponse('Client exist', '', 400);
             }
 
             $selfpay = new SelfPay();
