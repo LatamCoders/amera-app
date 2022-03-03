@@ -34,9 +34,7 @@ class CorporateAccountService
 
             $ca->company_legal_name = $request->company_legal_name;
             $ca->dba = $request->dba;
-            $ca->company_type = $request->company_type;
             $ca->tin = $request->tin;
-            $ca->nature_of_business = $request->nature_of_business;
             $ca->contract_start_date = $request->contract_start_date;
             $ca->office_location_address = $request->office_location_address;
             $ca->billing_address = $request->billing_address;
@@ -51,7 +49,6 @@ class CorporateAccountService
             $CaInf->contact_name = $request->contact_name;
             $CaInf->contact_number = $request->contact_number;
             $CaInf->additional_contact_name = $request->additional_contact_name;
-            $CaInf->additional_contact_title = $request->additional_contact_title;
             $CaInf->additional_contact_number = $request->additional_contact_number;
             $CaInf->additional_contact_email = $request->additional_contact_email;
 
@@ -60,7 +57,6 @@ class CorporateAccountService
             $cAPayment->name_on_cc = $request->name_on_cc;
             $cAPayment->cc_number = $request->cc_number;
             $cAPayment->type_of_cc = $request->type_of_cc;
-            $cAPayment->zip = $request->zip;
             $cAPayment->code_of_cc = $request->code_of_cc;
 
             $ca->save();

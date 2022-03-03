@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CreditCard;
 use App\Models\DriverRate;
+use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\Models\SelfPayRate;
 use App\Services\AdditionalServicesService;
@@ -79,6 +80,20 @@ class SelfPayController extends Controller
             $token = $auth->fromUser($cliente);
 
             return CustomHttpResponse::HttpResponse('OK', $this->RespondWithToken($token, $cliente), 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Reservation code Login
+     */
+    public function ReservationCodeLogin(Request $request): JsonResponse
+    {
+        try {
+            $code = $this->_SelfPayService->ReservationCode($request);
+
+            return CustomHttpResponse::HttpResponse('OK', $code, 200);
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

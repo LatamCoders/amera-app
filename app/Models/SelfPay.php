@@ -62,6 +62,11 @@ class SelfPay extends Authenticatable implements JWTSubject
         return $this->hasOne(CreditCard::class, 'selfpay_id');
     }
 
+    public function ReservationCode(): HasOne
+    {
+        return $this->hasOne(ReservationCode::class, 'selfpay_id');
+    }
+
     public function Booking(): HasMany
     {
         return $this->hasMany(Booking::class, 'selfpay_id');
