@@ -66,7 +66,9 @@ class CorporateAccountService
             $ca->save();
 
             $ca->CorporateAccountPersonalInfo()->save($CaInf);
-            $ca->CorporateAccountPaymentMethod()->save($cAPayment);
+            if ($request->name_on_cc != "") {
+                $ca->CorporateAccountPaymentMethod()->save($cAPayment);
+            }
         });
     }
 
@@ -90,7 +92,6 @@ class CorporateAccountService
     {
 
         $booking = new Booking();
-
 
 
     }
