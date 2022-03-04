@@ -34,6 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('client/login', [SelfPayController::class, 'UserLogin'])->name('login');
         Route::post('client/register', [SelfPayController::class, 'SelfPaySignIn']);
         Route::post('client/sendsmscode', [SelfPayController::class, 'SendSmsCode']);
+        Route::post('client/reservationcode/generate', [SelfPayController::class, 'ReservationCodeGenerate']);
         Route::post('client/reservationcode/login', [SelfPayController::class, 'ReservationCodeLogin']);
 
         /*

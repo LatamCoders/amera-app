@@ -70,6 +70,7 @@ class SelfPayController extends Controller
      */
     public function UserLogin(Request $request, JWTAuth $auth): JsonResponse
     {
+
         try {
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
 
@@ -80,6 +81,20 @@ class SelfPayController extends Controller
             $token = $auth->fromUser($cliente);
 
             return CustomHttpResponse::HttpResponse('OK', $this->RespondWithToken($token, $cliente), 200);
+        } catch (Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Generate reservation code
+     */
+    public function ReservationCodeGenerate(Request $request): JsonResponse
+    {
+        try {
+            $code = $this->_SelfPayService->GenerateReservationCode($request->user_id);
+
+            return CustomHttpResponse::HttpResponse('OK', $code, 200);
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
