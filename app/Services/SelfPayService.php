@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SelfPayService
@@ -75,24 +73,12 @@ class SelfPayService
         $sp->save();
     }
 
-    public function GenerateReservationCode($user_id)
-    {
-        $code = rand(1000, 9999);
-        Cache::put("reservationCode-$user_id", $code, Carbon::now()->addMinutes(5));
-
-        return $code;
-    }
-
     public function ReservationCode($request)
     {
-        $reservationCode = Cache::get("reservationCode-$request->user_id");
-
         $code = ReservationCode::with('SelfPay')->where('code', $request->code)->first();
 
-        if ($reservationCode == $request->code) {
-            return $code;
-        } else if (!$code) {
-            throw new BadRequestException('Reservation code invalid');
+        if (!$code) {
+            throw new BadRequestException('Invalid reservation code');
         }
 
         return $code;
