@@ -34,7 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('client/login', [SelfPayController::class, 'UserLogin'])->name('login');
         Route::post('client/register', [SelfPayController::class, 'SelfPaySignIn']);
         Route::post('client/sendsmscode', [SelfPayController::class, 'SendSmsCode']);
-        Route::post('client/reservationcode/login', [SelfPayController::class, 'ReservationCodeLogin']);
+        Route::post('client/reservationCode/login', [SelfPayController::class, 'ReservationCodeLogin']);
 
         /*
          * Controller: Driver
@@ -181,6 +181,12 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('{driverId}/rate/client/{clientId}/booking/{bookingId}', [DriverController::class, 'RateSelfPay']);
             Route::post('{driverId}/rate/amera/booking/{bookingId}', [DriverController::class, 'DriverRateAmeraExperience']);
+
+            /*
+             * Method: Post
+             * Tracking
+             */
+            Route::post('booking/{bookingId}/route/tracking', [DriverController::class, 'DriverRouteTracking']);
         });
 
     });
@@ -205,6 +211,7 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('panel/booking/add', [CorporateAccountController::class, 'BookingRegister']);
             Route::post('panel/client/add', [CorporateAccountController::class, 'RegisterCaClient']);
+            Route::post('panel/reservationCode/generate', [CorporateAccountController::class, 'ReservationCodeGenerate']);
 
             /*
              * Method: Get

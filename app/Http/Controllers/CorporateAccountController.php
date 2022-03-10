@@ -4,23 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Services\BookingService;
 use App\Services\CorporateAccountService;
+use App\Services\ReservationCodeService;
 use App\Services\SelfPayService;
 use App\utils\CustomHttpResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use PHPUnit\Exception;
 
 class CorporateAccountController extends Controller
 {
     protected $_CorporateAccountService;
     protected $_BookingService;
     protected $_SelfPayService;
+    protected $_ReservationCodeService;
 
-    public function __construct(CorporateAccountService $CorporateAccountService, BookingService $bookingService, SelfPayService $selfPay)
+    public function __construct(CorporateAccountService $CorporateAccountService, BookingService $bookingService, SelfPayService $selfPay, ReservationCodeService $reservationCodeService)
     {
         $this->middleware('auth:users', ['except' => ['CaLogin', 'CaRegister']]);
         $this->_CorporateAccountService = $CorporateAccountService;
         $this->_BookingService = $bookingService;
         $this->_SelfPayService = $selfPay;
+        $this->_ReservationCodeService = $reservationCodeService;
     }
 
     public function CaRegister(Request $request): JsonResponse
@@ -81,7 +85,7 @@ class CorporateAccountController extends Controller
     public function RegisterCaClient(Request $request): JsonResponse
     {
         try {
-           $res = $this->_SelfPayService->SelfPaySignIn($request, null, false);
+            $res = $this->_SelfPayService->SelfPaySignIn($request, null, false);
 
             return CustomHttpResponse::HttpResponse($res, '', 200);
         } catch (\Exception $exception) {
@@ -109,5 +113,15 @@ class CorporateAccountController extends Controller
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
+    }
+
+    /*
+     * Generate reservation code
+     */
+    public function ReservationCodeGenerate(Request $request): JsonResponse
+    {
+        $this->_ReservationCodeService->GenerateReservationCode($request->query('user_id'));
+
+        return CustomHttpResponse::HttpResponse('OK', null, 200);
     }
 }

@@ -41,7 +41,7 @@ class SelfPayController extends Controller
         SmsService                $SmsService
     )
     {
-        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode', 'ActivateVerificationCode']]);
+        $this->middleware('auth:selfpay', ['except' => ['UserLogin', 'SelfPaySignIn', 'SendSmsCode', 'ActivateVerificationCode', 'ReservationCodeLogin']]);
         $this->_SelfPayService = $selfPayService;
         $this->_ExperienceService = $experienceService;
         $this->_BookingService = $bookingService;
@@ -68,8 +68,10 @@ class SelfPayController extends Controller
     /*
      * Devolver datos de usuario logeado
      */
+
     public function UserLogin(Request $request, JWTAuth $auth): JsonResponse
     {
+
         try {
             $cliente = SelfPay::where('phone_number', $request->phone_number)->first();
 
@@ -91,9 +93,9 @@ class SelfPayController extends Controller
     public function ReservationCodeLogin(Request $request): JsonResponse
     {
         try {
-            $code = $this->_SelfPayService->ReservationCode($request);
+           $client = $this->_SelfPayService->ReservationCode($request);
 
-            return CustomHttpResponse::HttpResponse('OK', $code, 200);
+            return CustomHttpResponse::HttpResponse('OK', $client, 200);
         } catch (Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

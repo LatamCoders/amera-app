@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\DriverTracking;
 use App\Models\Driver;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -34,5 +35,10 @@ class DriverService
         } else {
             throw new BadRequestException('Invalid verification type');
         }
+    }
+
+    public function DriverRoute($bookingId, $lat, $long)
+    {
+        broadcast(new DriverTracking($bookingId, $lat, $long))->toOthers();
     }
 }

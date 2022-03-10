@@ -311,4 +311,12 @@ class DriverController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    /*
+     * Ruta del driver
+     */
+    public function DriverRouteTracking($bookingId, Request $request)
+    {
+        $this->_DriverService->DriverRoute($bookingId, $request->lat, $request->long);
+    }
 }

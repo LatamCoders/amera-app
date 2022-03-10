@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
@@ -79,7 +78,7 @@ class SelfPayService
         $code = ReservationCode::with('SelfPay')->where('code', $request->code)->first();
 
         if (!$code) {
-            throw new BadRequestException('Reservation code invalid');
+            throw new BadRequestException('Invalid reservation code');
         }
 
         return $code;
