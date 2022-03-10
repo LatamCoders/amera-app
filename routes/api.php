@@ -181,6 +181,12 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('{driverId}/rate/client/{clientId}/booking/{bookingId}', [DriverController::class, 'RateSelfPay']);
             Route::post('{driverId}/rate/amera/booking/{bookingId}', [DriverController::class, 'DriverRateAmeraExperience']);
+
+            /*
+             * Method: Post
+             * Tracking
+             */
+            Route::post('booking/{bookingId}/route/tracking', [DriverController::class, 'DriverRouteTracking']);
         });
 
     });
