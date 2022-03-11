@@ -116,7 +116,7 @@ class BookingService
     public function ShowOneBooking($clientId, $bookingId, $type)
     {
         if ($type == 'selfpay') {
-            return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)
+            return Booking::with('AdditionalService', 'Driver', 'Driver.vehicle')->where('selfpay_id', $clientId)
                 ->where('id', $bookingId)->first();
         } else if ($type == 'driver') {
             return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)
