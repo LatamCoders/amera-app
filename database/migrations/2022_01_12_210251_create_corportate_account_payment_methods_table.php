@@ -17,7 +17,7 @@ class CreateCorportateAccountPaymentMethodsTable extends Migration
             $table->id();
             $table->string('name_on_cc', 50);
             $table->string('cc_number', 100);
-            $table->string('type_of_cc', 50);
+            $table->string('expiration_date', 10);
             $table->string('code_of_cc', 10);
             $table->foreignId('corporate_account_id')->constrained('corporate_accounts')->onDelete('cascade');
         });

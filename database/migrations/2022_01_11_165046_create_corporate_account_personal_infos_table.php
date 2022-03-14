@@ -21,9 +21,9 @@ class CreateCorporateAccountPersonalInfosTable extends Migration
             $table->string('website', 50);
             $table->string('contact_name', 50);
             $table->string('contact_number', 50);
-            $table->string('additional_contact_name', 50);
-            $table->string('additional_contact_number', 50);
-            $table->string('additional_contact_email', 50);
+            $table->string('additional_contact_name', 50)->nullable();
+            $table->string('additional_contact_number', 50)->nullable();
+            $table->string('additional_contact_email', 50)->nullable();
             $table->foreignId('corporate_account_id')->constrained('corporate_accounts')->onDelete('cascade');
         });
     }
