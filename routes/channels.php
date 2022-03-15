@@ -18,10 +18,6 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int)$user->id === (int)$id;
 });
 
-Broadcast::channel('testing.{bookingId}', function ($bookingId) {
-    return true;
-});
-
 Broadcast::channel('booking.{bookingId}', function ($user, $bookingId) {
     $booking = Booking::where('id', $bookingId)->first();
 

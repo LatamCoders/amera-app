@@ -13,7 +13,7 @@ class SmsService
             ->withoutVerifying()
             ->post('https://livecomm.vndsupport.com/api2/login.php/', [
                 'action' => 'loginUser',
-                'username' => 'ebe@vndx.com',
+                'username' => 'ebe@livecomm.com',
                 'userpassword' => 'lc2020_debug$%1'
             ]);
 
