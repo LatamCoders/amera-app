@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AmeraUser;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AmeraUserService
@@ -26,6 +27,29 @@ class AmeraUserService
         if (!$token) throw new HttpException(500, 'password incorrect');
 
         return $this->RespondWithToken($token, $existUser);
+    }
+
+    public function UserList()
+    {
+        return AmeraUser::with('Role', 'AmeraAdmin')->get();
+    }
+
+    public function GetAndModifyUser($action, $ameraUserId, $request)
+    {
+        $data = AmeraUser::with('Role', 'AmeraAdmin')->where('id', $ameraUserId)->first();
+        if ($action == 'getData') {
+            return $data;
+        } else if ($action == 'modify') {
+            $data->name = $request->name;
+            $data->email = $request->email;
+            $data->rol = $request->rol;
+
+            $data->save();
+
+            return 'User has been modify';
+        } else {
+            throw new BadRequestException('Invalid option');
+        }
     }
 
     /*

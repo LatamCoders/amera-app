@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AmeraAdminService;
+use App\Services\AmeraUserService;
 use App\Services\BookingService;
 use App\Services\CorporateAccountService;
 use App\utils\CustomHttpResponse;
@@ -14,13 +15,15 @@ class AmeraAdminController extends Controller
     protected $_AmeraAdminService;
     protected $_BookingService;
     protected $_CorporateAccountService;
+    protected $_AmeraUserService;
 
-    public function __construct(AmeraAdminService $AmeraAdminService, BookingService $bookingService, CorporateAccountService $corporateAccountService)
+    public function __construct(AmeraAdminService $AmeraAdminService, BookingService $bookingService, CorporateAccountService $corporateAccountService, AmeraUserService $ameraUserService)
     {
         $this->middleware('auth:users', ['except' => ['AdminLogin', 'AdminRegister']]);
         $this->_AmeraAdminService = $AmeraAdminService;
         $this->_BookingService = $bookingService;
         $this->_CorporateAccountService = $corporateAccountService;
+        $this->_AmeraUserService = $ameraUserService;
     }
 
     public function AdminRegister(Request $request): JsonResponse
@@ -92,7 +95,7 @@ class AmeraAdminController extends Controller
     public function BookingList(Request $request): JsonResponse
     {
         try {
-           $list = $this->_BookingService->GetBookingList($request->query('status'));
+            $list = $this->_BookingService->GetBookingList($request->query('status'));
 
             return CustomHttpResponse::HttpResponse('OK', $list, 200);
         } catch (\Exception $exception) {
@@ -136,7 +139,7 @@ class AmeraAdminController extends Controller
     public function GetCorporateAccountInfo($caId): JsonResponse
     {
         try {
-           $caData = $this->_CorporateAccountService->GetCorporateAccountData($caId);
+            $caData = $this->_CorporateAccountService->GetCorporateAccountData($caId);
 
             return CustomHttpResponse::HttpResponse('OK', $caData, 200);
         } catch (\Exception $exception) {
@@ -147,7 +150,7 @@ class AmeraAdminController extends Controller
     public function GetBookingInfo($bookingId): JsonResponse
     {
         try {
-           $bookingData = $this->_BookingService->GetBookingData($bookingId);
+            $bookingData = $this->_BookingService->GetBookingData($bookingId);
 
             return CustomHttpResponse::HttpResponse('OK', $bookingData, 200);
         } catch (\Exception $exception) {
@@ -158,9 +161,31 @@ class AmeraAdminController extends Controller
     public function DriverInfo($driverId): JsonResponse
     {
         try {
-           $bookingData = $this->_AmeraAdminService->GetDriverInfo($driverId);
+            $bookingData = $this->_AmeraAdminService->GetDriverInfo($driverId);
 
             return CustomHttpResponse::HttpResponse('OK', $bookingData, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function GetUsersList(): JsonResponse
+    {
+        try {
+            $userData = $this->_AmeraUserService->UserList();
+
+            return CustomHttpResponse::HttpResponse('OK', $userData, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ModifyUser(Request $request, $ameraUserId): JsonResponse
+    {
+        try {
+            $userData = $this->_AmeraUserService->GetAndModifyUser($request->query('action'), $ameraUserId, $request);
+
+            return CustomHttpResponse::HttpResponse('OK', $userData, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

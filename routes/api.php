@@ -255,6 +255,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
             Route::get('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
+            Route::get('panel/users/list', [AmeraAdminController::class, 'GetUsersList']);
+            Route::match(['POST', 'GET'], 'panel/user/{ameraUserId}', [AmeraAdminController::class, 'ModifyUser']);
 
         });
     });
