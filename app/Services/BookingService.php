@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Models\Booking;
+use App\Models\SelfPay;
+use App\Notifications\StartTrip;
 use App\utils\UniqueIdentifier;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BookingService
@@ -45,10 +48,11 @@ class BookingService
             throw new BadRequestException('Trip already start');
         }
 
-
         $booking->trip_start = Carbon::now();
 
         $booking->save();
+
+        Notification::send(auth()->user(), new StartTrip('hola'));
     }
 
     public function End($bookingId)
