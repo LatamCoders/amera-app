@@ -272,26 +272,6 @@ class SelfPayController extends Controller
     }
 
     /*
-     * Iniciar viaje
-     */
-    public function StartOrEndTrip($bookingId, $tripAction): JsonResponse
-    {
-        try {
-            if ($tripAction == 'start') {
-                $this->_BookingService->Start($bookingId);
-
-                return CustomHttpResponse::HttpResponse('Trip start', '', 200);
-            }
-
-            $this->_BookingService->End($bookingId);
-
-            return CustomHttpResponse::HttpResponse('Trip End', '', 200);
-        } catch (\Exception $exception) {
-            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
-        }
-    }
-
-    /*
      * Agregar servicios adicionales
      */
     public function AddAdditionalService(Request $request, $bookingId): JsonResponse

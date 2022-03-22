@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Events\BookingNotification;
 use App\Models\Booking;
 use App\Models\SelfPay;
 use App\Notifications\StartTrip;
 use App\utils\UniqueIdentifier;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -36,7 +38,7 @@ class BookingService
         return $booking->id;
     }
 
-    public function Start($bookingId)
+    public function Start($bookingId, $message)
     {
         $booking = Booking::where('booking_id', $bookingId)->first();
 
@@ -52,10 +54,10 @@ class BookingService
 
         $booking->save();
 
-        Notification::send(auth()->user(), new StartTrip('hola'));
+        broadcast(new BookingNotification($booking->selfpay_id, $message))->toOthers();
     }
 
-    public function End($bookingId)
+    public function End($bookingId, $message)
     {
         $booking = Booking::where('booking_id', $bookingId)->first();
 
@@ -67,6 +69,8 @@ class BookingService
         $booking->status = 1;
 
         $booking->save();
+
+        broadcast(new BookingNotification($booking->selfpay_id, $message))->toOthers();
     }
 
     public function GetBookingList($status)

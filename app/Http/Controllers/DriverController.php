@@ -162,6 +162,26 @@ class DriverController extends Controller
     }
 
     /*
+     * Iniciar viaje
+     */
+    public function StartOrEndTrip($bookingId, $tripAction, Request $request): JsonResponse
+    {
+        try {
+            if ($tripAction == 'start') {
+                $this->_BookingService->Start($bookingId, $request->message);
+
+                return CustomHttpResponse::HttpResponse('Trip start', '', 200);
+            }
+
+            $this->_BookingService->End($bookingId, $request->message);
+
+            return CustomHttpResponse::HttpResponse('Trip End', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
      * Devolver datos de usuario logeado
      */
     public function DriverLogin(Request $request, JWTAuth $auth): JsonResponse

@@ -137,8 +137,6 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
-            Route::post('booking/{bookingId}/trip/{tripAction}', [SelfPayController::class, 'StartOrEndTrip']);
-            Route::post('booking/{bookingId}/services/add', [SelfPayController::class, 'AddAdditionalService']);
 
             /*
              * Method: Post
@@ -165,6 +163,13 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::get('{driverId}/bookings', [DriverController::class, 'MyBookings']);
             Route::get('{driverId}/bookings/{bookingId}', [DriverController::class, 'GetOneBooking']);
+
+            /*
+             * Method: Post
+             * Booking
+             */
+            Route::post('booking/{bookingId}/trip/{tripAction}', [DriverController::class, 'StartOrEndTrip']);
+            Route::post('booking/{bookingId}/services/add', [DriverController::class, 'AddAdditionalService']);
 
             /*
              * Method: Post
