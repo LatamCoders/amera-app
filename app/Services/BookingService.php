@@ -52,7 +52,7 @@ class BookingService
 
         $booking->trip_start = Carbon::now();
 
-        /*$booking->save();*/
+        $booking->save();
 
         broadcast(new BookingNotification($booking->selfpay_id, $message))->toOthers();
     }
