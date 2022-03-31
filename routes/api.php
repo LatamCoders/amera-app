@@ -107,6 +107,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Method: Get
              */
             Route::get('{clientId}/profile/data', [SelfPayController::class, 'getClientData']);
+            Route::get('{clientId}/profile/payment-method', [SelfPayController::class, 'GetMyPaymentMethod']);
             Route::get('{clientId}/rate/get', [SelfPayController::class, 'GetClientRate']);
 
             /*

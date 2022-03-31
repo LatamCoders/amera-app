@@ -90,9 +90,24 @@ class SelfPayService
                 ['source' => $card_id->id]
             );
 
-            $client->stripe_payment_method_id = $$paymentId->id;
+            $client->stripe_payment_method_id = $paymentId->id;
             $client->save();
         });
+    }
+
+    public function GetCreditCard($clientId)
+    {
+        $client = SelfPay::where('client_id', $clientId)->first();
+
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        return $stripe->customers->retrieveSource(
+            "$client->stripe_customer_id",
+            "$client->stripe_payment_method_id",
+            []
+        );
     }
 
     public function ChargeCreditCard($request, $clientId): string
