@@ -48,6 +48,10 @@ class SelfPayService
 
             $selfpay->save();
 
+            if ($request->number != null) {
+                $this->AddStripePaymentMethod($request, $selfPayId);
+            }
+
         });
 
         return 'Client register';
