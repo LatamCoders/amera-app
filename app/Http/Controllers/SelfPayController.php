@@ -389,6 +389,20 @@ class SelfPayController extends Controller
         }
     }
 
+    /*
+     * Obtener metodo de pago
+     */
+    public function GetMyPaymentMethod($clientId): JsonResponse
+    {
+        try {
+           $payment = $this->_SelfPayService->GetCreditCard($clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', $payment, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
 
     /*
      * Test encrypt
