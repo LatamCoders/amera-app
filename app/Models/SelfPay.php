@@ -25,6 +25,8 @@ class SelfPay extends Authenticatable implements JWTSubject
         'birthday',
         'phone_number',
         'email',
+        'stripe_customer_id',
+        'stripe_payment_method_id',
         'address',
         'city',
         'note',

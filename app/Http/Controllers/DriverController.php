@@ -339,4 +339,12 @@ class DriverController extends Controller
     {
         $this->_DriverService->DriverRoute($bookingId, $request->lat, $request->long);
     }
+
+    /*
+     * Notificaciones para selfpay
+     */
+    public function SendSelfPayNotifications($selfPayId, Request $request)
+    {
+        $this->_DriverService->SelfPayNotifications($selfPayId, $request->query('selfpay_id'));
+    }
 }
