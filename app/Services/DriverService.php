@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\BookingNotification;
 use App\Events\DriverTracking;
 use App\Models\Driver;
 use Carbon\Carbon;
@@ -40,5 +41,10 @@ class DriverService
     public function DriverRoute($bookingId, $lat, $long)
     {
         broadcast(new DriverTracking($bookingId, $lat, $long))->toOthers();
+    }
+
+    public function SelfPayNotifications($selfPayId, $message)
+    {
+        broadcast(new BookingNotification($selfPayId, $message));
     }
 }

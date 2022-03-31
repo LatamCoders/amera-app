@@ -122,8 +122,8 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('{clientId}/profile/update', [SelfPayController::class, 'UpdateProfileData']);
             Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
-            Route::post('{clientId}/profile/payment/creditcard/add', [SelfPayController::class, 'AddCreditCard']);
             Route::post('{clientId}/profile/verify', [SelfPayController::class, 'VerifyEmailOrNumber']);
+            Route::post('{clientId}/profile/payment/add', [SelfPayController::class, 'AddPaymentMethod']);
 
             /*
              * Method: Post
@@ -137,6 +137,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
+            Route::post('{clientId}/booking/trip/charge', [SelfPayController::class, 'ChargeClientCard']);
 
             /*
              * Method: Post
@@ -192,6 +193,12 @@ Route::group(['prefix' => 'v1'], function () {
              * Tracking
              */
             Route::post('booking/{bookingId}/route/tracking', [DriverController::class, 'DriverRouteTracking']);
+
+            /*
+             * Method: Post
+             * Notifications
+             */
+            Route::post('notifications/selfpay/{selfPayId}/send', [DriverController::class, 'SendSelfPayNotifications']);
         });
 
     });

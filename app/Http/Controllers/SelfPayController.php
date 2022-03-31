@@ -186,28 +186,6 @@ class SelfPayController extends Controller
     }
 
     /*
-     * Agregar tarjeta de credito
-     */
-    public function AddCreditCard(Request $request, $clientId): JsonResponse
-    {
-        try {
-            $client = SelfPay::where('client_id', $clientId)->first();
-
-            $credit_card = new CreditCard();
-
-            $credit_card->name = $request->name;
-            $credit_card->number = $request->number;
-            $credit_card->ccv = $request->ccv;
-            $credit_card->date = $request->date;
-            $credit_card->selfpay_id = $client->id;
-
-            return CustomHttpResponse::HttpResponse('Credit card add successfully', '', 200);
-        } catch (Exception $exception) {
-            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
-        }
-    }
-
-    /*
      * Puntuar Driver
      */
     public function RateDriver(Request $request, $booking, $selfPayId, $driverId): JsonResponse
@@ -378,6 +356,34 @@ class SelfPayController extends Controller
             $this->_AdditionalServicesService->ModifyServices($request, $serviceId, $bookingId);
 
             return CustomHttpResponse::HttpResponse('Service modified', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Agregar metodo de pago
+     */
+    public function AddPaymentMethod(Request $request, $clientId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->AddStripePaymentMethod($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('Payment method added successfully', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Cargar
+     */
+    public function ChargeClientCard(Request $request, $clientId): JsonResponse
+    {
+        try {
+           $status = $this->_SelfPayService->ChargeCreditCard($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('Card charged', $status, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

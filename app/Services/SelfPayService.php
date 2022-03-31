@@ -8,6 +8,9 @@ use App\utils\CustomHttpResponse;
 use App\utils\UploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Stripe\Customer;
+use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SelfPayService
@@ -20,28 +23,94 @@ class SelfPayService
             return CustomHttpResponse::HttpResponse('Client exist', '', 400);
         }
 
-        $selfpay = new SelfPay();
+        DB::transaction(function () use ($request, $phoneVerify, $activatedUser) {
+            $customer = $this->RegisterStripeCustomer("$request->name $request->lastname", $request->email, $request->phone_number);
 
-        $selfPayId = 'SP' . rand(100, 9999);
+            $selfpay = new SelfPay();
 
-        $selfpay->client_id = $selfPayId;
-        $selfpay->name = $request->name;
-        $selfpay->lastname = $request->lastname;
-        $selfpay->phone_number = $request->phone_number;
-        $selfpay->email = $request->email;
-        $selfpay->gender = $request->gender;
-        $selfpay->birthday = $request->birthday;
-        $selfpay->address = $request->address;
-        $selfpay->city = $request->city;
-        $selfpay->note = $request->note;
-        $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
-        $selfpay->ca_id = $request->ca_id;
-        $selfpay->phone_number_verified_at = $phoneVerify;
-        $selfpay->active = $activatedUser;
+            $selfPayId = 'SP' . rand(100, 9999);
 
-        $selfpay->save();
+            $selfpay->client_id = $selfPayId;
+            $selfpay->name = $request->name;
+            $selfpay->phone_number = $request->phone_number;
+            $selfpay->lastname = $request->lastname;
+            $selfpay->email = $request->email;
+            $selfpay->stripe_customer_id = $customer->id;
+            $selfpay->gender = $request->gender;
+            $selfpay->birthday = $request->birthday;
+            $selfpay->address = $request->address;
+            $selfpay->city = $request->city;
+            $selfpay->note = $request->note;
+            $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
+            $selfpay->ca_id = $request->ca_id;
+            $selfpay->phone_number_verified_at = $phoneVerify;
+            $selfpay->active = $activatedUser;
+
+            $selfpay->save();
+
+        });
 
         return 'Client register';
+    }
+
+    public function RegisterStripeCustomer($name, $email, $phoneNumber): Customer
+    {
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        return $stripe->customers->create([
+            'name' => $name,
+            'email' => $email,
+            'phone' => $phoneNumber,
+        ]);
+    }
+
+    public function AddStripePaymentMethod($request, $clientId)
+    {
+        DB::transaction(function () use ($request, $clientId) {
+            $client = SelfPay::where('client_id', $clientId)->first();
+
+            $stripe = new StripeClient(
+                env('STRIPE_KEY')
+            );
+
+            $card_id = $stripe->tokens->create([
+                'card' => [
+                    'number' => $request->number,
+                    'exp_month' => $request->exp_month,
+                    'exp_year' => $request->exp_year,
+                    'cvc' => $request->cvc,
+                    'name' => $request->name,
+                ],
+            ]);
+
+           $paymentId = $stripe->customers->createSource(
+                "$client->stripe_customer_id",
+                ['source' => $card_id->id]
+            );
+
+            $client->stripe_payment_method_id = $$paymentId->id;
+            $client->save();
+        });
+    }
+
+    public function ChargeCreditCard($request, $clientId): string
+    {
+        $client = SelfPay::where('client_id', $clientId)->first();
+
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+       $status = $stripe->charges->create([
+            'amount' => $request->amount * 100,
+            'currency' => 'usd',
+            'customer' => $client->stripe_customer_id,
+            'description' => $request->description,
+        ]);
+
+        return $status->status;
     }
 
     public function VerifyClientNumberOrEmail($selfpayId, $verificationType)

@@ -22,6 +22,8 @@ class CreateSelfPaysTable extends Migration
             $table->date('birthday')->nullable();
             $table->string('phone_number', 50)->unique();
             $table->string('email', 50);
+            $table->string('stripe_customer_id', 255)->unique()->nullable();
+            $table->string('stripe_payment_method_id', 255)->nullable();
             $table->text('address')->nullable();
             $table->string('city', 100)->nullable();
             $table->text('note')->nullable();
