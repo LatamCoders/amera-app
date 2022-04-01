@@ -30,6 +30,8 @@ class BookingService
         $booking->appoinment_datetime = $request->appoinment_datetime;
         $booking->from = json_encode($from);
         $booking->to = json_encode($to);
+        $booking->trip_distance = $request->trip_distance;
+        $booking->price = $request->price;
         $booking->driver_id = $request->driver_id;
         $booking->status = 0;
 

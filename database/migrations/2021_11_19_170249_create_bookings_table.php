@@ -26,8 +26,10 @@ class CreateBookingsTable extends Migration
             $table->dateTime('appoinment_datetime');
             $table->text('from');
             $table->text('to');
+            $table->string('trip_distance', 50);
             $table->dateTime('trip_start')->nullable();
             $table->dateTime('trip_end')->nullable();
+            $table->double('price');
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->nullOnDelete();
 
             $table->tinyInteger('status');
