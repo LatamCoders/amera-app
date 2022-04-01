@@ -146,6 +146,7 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('booking/{bookingId}/service/{serviceId}/delete', [SelfPayController::class, 'DeleteOneService']);
             Route::post('booking/{bookingId}/service/{serviceId}/modify', [SelfPayController::class, 'ModifyOneService']);
+            Route::post('booking/{bookingId}/services/add', [SelfPayController::class, 'AddAdditionalService']);
         });
 
         Route::post('encrypt', [SelfPayController::class, 'TestEncipt']);
@@ -171,7 +172,6 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::post('booking/{bookingId}/trip/{tripAction}', [DriverController::class, 'StartOrEndTrip']);
-            Route::post('booking/{bookingId}/services/add', [DriverController::class, 'AddAdditionalService']);
 
             /*
              * Method: Post
