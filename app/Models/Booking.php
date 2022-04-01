@@ -24,6 +24,7 @@ class Booking extends Model
         'appoinment_datetime',
         'from',
         'to',
+        'price',
         'driver_id',
         'status'
     ];
