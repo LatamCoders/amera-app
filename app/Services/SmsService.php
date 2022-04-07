@@ -11,10 +11,10 @@ class SmsService
     {
         $response = Http::asForm()
             ->withoutVerifying()
-            ->post('https://livecomm.vndsupport.com/api2/login.php/', [
+            ->post(env('LIVECOMM_LOGIN_URL'), [
                 'action' => 'loginUser',
-                'username' => 'ebe@livecomm.com',
-                'userpassword' => 'lc2020_debug$%1'
+                'username' => env('LIVECOMM_USERNAME'),
+                'userpassword' => env('LIVECOMM_PASSWORD')
             ]);
 
         return $response['bearer_token'];
@@ -30,12 +30,12 @@ class SmsService
         $response = Http::asForm()
             ->withoutVerifying()
             ->withToken($token)
-            ->post('https://livecomm.vndsupport.com/api2/', [
+            ->post(env('LIVECOMM_SEND_URL'), [
                 'action' => 'submitOpenMessage',
                 'to_number' => $number,
-                'lc_number' => '2109609993',
+                'lc_number' => env('LIVECOMM_LC_NUMBER'),
                 'message' => $smsCode,
-                'personid' => '895'
+                'personid' => env('LIVECOMM_PERSON_ID')
             ]);
 
         if ($response['success'] == '1') {
