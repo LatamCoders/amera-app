@@ -6,6 +6,7 @@ use App\Events\BookingNotification;
 use App\Models\Booking;
 use App\Models\SelfPay;
 use App\Notifications\StartTrip;
+use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ class BookingService
         $booking->trip_distance = $request->trip_distance;
         $booking->price = $request->price;
         $booking->driver_id = $request->driver_id;
-        $booking->status = 0;
+        $booking->status = StatusCodes::PENDING;
 
         $booking->save();
 
@@ -53,6 +54,7 @@ class BookingService
         }
 
         $booking->trip_start = Carbon::now();
+        $booking->status = StatusCodes::IN_PROGRESS;
 
         $booking->save();
 
@@ -68,7 +70,7 @@ class BookingService
         }
 
         $booking->trip_end = Carbon::now();
-        $booking->status = 1;
+        $booking->status = StatusCodes::COMPLETED;
 
         $booking->save();
 
