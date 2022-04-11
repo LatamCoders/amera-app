@@ -4,8 +4,9 @@ namespace App\utils;
 
 class StatusCodes
 {
-    const PENDING = 0;
-    const IN_PROGRESS = 1;
-    const COMPLETED = 2;
-    const CANCELLED = 3;
+    const TRIP_PENDING = 0;
+    const CANCELLATION_PENDING = 1;
+    const IN_PROGRESS = 2;
+    const COMPLETED = 3;
+    const CANCELLED = 4;
 }

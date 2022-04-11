@@ -10,6 +10,7 @@ use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -34,7 +35,7 @@ class BookingService
         $booking->trip_distance = $request->trip_distance;
         $booking->price = $request->price;
         $booking->driver_id = $request->driver_id;
-        $booking->status = StatusCodes::PENDING;
+        $booking->status = StatusCodes::TRIP_PENDING;
 
         $booking->save();
 
@@ -136,5 +137,53 @@ class BookingService
         } else {
             throw new BadRequestException('Invalid option');
         }
+    }
+
+    /*
+     * Pedir cancelar un booking
+     */
+    public function RequestCancelBooking($bookingId)
+    {
+        $booking = Booking::were('booking_id', $bookingId)->first();
+
+        $booking->status = StatusCodes::CANCELLATION_PENDING;
+
+        $booking->save();
+    }
+
+    /*
+     * Devolucion de dinero al Selfpay
+     */
+    public function RefundCard($refundId)
+    {
+        $stripe = new \Stripe\StripeClient(
+            env('STRIPE_KEY')
+        );
+        $stripe->refunds->create([
+            'charge' => $refundId,
+        ]);
+    }
+
+    /*
+     * cancelar un booking
+     */
+    public function ApproveCancellationBooking($bookingId)
+    {
+        $booking = Booking::were('booking_id', $bookingId)->first();
+
+        if ($booking->status != StatusCodes::CANCELLATION_PENDING) {
+            throw new BadRequestException('This booking is not pending for cancellation');
+        }
+
+       $response = Http::withToken(env('STRIPE_KEY'))->post("https://api.stripe.com/v1/charges/$booking->charge_id/refunds");
+
+        if ($response->status() != 200) {
+            throw new BadRequestException($response['error']['message']);
+        }
+
+        $booking->status = StatusCodes::CANCELLED;
+        $booking->refaund = true;
+
+        $booking->save();
     }
 }

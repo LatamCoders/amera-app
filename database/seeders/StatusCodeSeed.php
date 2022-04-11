@@ -18,18 +18,22 @@ class StatusCodeSeed extends Seeder
             [
                 [
                     'code' => 0,
-                    'status' => 'Pending',
-                ],
-                [
-                    'code' => 1,
-                    'status' => 'In progress',
+                    'status' => 'Trip pending',
                 ],
                 [
                     'code' => 2,
-                    'status' => 'Completed',
+                    'status' => 'Cancellation pending',
                 ],
                 [
                     'code' => 3,
+                    'status' => 'In progress',
+                ],
+                [
+                    'code' => 4,
+                    'status' => 'Completed',
+                ],
+                [
+                    'code' => 5,
                     'status' => 'Cancelled',
                 ]
             ]
