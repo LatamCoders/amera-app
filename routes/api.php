@@ -139,6 +139,7 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
             Route::post('{clientId}/booking/trip/charge', [SelfPayController::class, 'ChargeClientCard']);
+            Route::post('booking/{bookingId}/cancel', [SelfPayController::class, 'CancelBooking']);
 
             /*
              * Method: Post
@@ -257,6 +258,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
+            Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveCancelBooking']);
 
             /*
              * Method: get

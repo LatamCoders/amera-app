@@ -93,7 +93,7 @@ class SelfPayController extends Controller
     public function ReservationCodeLogin(Request $request): JsonResponse
     {
         try {
-           $client = $this->_SelfPayService->ReservationCode($request);
+            $client = $this->_SelfPayService->ReservationCode($request);
 
             return CustomHttpResponse::HttpResponse('OK', $client, 200);
         } catch (Exception $exception) {
@@ -241,7 +241,7 @@ class SelfPayController extends Controller
     public function AddReserve(Request $request, $clientId): JsonResponse
     {
         try {
-           $res = $this->_BookingService->AddBooking($request, $clientId);
+            $res = $this->_BookingService->AddBooking($request, $clientId);
 
             return CustomHttpResponse::HttpResponse('Booking add successfully', ['booking_id' => $res], 200);
         } catch (\Exception $exception) {
@@ -381,7 +381,7 @@ class SelfPayController extends Controller
     public function ChargeClientCard(Request $request, $clientId): JsonResponse
     {
         try {
-           $status = $this->_SelfPayService->ChargeCreditCard($request, $clientId);
+            $status = $this->_SelfPayService->ChargeCreditCard($request, $clientId);
 
             return CustomHttpResponse::HttpResponse('Card charged', $status, 200);
         } catch (\Exception $exception) {
@@ -395,9 +395,23 @@ class SelfPayController extends Controller
     public function GetMyPaymentMethod($clientId): JsonResponse
     {
         try {
-           $payment = $this->_SelfPayService->GetCreditCard($clientId);
+            $payment = $this->_SelfPayService->GetCreditCard($clientId);
 
             return CustomHttpResponse::HttpResponse('OK', $payment, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Pedir cancelar booking
+     */
+    public function CancelBooking($bookingId): JsonResponse
+    {
+        try {
+            $this->_BookingService->RequestCancelBooking($bookingId);
+
+            return CustomHttpResponse::HttpResponse('OK', 'Cancelled request send successfully', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

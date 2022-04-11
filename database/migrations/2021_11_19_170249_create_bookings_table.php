@@ -30,6 +30,8 @@ class CreateBookingsTable extends Migration
             $table->dateTime('trip_start')->nullable();
             $table->dateTime('trip_end')->nullable();
             $table->double('price');
+            $table->string('charge_id', 100)->nullable();
+            $table->boolean('refund')->nullable();
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->nullOnDelete();
 
             $table->tinyInteger('status');

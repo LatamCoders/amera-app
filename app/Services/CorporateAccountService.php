@@ -22,7 +22,7 @@ class CorporateAccountService
         DB::transaction(function () use ($request) {
             $user = new AmeraUser();
 
-            $user->name = $request->contact_name;
+            $user->name = $request->company_legal_name;
             $user->email = $request->email;
             $user->password = Hash::make('amera');
             $user->role = 3;
@@ -35,7 +35,6 @@ class CorporateAccountService
             $ca->company_legal_name = $request->company_legal_name;
             $ca->dba = $request->dba;
             $ca->tin = $request->tin;
-            $ca->contract_start_date = $request->contract_start_date;
             $ca->office_location_address = $request->office_location_address;
             $ca->billing_address = $request->billing_address;
             $ca->amera_user_id = $user->id;
@@ -46,11 +45,10 @@ class CorporateAccountService
             $CaInf->fax_number = $request->fax_number;
             $CaInf->email = $request->email;
             $CaInf->website = $request->website;
-            $CaInf->contact_name = $request->contact_name;
-            $CaInf->contact_number = $request->contact_number;
             $CaInf->additional_contact_name = $request->additional_contact_name;
             $CaInf->additional_contact_number = $request->additional_contact_number;
             $CaInf->additional_contact_email = $request->additional_contact_email;
+            $CaInf->additional_contact_title = $request->additional_contact_title;
 
             $cAPayment = new CorportateAccountPaymentMethod();
 

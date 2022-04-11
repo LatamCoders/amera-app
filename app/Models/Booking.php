@@ -26,6 +26,8 @@ class Booking extends Model
         'to',
         'trip_distance',
         'price',
+        'charge_id',
+        'refund',
         'driver_id',
         'status'
     ];

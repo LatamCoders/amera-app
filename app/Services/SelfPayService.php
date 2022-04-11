@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
@@ -89,7 +90,7 @@ class SelfPayService
                 ],
             ]);
 
-           $paymentId = $stripe->customers->createSource(
+            $paymentId = $stripe->customers->createSource(
                 "$client->stripe_customer_id",
                 ['source' => $card_id->id]
             );
@@ -114,22 +115,33 @@ class SelfPayService
         );
     }
 
-    public function ChargeCreditCard($request, $clientId): string
+    public function ChargeCreditCard($request, $clientId)
     {
-        $client = SelfPay::where('client_id', $clientId)->first();
+        try {
+            DB::beginTransaction();
 
-        $stripe = new StripeClient(
-            env('STRIPE_KEY')
-        );
+            $client = SelfPay::where('client_id', $clientId)->first();
 
-       $status = $stripe->charges->create([
-            'amount' => $request->amount * 100,
-            'currency' => 'usd',
-            'customer' => $client->stripe_customer_id,
-            'description' => $request->description,
-        ]);
+            $stripe = new StripeClient(
+                env('STRIPE_KEY')
+            );
 
-        return $status->status;
+            $status = $stripe->charges->create([
+                'amount' => $request->amount * 100,
+                'currency' => 'usd',
+                'customer' => $client->stripe_customer_id,
+                'description' => $request->description,
+            ]);
+
+            Booking::where('selfpay_id', $client->id)->update(['charge_id' => $status->id]);
+
+            DB::commit();
+
+            return $status->status;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new BadRequestException('Charge error');
+        }
     }
 
     public function VerifyClientNumberOrEmail($selfpayId, $verificationType)
