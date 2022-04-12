@@ -224,7 +224,7 @@ class SelfPayController extends Controller
     /*
      * Calificar a Amera
      */
-    public function ClientRateAmeraExperience(Request $request, $bookingId, $selfPayId): JsonResponse
+    public function ClientRateAmeraExperience(Request $request, $selfPayId, $bookingId): JsonResponse
     {
         try {
             $this->_ExperienceService->RateAmera($request, $bookingId, null, $selfPayId);
