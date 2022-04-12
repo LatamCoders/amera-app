@@ -144,7 +144,7 @@ class BookingService
      */
     public function RequestCancelBooking($bookingId)
     {
-        $booking = Booking::were('booking_id', $bookingId)->first();
+        $booking = Booking::where('id', $bookingId)->first();
 
         $booking->status = StatusCodes::CANCELLATION_PENDING;
 
@@ -169,7 +169,7 @@ class BookingService
      */
     public function ApproveCancellationBooking($bookingId)
     {
-        $booking = Booking::were('booking_id', $bookingId)->first();
+        $booking = Booking::where('id', $bookingId)->first();
 
         if ($booking->status != StatusCodes::CANCELLATION_PENDING) {
             throw new BadRequestException('This booking is not pending for cancellation');
