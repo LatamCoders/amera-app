@@ -24,7 +24,6 @@ class Booking extends Model
         'appoinment_datetime',
         'from',
         'to',
-        'trip_distance',
         'price',
         'charge_id',
         'refund',
