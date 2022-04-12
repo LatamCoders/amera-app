@@ -21,19 +21,19 @@ class StatusCodeSeed extends Seeder
                     'status' => 'Trip pending',
                 ],
                 [
-                    'code' => 2,
+                    'code' => 1,
                     'status' => 'Cancellation pending',
                 ],
                 [
-                    'code' => 3,
+                    'code' => 2,
                     'status' => 'In progress',
                 ],
                 [
-                    'code' => 4,
+                    'code' => 3,
                     'status' => 'Completed',
                 ],
                 [
-                    'code' => 5,
+                    'code' => 4,
                     'status' => 'Cancelled',
                 ]
             ]
