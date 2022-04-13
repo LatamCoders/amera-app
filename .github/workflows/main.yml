@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: [master]
+name: 🚀 Deploy website on push
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: amera.losolivoscartagena.com
+          username: amera_test_user
+          password: ${{ secrets.PROD_SECRET_KEY }}
+          protocol: ftps
+          port: 22
+
