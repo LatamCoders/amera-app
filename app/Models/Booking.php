@@ -27,6 +27,7 @@ class Booking extends Model
         'price',
         'charge_id',
         'refund',
+        'booking_paid_to_driver_at',
         'driver_id',
         'status'
     ];
@@ -64,6 +65,11 @@ class Booking extends Model
     public function SelfPayRate(): HasOne
     {
         return $this->hasOne(SelfPay::class, 'booking_id');
+    }
+
+    public function Refund(): HasOne
+    {
+        return $this->hasOne(Refund::class, 'booking_id');
     }
 
     public function AdditionalService(): HasMany

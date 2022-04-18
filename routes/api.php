@@ -258,7 +258,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
-            Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveCancelBooking']);
+            Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveTripCancellation']);
+            Route::post('panel/booking/{bookingId}/markAsPaid', [AmeraAdminController::class, 'MarkBookingAsPaid']);
 
             /*
              * Method: get

@@ -149,40 +149,4 @@ class BookingService
 
         $booking->save();
     }
-
-    /*
-     * Devolucion de dinero al Selfpay
-     */
-    public function RefundCard($refundId)
-    {
-        $stripe = new \Stripe\StripeClient(
-            env('STRIPE_KEY')
-        );
-        $stripe->refunds->create([
-            'charge' => $refundId,
-        ]);
-    }
-
-    /*
-     * cancelar un booking
-     */
-    public function ApproveCancellationBooking($bookingId)
-    {
-        $booking = Booking::where('id', $bookingId)->first();
-
-        if ($booking->status != StatusCodes::CANCELLATION_PENDING) {
-            throw new BadRequestException('This booking is not pending for cancellation');
-        }
-
-       $response = Http::withToken(env('STRIPE_KEY'))->post("https://api.stripe.com/v1/charges/$booking->charge_id/refunds");
-
-        if ($response->status() != 200) {
-            throw new BadRequestException($response['error']['message']);
-        }
-
-        $booking->status = StatusCodes::CANCELLED;
-        $booking->refaund = true;
-
-        $booking->save();
-    }
 }

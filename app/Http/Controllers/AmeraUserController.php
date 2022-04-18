@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\AmeraUserService;
 use App\Services\BookingService;
-use App\Services\CorporateAccountService;
 use App\utils\CustomHttpResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\JWTAuth;
 
 class AmeraUserController extends Controller
 {
@@ -39,20 +37,6 @@ class AmeraUserController extends Controller
             $response = $this->_AmeraUserService->AmeraUserLogOut();
 
             return CustomHttpResponse::HttpResponse('OK', $response, 200);
-        } catch (\Exception $exception) {
-            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
-        }
-    }
-
-    /*
-     * Aprobar cancelacion de booking
-     */
-    public function ApproveCancelBooking($bookingId): JsonResponse
-    {
-        try {
-            $this->_BookingService->ApproveCancellationBooking($bookingId);
-
-            return CustomHttpResponse::HttpResponse('OK', 'Booking cancelled', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

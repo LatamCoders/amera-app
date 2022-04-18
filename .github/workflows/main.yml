@@ -18,10 +18,7 @@ jobs:
         with:
           server: amera.losolivoscartagena.com
           username: amera_test_user
-          password: amera2022.
-          protocol: ftps
-          port: 22
+          password: ${{ secrets.PROD_SECRET_KEY }}
+          protocol: ftp
+          port: 21
           server-dir: /home/amera_test_user/amera.losolivoscartagena.com/
-
-
-

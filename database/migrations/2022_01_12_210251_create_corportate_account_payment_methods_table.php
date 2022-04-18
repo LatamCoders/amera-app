@@ -15,10 +15,7 @@ class CreateCorportateAccountPaymentMethodsTable extends Migration
     {
         Schema::create('corportate_account_payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->string('name_on_cc', 50);
-            $table->string('cc_number', 100);
-            $table->string('expiration_date', 10);
-            $table->string('code_of_cc', 10);
+            $table->string('stripe_payment_method_id', 255)->nullable();
             $table->foreignId('corporate_account_id')->constrained('corporate_accounts')->onDelete('cascade');
         });
     }
