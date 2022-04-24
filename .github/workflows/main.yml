@@ -22,6 +22,3 @@ jobs:
           protocol: ftp
           port: 21
           server-dir: /home/amera_test_user/amera.losolivoscartagena.com/
-
-
-

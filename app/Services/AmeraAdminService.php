@@ -7,10 +7,14 @@ use App\Models\AmeraUser;
 use App\Models\Booking;
 use App\Models\CorporateAccount;
 use App\Models\Driver;
+use App\Models\Refund;
+use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
+use http\Exception\BadMessageException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -127,6 +131,64 @@ class AmeraAdminService
                 $user->save();
                 break;
         }
+    }
+
+    /*
+     * Aprovar cancelacion del booking
+     */
+    public function ApproveCancellationTrip($bookingId): string
+    {
+        try {
+            DB::beginTransaction();
+
+            $booking = Booking::where('id', $bookingId)->first();
+
+            if ($booking->status != StatusCodes::CANCELLATION_PENDING) {
+                throw new BadMessageException('This booking is not pending for cancellation');
+            }
+
+            $stripe = new StripeClient(
+                env('STRIPE_KEY')
+            );
+            $refund_id = $stripe->refunds->create([
+                'charge' => $booking->charge_id,
+            ]);
+
+            $booking->status = StatusCodes::CANCELLED;
+            $booking->refund = true;
+
+            $refund = new Refund();
+
+            $refund->stripe_refund_id = $refund_id;
+            $refund->booking_id = $booking->id;
+
+            $booking->save();
+            $refund->save();
+
+            DB::commit();
+
+            return 'Refund successfully';
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw new BadRequestException($e->getMessage());
+        }
+
+    }
+
+    /*
+     * Marcar como pagado al driver
+     */
+    public function MarkAsDriverPaid($bookingId)
+    {
+        $booking = Booking::where('id', $bookingId)->first();
+
+        if ($booking->status != StatusCodes::COMPLETED) {
+            throw new BadRequestException("Can't mark as paid. This booking is not completed yet");
+        }
+
+        $booking->booking_paid_to_driver_at = Carbon::now();
+
+        $booking->save();
     }
 
     public function DeleteCaUser($ameraUserId)

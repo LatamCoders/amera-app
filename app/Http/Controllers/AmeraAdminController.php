@@ -180,12 +180,34 @@ class AmeraAdminController extends Controller
         }
     }
 
+    public function ApproveTripCancellation($bookingId): JsonResponse
+    {
+        try {
+            $response = $this->_AmeraAdminService->ApproveCancellationTrip($bookingId);
+
+            return CustomHttpResponse::HttpResponse('OK', $response, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
     public function ModifyUser(Request $request, $ameraUserId): JsonResponse
     {
         try {
             $userData = $this->_AmeraUserService->GetAndModifyUser($request->query('action'), $ameraUserId, $request);
 
             return CustomHttpResponse::HttpResponse('OK', $userData, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function MarkBookingAsPaid($bookingId): JsonResponse
+    {
+        try {
+            $this->_AmeraAdminService->MarkAsDriverPaid($bookingId);
+
+            return CustomHttpResponse::HttpResponse('OK', 'Marked as paid', 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

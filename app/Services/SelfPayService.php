@@ -144,6 +144,47 @@ class SelfPayService
         }
     }
 
+    public function DeleteCreditCard($clientId)
+    {
+        DB::transaction(function () use ($clientId) {
+            $client = SelfPay::where('client_id', $clientId)->first();
+
+            $stripe = new StripeClient(
+                env('STRIPE_KEY')
+            );
+
+            $stripe->customers->deleteSource(
+                $client->stripe_customer_id,
+                $client->stripe_payment_method_id,
+                []
+            );
+
+            $client->stripe_payment_method_id = null;
+            $client->save();
+        });
+
+    }
+
+    public function ModifyCreditCard($request, $clientId)
+    {
+        $client = SelfPay::where('client_id', $clientId)->first();
+
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        $stripe->customers->updateSource(
+            $client->stripe_customer_id,
+            $client->stripe_payment_method_id,
+            [
+                'name' => $request->credit_card_name,
+                'exp_month' => $request->exp_month,
+                'exp_year' => $request->exp_year,
+            ]
+        );
+
+    }
+
     public function VerifyClientNumberOrEmail($selfpayId, $verificationType)
     {
         if ($verificationType == 'phone_number') {
