@@ -404,6 +404,34 @@ class SelfPayController extends Controller
     }
 
     /*
+     * ELiminar metodo de pago
+     */
+    public function DeleteMyPaymentMethod($clientId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->DeleteCreditCard($clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', 'Payment method deleted', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Modificar metodo de pago
+     */
+    public function UpdateMyPaymentMethod(Request $request, $clientId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->ModifyCreditCard($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', 'Payment method updated', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
      * Pedir cancelar booking
      */
     public function CancelBooking($bookingId): JsonResponse

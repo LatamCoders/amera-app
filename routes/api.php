@@ -125,6 +125,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
             Route::post('{clientId}/profile/verify', [SelfPayController::class, 'VerifyEmailOrNumber']);
             Route::post('{clientId}/profile/payment/add', [SelfPayController::class, 'AddPaymentMethod']);
+            Route::post('{clientId}/profile/payment/delete', [SelfPayController::class, 'DeleteMyPaymentMethod']);
+            Route::post('{clientId}/profile/payment/update', [SelfPayController::class, 'UpdateMyPaymentMethod']);
 
             /*
              * Method: Post
