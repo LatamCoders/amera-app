@@ -21,4 +21,4 @@ jobs:
           password: amera2022.
           protocol: ftp
           port: 21
-          server-dir: /home/amera_test_user/amera.losolivoscartagena.com/
+          server-dir: /amera.losolivoscartagena.com/
