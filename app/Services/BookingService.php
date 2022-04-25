@@ -114,9 +114,9 @@ class BookingService
     public function BookingList($clientId, $type)
     {
         if ($type == 'selfpay') {
-            return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)->get();
+            return Booking::with('AdditionalService', 'Driver')->where('selfpay_id', $clientId)->orderByDesc('booking_date')->get();
         } else if ($type == 'driver') {
-            return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)->get();
+            return Booking::with('SelfPay', 'AdditionalService')->where('driver_id', $clientId)->orderByDesc('booking_date')->get();
         } else {
             throw new BadRequestException('Invalid option');
         }
