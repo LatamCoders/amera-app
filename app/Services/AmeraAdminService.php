@@ -7,7 +7,10 @@ use App\Models\AmeraUser;
 use App\Models\Booking;
 use App\Models\CorporateAccount;
 use App\Models\Driver;
+use App\Models\DriverDocument;
 use App\Models\Refund;
+use App\Models\Vehicle;
+use App\Models\VehicleDocument;
 use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
 use http\Exception\BadMessageException;
@@ -103,32 +106,34 @@ class AmeraAdminService
 
     public function ApproveDriverDocuments($driverId, $document)
     {
-        $user = Driver::where('id', $driverId)->first();
+        $driverDocuments = DriverDocument::where('driver_id', $driverId)->first();
+        $vehicle = Vehicle::where('driver_id', $driverId)->first();
+        $vehicleDocuments = VehicleDocument::where('vehicle_id', $vehicle->id)->first();
 
         switch ($document) {
             case 'driver_license':
-                $user->driver_license_verify_at = Carbon::now();
-                $user->save();
+                $driverDocuments->driver_license_verify_at = Carbon::now();
+                $driverDocuments->save();
                 break;
             case 'proof_of_insurance':
-                $user->proof_of_insurance_verify_at = Carbon::now();
-                $user->save();
+                $driverDocuments->proof_of_insurance_verify_at = Carbon::now();
+                $driverDocuments->save();
                 break;
             case 'vehicle_front_image':
-                $user->vehicle_front_image_verify_at = Carbon::now();
-                $user->save();
+                $vehicleDocuments->vehicle_front_image_verify_at = Carbon::now();
+                $vehicleDocuments->save();
                 break;
             case 'vehicle_rear_image':
-                $user->vehicle_rear_image_verify_at = Carbon::now();
-                $user->save();
+                $vehicleDocuments->vehicle_rear_image_verify_at = Carbon::now();
+                $vehicleDocuments->save();
                 break;
             case 'vehicle_side_image':
-                $user->vehicle_side_image_verify_at = Carbon::now();
-                $user->save();
+                $vehicleDocuments->vehicle_side_image_verify_at = Carbon::now();
+                $vehicleDocuments->save();
                 break;
             case 'vehicle_interior_image':
-                $user->vehicle_interior_image_verify_at = Carbon::now();
-                $user->save();
+                $vehicleDocuments->vehicle_interior_image_verify_at = Carbon::now();
+                $vehicleDocuments->save();
                 break;
             default:
                 throw new BadRequestException("This document doesn't exist");
