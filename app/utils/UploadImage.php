@@ -14,8 +14,8 @@ class UploadImage
 
         $filename = "$number.{$image->getClientOriginalExtension()}";
 
-        Storage::disk('spaces')->putFileAs('profiles', $image, $filename);
+        Storage::disk('public')->putFileAs('profiles', $image, $filename);
 
-        return Storage::disk('spaces')->url("profiles/$filename");
+        return Storage::disk('public')->url("profiles/$filename");
     }
 }
