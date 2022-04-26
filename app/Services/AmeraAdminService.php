@@ -9,6 +9,7 @@ use App\Models\CorporateAccount;
 use App\Models\Driver;
 use App\Models\DriverDocument;
 use App\Models\Refund;
+use App\Models\Vehicle;
 use App\Models\VehicleDocument;
 use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
@@ -105,10 +106,9 @@ class AmeraAdminService
 
     public function ApproveDriverDocuments($driverId, $document)
     {
-        $vehicleDocuments = VehicleDocument::where('driver_id', $driverId)->first();
         $driverDocuments = DriverDocument::where('driver_id', $driverId)->first();
-
-
+        $vehicle = Vehicle::where('driver_id', $driverId)->first();
+        $vehicleDocuments = VehicleDocument::where('vehicle_id', $vehicle->id)->first();
 
         switch ($document) {
             case 'driver_license':
