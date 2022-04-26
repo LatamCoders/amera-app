@@ -69,7 +69,7 @@ class AmeraAdminService
 
     public function GetDriverInfo($driverId)
     {
-        return Driver::with('Booking', 'Vehicle')->where('id', $driverId)->first();
+        return Driver::with('Booking', 'Vehicle.VehicleDocuments', 'DriverDocuments')->where('id', $driverId)->first();
     }
 
     public function GetCorporateAccountList()
