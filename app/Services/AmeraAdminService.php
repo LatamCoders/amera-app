@@ -106,30 +106,32 @@ class AmeraAdminService
         $user = Driver::where('id', $driverId)->first();
 
         switch ($document) {
-            case 'driver_license_verify_at':
+            case 'driver_license':
                 $user->driver_license_verify_at = Carbon::now();
                 $user->save();
                 break;
-            case 'proof_of_insurance_verify_at':
+            case 'proof_of_insurance':
                 $user->proof_of_insurance_verify_at = Carbon::now();
                 $user->save();
                 break;
-            case 'vehicle_front_image_verify_at':
+            case 'vehicle_front_image':
                 $user->vehicle_front_image_verify_at = Carbon::now();
                 $user->save();
                 break;
-            case 'vehicle_rear_image_verify_at':
+            case 'vehicle_rear_image':
                 $user->vehicle_rear_image_verify_at = Carbon::now();
                 $user->save();
                 break;
-            case 'vehicle_side_image_verify_at':
+            case 'vehicle_side_image':
                 $user->vehicle_side_image_verify_at = Carbon::now();
                 $user->save();
                 break;
-            case 'vehicle_interior_image_verify_at':
+            case 'vehicle_interior_image':
                 $user->vehicle_interior_image_verify_at = Carbon::now();
                 $user->save();
                 break;
+            default:
+                throw new BadRequestException("This document doesn't exist");
         }
     }
 
