@@ -120,8 +120,8 @@ class CorporateAccountController extends Controller
      */
     public function ReservationCodeGenerate(Request $request): JsonResponse
     {
-        $this->_ReservationCodeService->GenerateReservationCode($request->query('user_id'));
+       $h = $this->_ReservationCodeService->GenerateReservationCode($request->query('user_id'));
 
-        return CustomHttpResponse::HttpResponse('OK', null, 200);
+        return CustomHttpResponse::HttpResponse('OK', $h, 200);
     }
 }
