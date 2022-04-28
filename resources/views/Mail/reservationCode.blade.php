@@ -108,7 +108,7 @@
         <h1>Hi, {{ $name }}</h1>
         <div style="padding: 5px">
             <p>
-                Your reservation has been successfully scheduled for April 23, 2022. This is your
+                Your reservation has been successfully scheduled for {{ \Carbon\Carbon::parse($datetime)->format('l, F j Y h:i A') }}. This is your
                 reservation code :
             </p>
             <br>

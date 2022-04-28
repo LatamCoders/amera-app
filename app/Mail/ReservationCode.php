@@ -13,16 +13,18 @@ class ReservationCode extends Mailable
 
     public $NAME;
     public $CODE;
+    public $DATE_TIME;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $code)
+    public function __construct($name, $code, $datetime)
     {
         $this->NAME = $name;
         $this->CODE = $code;
+        $this->DATE_TIME = $datetime;
     }
 
     /**
@@ -36,6 +38,7 @@ class ReservationCode extends Mailable
             ->with([
                 'name' => $this->NAME,
                 'code' => $this->CODE,
+                'datetime' => $this->DATE_TIME,
             ]);
     }
 }

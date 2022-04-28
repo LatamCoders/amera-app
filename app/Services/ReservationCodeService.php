@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Booking;
 use App\Models\ReservationCode;
+use App\Models\SelfPay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -13,7 +15,9 @@ class ReservationCodeService
     {
         DB::beginTransaction();
 
-        $client = ReservationCode::with('SelfPay.Booking')->where('selfpay_id', $user_id)->first();
+        $client = ReservationCode::with('SelfPay')->where('selfpay_id', $user_id)->first();
+        $bookingDate = Booking::where('selfpay_id', $user_id)->first();
+        $selfPay = SelfPay::where('id', $user_id)->first();
 
         if (!$client) {
             $code = rand(10000000, 99999999);
@@ -24,7 +28,7 @@ class ReservationCodeService
 
             $rc->save();
 
-            Mail::to('jose.b1996m@gmail.com')->send(new \App\Mail\ReservationCode($client->self_pay->name, $code));
+            Mail::to($selfPay->email)->send(new \App\Mail\ReservationCode($selfPay->name, $code, $bookingDate->appoiment_datetime));
 
             DB::commit();
         } else {
