@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
+use App\utils\Stripe;
 use App\utils\UploadImage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class SelfPayService
         }
 
         DB::transaction(function () use ($request, $phoneVerify, $activatedUser) {
-            $customer = $this->RegisterStripeCustomer("$request->name $request->lastname", $request->email, $request->phone_number);
+            $customer = Stripe::RegisterStripeCustomer("$request->name $request->lastname", $request->email, $request->phone_number);
 
             $selfpay = new SelfPay();
 
@@ -56,19 +57,6 @@ class SelfPayService
         });
 
         return 'Client register';
-    }
-
-    public function RegisterStripeCustomer($name, $email, $phoneNumber): Customer
-    {
-        $stripe = new StripeClient(
-            env('STRIPE_KEY')
-        );
-
-        return $stripe->customers->create([
-            'name' => $name,
-            'email' => $email,
-            'phone' => $phoneNumber,
-        ]);
     }
 
     public function AddStripePaymentMethod($request, $clientId)
