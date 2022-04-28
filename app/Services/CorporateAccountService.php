@@ -79,7 +79,7 @@ class CorporateAccountService
                 []
             );
 
-            throw new BadRequestException($e);
+            throw new BadRequestException($e->getMessage());
         }
     }
 
