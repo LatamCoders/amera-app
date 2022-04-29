@@ -4,6 +4,10 @@
             margin: 0;
             padding: 0;
         }
+        main {
+            width: 90%;
+            margin: 0 auto;
+        }
 
         .logo {
             width: 116px;
@@ -42,6 +46,13 @@
             text-align: center;
             margin: 20px 0;
         }
+        a{
+            text-decoration: none !important;
+        }
+
+        .redirImg:hover {
+            cursor: pointer;
+        }
 
         .imgGoogle,
         .imgAppstore {
@@ -64,7 +75,8 @@
         }
 
 
-        @media screen and (min-width: 320px) and (max-width: 502px) {
+
+        @media screen and (min-width: 320px) and (max-width: 502px){
             .fondo-header {
 
                 background-position: center;
@@ -84,6 +96,9 @@
 
             .margenesmovil {
                 margin-top: 10px;
+            }
+            .parrafo-terminos {
+                padding: 5px;
             }
         }
 
@@ -105,21 +120,22 @@
         <div class="fondo-header">
 
         </div>
-        <h1>Hi, {{ $name }}</h1>
+        <h1>Hi, {{ $NAME }}</h1>
         <div style="padding: 5px">
             <p>
-                Your reservation has been successfully scheduled for {{ \Carbon\Carbon::parse($datetime)->format('l, F j Y h:i A') }}. This is your
-                reservation code :
+                Thank you, our credentialing team will review your documents and notify you shortly.
             </p>
             <br>
-            <b>{{ $code }}</b>
-            <p>
-                Now please download the amera app and login from the following app stores...
-            </p>
         </div>
         <div style="text-align: center; margin: 30px 0">
-            <img class="imgGoogle" src="https://i.ibb.co/wBtNFG5/googleplay.png" alt="logo-google-play">
-            <img class="imgAppstore margenesmovil" src="https://i.ibb.co/kGVYmh4/APP-STORE.png" alt="logo-app-store">
+            <a class="redirImg" href="">
+                <img class="imgGoogle" src="https://i.ibb.co/wBtNFG5/googleplay.png" alt="logo-google-play">
+            </a>
+            <a class="redirImg" href="">
+                <img class="imgAppstore margenesmovil" src="https://i.ibb.co/kGVYmh4/APP-STORE.png"
+                     alt="logo-app-store">
+
+            </a>
         </div>
     </div>
     <footer>
@@ -128,7 +144,7 @@
                 <span style="display: inline-block; width: 281px;">
                         <h4 style="text-align: start">Terms Privacy</h4>
 
-                    <p style="text-align: start">
+                    <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
                         Austin, Texas Available in
@@ -146,19 +162,19 @@
                 </span>
 
                 <span style="display: inline-block">
-                <a style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/F57wVTW/facebook-8.png" width="32">
                 </a>
 
-                <a style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/GxwdKrZ/Instagram.png" width="32">
                 </a>
 
-                <a style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/1dc2mgB/Whatsaap-8.png" width="32">
                 </a>
 
-                <a style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/dB0wKjn/twitter-8.png" width="32">
                 </a>
                     <br><br><br>
@@ -169,5 +185,3 @@
         </div>
     </footer>
 </main>
-
-</body>

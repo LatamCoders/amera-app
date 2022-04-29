@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ChekingDriverDocuments;
 use App\Models\Driver;
 use App\Models\SelfPay;
 use App\Models\Vehicle;
@@ -15,6 +16,7 @@ use App\utils\UploadImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Util\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Tymon\JWTAuth\JWTAuth;
@@ -65,6 +67,7 @@ class DriverController extends Controller
 
                 UploadFiles::UploadDriverFile($request, $driverId, $driver->id);
 
+                Mail::to($request->email)->send(new ChekingDriverDocuments($request->name));
             });
 
             return CustomHttpResponse::HttpResponse('Driver register', '', 200);
