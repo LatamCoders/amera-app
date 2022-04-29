@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Events\BookingNotification;
+use App\Mail\BookingClientDetail;
+use App\Mail\RequestCancelBookingWithFee;
+use App\Mail\RequestCancelBookingWithoutFee;
 use App\Models\Booking;
 use App\Models\SelfPay;
 use App\Notifications\StartTrip;
@@ -10,7 +13,9 @@ use App\utils\StatusCodes;
 use App\utils\UniqueIdentifier;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -18,27 +23,47 @@ class BookingService
 {
     public function AddBooking($request, $clientId)
     {
-        $booking = new Booking();
+        try {
+            DB::beginTransaction();
 
-        $from = (object)['from' => $request->from, 'coordinate' => $request->from_coordinates];
-        $to = (object)['from' => $request->to, 'coordinate' => $request->to_coordinates];
+            $booking = new Booking();
 
-        $booking->booking_id = UniqueIdentifier::GenerateUid();
-        $booking->selfpay_id = $clientId;
-        $booking->booking_date = $request->booking_date;
-        $booking->pickup_time = $request->pickup_time;
-        $booking->city = $request->city;
-        $booking->surgery_type = $request->surgery_type;
-        $booking->appoinment_datetime = $request->appoinment_datetime;
-        $booking->from = json_encode($from);
-        $booking->to = json_encode($to);
-        $booking->price = $request->price;
-        $booking->driver_id = $request->driver_id;
-        $booking->status = StatusCodes::TRIP_PENDING;
+            $from = (object)['from' => $request->from, 'coordinate' => $request->from_coordinates];
+            $to = (object)['from' => $request->to, 'coordinate' => $request->to_coordinates];
 
-        $booking->save();
+            $booking->booking_id = UniqueIdentifier::GenerateUid();
+            $booking->selfpay_id = $clientId;
+            $booking->booking_date = $request->booking_date;
+            $booking->pickup_time = $request->pickup_time;
+            $booking->city = $request->city;
+            $booking->surgery_type = $request->surgery_type;
+            $booking->appoinment_datetime = $request->appoinment_datetime;
+            $booking->from = json_encode($from);
+            $booking->to = json_encode($to);
+            $booking->price = $request->price;
+            $booking->driver_id = $request->driver_id;
+            $booking->status = StatusCodes::TRIP_PENDING;
 
-        return $booking->id;
+            $booking->save();
+
+            if ($request->query('clientType') == null) {
+                $client = SelfPay::where('id', $clientId)->first();
+
+                Mail::to($client->email)->send(new BookingClientDetail($client->name));
+            } else if ($request->query('clientType') == 'reservationCode') {
+                $reservationCode = new ReservationCodeService();
+
+                $reservationCode->GenerateReservationCode($clientId);
+            }
+
+            DB::commit();
+
+            return $booking->id;
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            throw new BadRequestException($e->getMessage());
+        }
     }
 
     public function Start($bookingId, $message)
@@ -143,7 +168,15 @@ class BookingService
      */
     public function RequestCancelBooking($bookingId)
     {
-        $booking = Booking::where('id', $bookingId)->first();
+        $booking = Booking::with('SelfPay')->where('id', $bookingId)->first();
+
+        $hours = Carbon::create($booking->booking_date)->diffInHours(Carbon::now());
+
+        if ($hours <= 23) {
+            Mail::to($booking->SelfPay->name)->send(new RequestCancelBookingWithoutFee($booking->SelfPay->email));
+        } else if ($hours >= 24) {
+            Mail::to($booking->SelfPay->name)->send(new RequestCancelBookingWithFee($booking->SelfPay->email));
+        }
 
         $booking->status = StatusCodes::CANCELLATION_PENDING;
 

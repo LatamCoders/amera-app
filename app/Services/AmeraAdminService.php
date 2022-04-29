@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\CorporateAccountActivated;
 use App\Models\AmeraAdmin;
 use App\Models\AmeraUser;
 use App\Models\Booking;
@@ -17,6 +18,7 @@ use http\Exception\BadMessageException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -98,10 +100,13 @@ class AmeraAdminService
     public function ChangeUserStatus($userId)
     {
         $user = AmeraUser::where('id', $userId)->first();
+        $CA = CorporateAccount::with('CorporateAccountPersonalInfo')->where('amera_user_id', $userId)->first();
 
         $user->status = !$user->satus;
 
         $user->save();
+
+        Mail::to($CA->CorporateAccountPersonalInfo->email)->send(new CorporateAccountActivated($CA->company_legal_name));
     }
 
     public function ApproveDriverDocuments($driverId, $document)
