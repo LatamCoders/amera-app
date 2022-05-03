@@ -30,6 +30,6 @@ class ChekingDriverDocuments extends Mailable
      */
     public function build()
     {
-        return $this->view('Mail.ChakingDriverDocuments');
+        return $this->view('Mail.ChekingDriverDocuments');
     }
 }
