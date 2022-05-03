@@ -59,6 +59,7 @@ class DriverController extends Controller
                 $driver->lastname = $request->lastname;
                 $driver->phone_number = $request->phone_number;
                 $driver->email = $request->email;
+                $driver->is_cna = false;
                 $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
 
                 $driver->save();
