@@ -173,9 +173,9 @@ class BookingService
         $hours = Carbon::create($booking->booking_date)->diffInHours(Carbon::now());
 
         if ($hours <= 23) {
-            Mail::to($booking->SelfPay->name)->send(new RequestCancelBookingWithoutFee($booking->SelfPay->email));
+            Mail::to($booking->SelfPay->email)->send(new RequestCancelBookingWithoutFee($booking->SelfPay->name));
         } else if ($hours >= 24) {
-            Mail::to($booking->SelfPay->name)->send(new RequestCancelBookingWithFee($booking->SelfPay->email));
+            Mail::to($booking->SelfPay->email)->send(new RequestCancelBookingWithFee($booking->SelfPay->name));
         }
 
         $booking->status = StatusCodes::CANCELLATION_PENDING;
