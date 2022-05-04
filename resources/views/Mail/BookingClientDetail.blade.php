@@ -123,6 +123,8 @@
         <div style="padding: 5px">
             <p style="padding: 15px">
                 Thank you for booking with Amera! Please find the details of your reservation.
+
+
                 Have questions? Please connect with one of our care coordinators
                 at 855.263.7215 opt 1 or email us at requests@amerasolutions.com
                 The team at Amera
