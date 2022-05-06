@@ -322,7 +322,7 @@ class SelfPayController extends Controller
     /*
      * One booking
      */
-    public function GetOneBooking(Request $request, $bookingId, $selfpayId): JsonResponse
+    public function GetOneBooking($selfpayId, $bookingId, Request $request): JsonResponse
     {
         try {
             $res = $this->_BookingService->ShowOneBooking($selfpayId, $bookingId, $request->query('type'));
