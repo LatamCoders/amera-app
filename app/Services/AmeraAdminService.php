@@ -171,7 +171,7 @@ class AmeraAdminService
 
             $refund = new Refund();
 
-            $refund->stripe_refund_id = $refund_id;
+            $refund->stripe_refund_id = $refund_id->id;
             $refund->booking_id = $booking->id;
 
             $booking->save();

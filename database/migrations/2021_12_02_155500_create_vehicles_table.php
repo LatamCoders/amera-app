@@ -20,7 +20,7 @@ class CreateVehiclesTable extends Migration
             $table->text('year');
             $table->text('plate_number');
             $table->text('vin_number');
-            $table->foreignId('driver_id')->constrained('drivers');
+            $table->foreignId('driver_id')->constrained('drivers')->cascadeOnDelete();
             $table->timestamps();
         });
     }
