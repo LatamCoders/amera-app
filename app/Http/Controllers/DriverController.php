@@ -13,6 +13,7 @@ use App\Services\SmsService;
 use App\utils\CustomHttpResponse;
 use App\utils\UploadFiles;
 use App\utils\UploadImage;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +61,7 @@ class DriverController extends Controller
                 $driver->phone_number = $request->phone_number;
                 $driver->email = $request->email;
                 $driver->is_cna = false;
+                $driver->phone_number_verified_at = Carbon::now();
                 $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);
 
                 $driver->save();
