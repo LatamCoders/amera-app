@@ -54,7 +54,7 @@ class UploadFiles
             Storage::disk('public')->putFileAs('driver', $request->file('driver_license'), $DriverLicense);
 
             $ProofOfInsurance = "$number-proof-of-insurance.{$request->file('proof_of_insurance')->getClientOriginalExtension()}";
-            Storage::disk('public')->putFileAs('driver', $request->file('proof_of_insurance'), $DriverLicense);
+            Storage::disk('public')->putFileAs('driver', $request->file('proof_of_insurance'), $ProofOfInsurance);
 
             $driverDocument = new DriverDocument();
 

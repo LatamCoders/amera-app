@@ -145,7 +145,12 @@
                     </ul>
                 </div>
             </div>
-
+            <p>
+                This is your login password:
+            </p>
+            <p>
+                {{ $PASSWORD }}
+            </p>
 
             <br>
         </div>

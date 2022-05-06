@@ -12,15 +12,17 @@ class CorporateAccountActivated extends Mailable
     use Queueable, SerializesModels;
 
     public $NAME;
+    public $PASSWORD;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($NAME)
+    public function __construct($NAME, $PASSWORD)
     {
         //
         $this->NAME = $NAME;
+        $this->PASSWORD = $PASSWORD;
     }
 
     /**
