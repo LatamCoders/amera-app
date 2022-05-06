@@ -16,7 +16,7 @@ class CreateDriverDocumentsTable extends Migration
     {
         Schema::create('driver_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('driver_id')->constrained('drivers');
+            $table->foreignId('driver_id')->constrained('drivers')->cascadeOnDelete();
             $table->text('driver_license');
             $table->dateTime('driver_license_verify_at')->nullable();
             $table->text('proof_of_insurance');

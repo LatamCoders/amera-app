@@ -16,7 +16,7 @@ class CreateVehicleDocumentsTable extends Migration
     {
         Schema::create('vehicle_documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vehicle_id')->constrained('vehicles');
+            $table->foreignId('vehicle_id')->constrained('vehicles')->cascadeOnDelete();
             $table->text('vehicle_front_image');
             $table->dateTime('vehicle_front_image_verify_at')->nullable();
             $table->text('vehicle_rear_image');

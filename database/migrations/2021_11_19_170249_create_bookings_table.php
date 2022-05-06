@@ -18,7 +18,7 @@ class CreateBookingsTable extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->string('booking_id', 50)->unique();
-            $table->foreignId('selfpay_id')->constrained('selfpay');
+            $table->foreignId('selfpay_id')->constrained('selfpay')->cascadeOnDelete();
             $table->dateTime('booking_date');
             $table->time('pickup_time');
             $table->text('city');
