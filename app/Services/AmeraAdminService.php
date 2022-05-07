@@ -102,11 +102,14 @@ class AmeraAdminService
         $user = AmeraUser::where('id', $userId)->first();
         $CA = CorporateAccount::with('CorporateAccountPersonalInfo')->where('amera_user_id', $userId)->first();
 
+        $pass = UniqueIdentifier::GenerateRandomPassword();
+
         $user->status = !$user->satus;
+        $user->password = Hash::make($pass);
 
         $user->save();
 
-        Mail::to($CA->CorporateAccountPersonalInfo->email)->send(new CorporateAccountActivated($CA->company_legal_name));
+        Mail::to($CA->CorporateAccountPersonalInfo->email)->send(new CorporateAccountActivated($CA->company_legal_name, $pass));
     }
 
     public function ApproveDriverDocuments($driverId, $document)

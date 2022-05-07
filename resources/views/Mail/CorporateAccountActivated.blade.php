@@ -145,10 +145,12 @@
                     </ul>
                 </div>
             </div>
-            <p>
+            <br>
+            <p style="font-size: 18px;">
                 This is your login password:
             </p>
-            <p>
+            <br>
+            <p style="text-align: center; font-weight: bold; font-size: 28px">
                 {{ $PASSWORD }}
             </p>
 
