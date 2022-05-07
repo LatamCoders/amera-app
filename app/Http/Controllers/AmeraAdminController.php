@@ -212,4 +212,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function DeleteCorporateAccount($ameraUserId): JsonResponse
+    {
+        try {
+           $res = $this->_AmeraAdminService->DeleteCaUser($ameraUserId);
+
+            return CustomHttpResponse::HttpResponse($res, [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }

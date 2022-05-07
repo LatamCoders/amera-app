@@ -110,6 +110,7 @@ class AmeraAdminService
         $user->save();
 
         Mail::to($CA->CorporateAccountPersonalInfo->email)->send(new CorporateAccountActivated($CA->company_legal_name, $pass));
+        Mail::to($CA->CorporateAccountPersonalInfo->email)->sdeleteend(new CorporateAccountActivated($CA->company_legal_name, $pass));
     }
 
     public function ApproveDriverDocuments($driverId, $document)
@@ -206,10 +207,16 @@ class AmeraAdminService
         $booking->save();
     }
 
-    public function DeleteCaUser($ameraUserId)
+    public function DeleteCaUser($ameraUserId): string
     {
         $user = AmeraUser::where('id', $ameraUserId)->first();
 
+        if ($user->role != 3) {
+            throw new BadRequestException("This user is not a Corporate Account");
+        }
+
         $user->delete();
+
+        return 'Corporate Account deleted successfully';
     }
 }
