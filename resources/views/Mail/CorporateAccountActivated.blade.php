@@ -145,7 +145,14 @@
                     </ul>
                 </div>
             </div>
-
+            <br>
+            <p style="font-size: 18px;">
+                This is your login password:
+            </p>
+            <br>
+            <p style="text-align: center; font-weight: bold; font-size: 28px">
+                {{ $PASSWORD }}
+            </p>
 
             <br>
         </div>
