@@ -235,6 +235,7 @@ Route::group(['prefix' => 'v1'], function () {
              */
             Route::get('{CaId}/panel/client/search', [CorporateAccountController::class, 'CaClientList']);
             Route::get('{CaId}/panel/booking/list', [CorporateAccountController::class, 'GetCaBooking']);
+            Route::get('{CaId}/panel/paymentMethod', [CorporateAccountController::class, 'GetMyPaymentMethod']);
         });
 
     });
@@ -264,6 +265,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/driver/{driverId}/delete', [AmeraAdminController::class, 'DeleteDriverUser']);
             Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveTripCancellation']);
             Route::post('panel/booking/{bookingId}/markAsPaid', [AmeraAdminController::class, 'MarkBookingAsPaid']);
+            Route::post('panel/booking/{bookingId}/delete', [AmeraAdminController::class, 'DeleteBooking']);
 
             /*
              * Method: get
@@ -275,6 +277,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
             Route::get('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
+            Route::get('panel/ca/paymentMethod', [AmeraAdminController::class, 'GetCaPaymentMethod']);
             Route::get('panel/users/list', [AmeraAdminController::class, 'GetUsersList']);
             Route::match(['POST', 'GET'], 'panel/user/{ameraUserId}', [AmeraAdminController::class, 'ModifyUser']);
 

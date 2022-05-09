@@ -114,6 +114,13 @@ class CorporateAccountService
         });
     }
 
+    public function GetCaCreditCard($caId)
+    {
+        $client = CorporateAccount::with('CorporateAccountPersonalInfo', 'CorporateAccountPaymentMethod')->where('id', $caId)->first();
+
+        return Stripe::GetStripeCreditCard($client->CorporateAccountPersonalInfo->stripe_customer_id, $client->CorporateAccountPaymentMethod->stripe_payment_method_id);
+    }
+
     /*
      * Devolver datos del CA
      */

@@ -228,4 +228,13 @@ class AmeraAdminService
 
         return 'Driver deleted successfully';
     }
+
+    public function DeleteBooking($bookingId): string
+    {
+        $user = Booking::where('id', $bookingId)->first();
+
+        $user->delete();
+
+        return 'Booking deleted successfully';
+    }
 }

@@ -224,10 +224,32 @@ class AmeraAdminController extends Controller
         }
     }
 
+    public function GetCaPaymentMethod($caUserId): JsonResponse
+    {
+        try {
+           $res = $this->_CorporateAccountService->GetCaCreditCard($caUserId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
     public function DeleteDriverUser($driverId): JsonResponse
     {
         try {
            $res = $this->_AmeraAdminService->DeleteDriverUser($driverId);
+
+            return CustomHttpResponse::HttpResponse($res, [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function DeleteBooking($bookingId): JsonResponse
+    {
+        try {
+           $res = $this->_AmeraAdminService->DeleteBooking($bookingId);
 
             return CustomHttpResponse::HttpResponse($res, [], 200);
         } catch (\Exception $exception) {
