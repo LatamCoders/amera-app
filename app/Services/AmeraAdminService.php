@@ -219,4 +219,13 @@ class AmeraAdminService
 
         return 'Corporate Account deleted successfully';
     }
+
+    public function DeleteDriverUser($driverId): string
+    {
+        $user = Driver::where('id', $driverId)->first();
+
+        $user->delete();
+
+        return 'Driver deleted successfully';
+    }
 }
