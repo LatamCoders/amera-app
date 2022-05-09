@@ -19,4 +19,17 @@ class Stripe
             'phone' => $phoneNumber,
         ]);
     }
+
+    public static function GetStripeCreditCard($stripeCustomerId, $stripePaymentMethodId)
+    {
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        return $stripe->customers->retrieveSource(
+            "$stripeCustomerId",
+            "$stripePaymentMethodId",
+            []
+        );
+    }
 }

@@ -223,4 +223,15 @@ class AmeraAdminController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function DeleteDriverUser($driverId): JsonResponse
+    {
+        try {
+           $res = $this->_AmeraAdminService->DeleteDriverUser($driverId);
+
+            return CustomHttpResponse::HttpResponse($res, [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
