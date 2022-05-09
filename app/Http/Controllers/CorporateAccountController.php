@@ -115,6 +115,17 @@ class CorporateAccountController extends Controller
         }
     }
 
+    public function GetMyPaymentMethod($caId): JsonResponse
+    {
+        try {
+            $res = $this->_CorporateAccountService->GetCaCreditCard($caId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
     /*
      * Generate reservation code
      */
