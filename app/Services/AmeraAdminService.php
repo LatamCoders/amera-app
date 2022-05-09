@@ -110,7 +110,6 @@ class AmeraAdminService
         $user->save();
 
         Mail::to($CA->CorporateAccountPersonalInfo->email)->send(new CorporateAccountActivated($CA->company_legal_name, $pass));
-        Mail::to($CA->CorporateAccountPersonalInfo->email)->sdeleteend(new CorporateAccountActivated($CA->company_legal_name, $pass));
     }
 
     public function ApproveDriverDocuments($driverId, $document)
