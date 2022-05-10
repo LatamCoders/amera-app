@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\RecoveryPassword;
 use App\Models\AmeraUser;
 use App\Models\Booking;
 use App\Models\CorporateAccount;
@@ -9,6 +10,8 @@ use App\Models\CorporateAccountPersonalInfo;
 use App\Models\CorportateAccountPaymentMethod;
 use App\Models\SelfPay;
 use App\utils\Stripe;
+use App\utils\VerifyEmailService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -132,6 +135,45 @@ class CorporateAccountService
         } catch (\Exception $exception) {
             throw new HttpException(500, $exception->getMessage());
         }
+    }
+
+    public function RecoverPassword($request)
+    {
+        $code = Cache::get("RecoverPassword.$request->email");
+
+        if ($code != (int)$request->code) {
+            throw new BadRequestException("Invalid code");
+        }
+
+        $client = AmeraUser::where('email', $request->email)->first();
+
+        $client->password = Hash::make($request->password);
+
+        $client->save();
+
+        Cache::forget("RecoverPassword.$request->email");
+    }
+
+    public function ValidateRecoveryCode($request): string
+    {
+        return VerifyEmailService::VerifyCode($request->code, "RecoverPassword.$request->email");
+    }
+
+    public function ValidEmailAndSendCode($request)
+    {
+        $client = AmeraUser::where('email', $request->email)->first();
+
+        if (!$client) {
+            throw new BadRequestException("This user doesn't exist");
+        }
+
+        /*$code = rand(10000, 99999);
+
+        Cache::put($client->email, $code, now()->addMinutes(5));
+
+        Mail::to($client->email)->send(new RecoveryPassword($code));*/
+
+        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "RecoverPassword.$client->email");
     }
 
     /*

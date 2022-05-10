@@ -65,6 +65,9 @@ Route::group(['prefix' => 'v1'], function () {
          * Method: Post
          */
         Route::post('users/login', [AmeraUserController::class, 'Login']);
+        Route::post('users/recoverPassword/sendCode', [AmeraUserController::class, 'ValidEmailAndSendCode']);
+        Route::post('users/recoverPassword/validateCode', [AmeraUserController::class, 'ValidateRecoveryCode']);
+        Route::post('users/recoverPassword/changePassword', [AmeraUserController::class, 'ChangePassword']);
         Route::middleware('auth:users')->post('users/logout', [AmeraUserController::class, 'Logout']);
 
         /*

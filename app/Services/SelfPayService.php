@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
+use App\Mail\RecoveryPassword;
 use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\Stripe;
 use App\utils\UploadImage;
+use App\utils\VerifyEmailService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Stripe\Customer;
 use Stripe\StripeClient;
@@ -203,5 +206,34 @@ class SelfPayService
         }
 
         return $code;
+    }
+
+    public function SendVerificationEmailCode($request)
+    {
+        $client = SelfPay::where('email', $request->email)->first();
+
+        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "RecoverPassword.$client->email");
+    }
+
+    public function ValidateVerificationEmailCode($request): string
+    {
+        return VerifyEmailService::VerifyCode($request->code, "RecoverPassword.$request->email");
+    }
+
+    public function ValidateEmail(Request $request)
+    {
+        $code = Cache::get($request->email);
+
+        if ($code != (int)$request->code) {
+            throw new BadRequestException("Invalid code");
+        }
+
+        $client = SelfPay::where('email', $request->email)->first();
+
+        $client->email_verified_at = Carbon::now();
+
+        $client->save();
+
+        Cache::forget($request->email);
     }
 }
