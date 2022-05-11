@@ -302,9 +302,23 @@ class DriverController extends Controller
     public function VerifyEmailOrNumber(Request $request, $driverId): JsonResponse
     {
         try {
-            $this->_DriverService->VerifyDriverNumberOrEmail($driverId, $request->query('type'));
+            $this->_DriverService->VerifyDriverNumberOrEmail($driverId, $request->query('type'), $request);
 
             return CustomHttpResponse::HttpResponse('Ok', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+    * Send verification email code
+    */
+    public function SendVerificationEmailCode($clientId): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $this->_DriverService->SendVerificationEmailCode($clientId);
+
+            return CustomHttpResponse::HttpResponse('Code send successfully', [], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

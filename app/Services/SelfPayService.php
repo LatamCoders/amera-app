@@ -168,7 +168,7 @@ class SelfPayService
 
     }
 
-    public function VerifyClientNumberOrEmail($selfpayId, $verificationType)
+    public function VerifyClientNumberOrEmail($selfpayId, $verificationType, $request)
     {
         if ($verificationType == 'phone_number') {
 
@@ -180,9 +180,17 @@ class SelfPayService
         } else if ($verificationType == 'email') {
             $data = SelfPay::where('selfpay_id', $selfpayId)->first();
 
+            $code = Cache::get("VerifyEmail.$data->email");
+
+            if ($code != (int)$request->code) {
+                throw new BadRequestException("Invalid code");
+            }
+
             $data->email_verified_at = Carbon::now();
 
             $data->save();
+
+            Cache::forget("VerifyEmail.$data->email");
         } else {
             throw new BadRequestException('Invalid verification type');
         }
@@ -208,32 +216,10 @@ class SelfPayService
         return $code;
     }
 
-    public function SendVerificationEmailCode($request)
+    public function SendVerificationEmailCode($clientId)
     {
-        $client = SelfPay::where('email', $request->email)->first();
+        $client = SelfPay::where('selfpay_id', $clientId)->first();
 
-        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "RecoverPassword.$client->email");
-    }
-
-    public function ValidateVerificationEmailCode($request): string
-    {
-        return VerifyEmailService::VerifyCode($request->code, "RecoverPassword.$request->email");
-    }
-
-    public function ValidateEmail(Request $request)
-    {
-        $code = Cache::get($request->email);
-
-        if ($code != (int)$request->code) {
-            throw new BadRequestException("Invalid code");
-        }
-
-        $client = SelfPay::where('email', $request->email)->first();
-
-        $client->email_verified_at = Carbon::now();
-
-        $client->save();
-
-        Cache::forget($request->email);
+        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "VerifyEmail.$client->email");
     }
 }

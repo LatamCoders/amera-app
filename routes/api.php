@@ -127,9 +127,11 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('{clientId}/profile/update', [SelfPayController::class, 'UpdateProfileData']);
             Route::post('{clientId}/profile/image/update', [SelfPayController::class, 'UpdateProfileImage']);
             Route::post('{clientId}/profile/verify', [SelfPayController::class, 'VerifyEmailOrNumber']);
+            Route::post('{clientId}/profile/verify/sendVerificationCode', [SelfPayController::class, 'SendVerificationEmailCode']);
             Route::post('{clientId}/profile/payment/add', [SelfPayController::class, 'AddPaymentMethod']);
             Route::post('{clientId}/profile/payment/delete', [SelfPayController::class, 'DeleteMyPaymentMethod']);
             Route::post('{clientId}/profile/payment/update', [SelfPayController::class, 'UpdateMyPaymentMethod']);
+            Route::post('{clientId}/profile/verify/senVerificationCode', [SelfPayController::class, 'SendVerificationEmailCode']);
 
             /*
              * Method: Post
@@ -187,6 +189,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('{driverId}/profile/image/update', [DriverController::class, 'UpdateProfileImage']);
             Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
             Route::post('{driverId}/profile/verify', [DriverController::class, 'VerifyEmailOrNumber']);
+            Route::post('{driverId}/profile/verify/sendVerificationCode', [DriverController::class, 'SendVerificationEmailCode']);
 
             /*
              * Method: Post
