@@ -218,7 +218,7 @@ class SelfPayService
 
     public function SendVerificationEmailCode($clientId)
     {
-        $client = SelfPay::where('selfpay_id', $clientId)->first();
+        $client = SelfPay::where('client_id', $clientId)->first();
 
         VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "VerifyEmail.$client->email");
     }
