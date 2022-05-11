@@ -172,13 +172,13 @@ class SelfPayService
     {
         if ($verificationType == 'phone_number') {
 
-            $data = SelfPay::where('selfpay_id', $selfpayId)->first();
+            $data = SelfPay::where('client_id', $selfpayId)->first();
 
             $data->phone_number_verified_at = Carbon::now();
 
             $data->save();
         } else if ($verificationType == 'email') {
-            $data = SelfPay::where('selfpay_id', $selfpayId)->first();
+            $data = SelfPay::where('client_id', $selfpayId)->first();
 
             $code = Cache::get("VerifyEmail.$data->email");
 
