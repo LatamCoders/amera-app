@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\RecoveryPassword;
+use App\Mail\VerifyEmail;
 use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
@@ -220,6 +221,6 @@ class SelfPayService
     {
         $client = SelfPay::where('client_id', $clientId)->first();
 
-        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "VerifyEmail.$client->email");
+        VerifyEmailService::SendCode($client->email, VerifyEmail::class, "VerifyEmail.$client->email");
     }
 }
