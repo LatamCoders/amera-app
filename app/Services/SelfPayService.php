@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
+use App\Mail\RecoveryPassword;
 use App\Models\Booking;
 use App\Models\ReservationCode;
 use App\Models\SelfPay;
 use App\utils\CustomHttpResponse;
 use App\utils\Stripe;
 use App\utils\UploadImage;
+use App\utils\VerifyEmailService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Stripe\Customer;
 use Stripe\StripeClient;
@@ -165,7 +168,7 @@ class SelfPayService
 
     }
 
-    public function VerifyClientNumberOrEmail($selfpayId, $verificationType)
+    public function VerifyClientNumberOrEmail($selfpayId, $verificationType, $request)
     {
         if ($verificationType == 'phone_number') {
 
@@ -177,9 +180,17 @@ class SelfPayService
         } else if ($verificationType == 'email') {
             $data = SelfPay::where('selfpay_id', $selfpayId)->first();
 
+            $code = Cache::get("VerifyEmail.$data->email");
+
+            if ($code != (int)$request->code) {
+                throw new BadRequestException("Invalid code");
+            }
+
             $data->email_verified_at = Carbon::now();
 
             $data->save();
+
+            Cache::forget("VerifyEmail.$data->email");
         } else {
             throw new BadRequestException('Invalid verification type');
         }
@@ -203,5 +214,12 @@ class SelfPayService
         }
 
         return $code;
+    }
+
+    public function SendVerificationEmailCode($clientId)
+    {
+        $client = SelfPay::where('selfpay_id', $clientId)->first();
+
+        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "VerifyEmail.$client->email");
     }
 }

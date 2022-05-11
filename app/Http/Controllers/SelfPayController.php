@@ -283,7 +283,7 @@ class SelfPayController extends Controller
     public function VerifyEmailOrNumber(Request $request, $selfpayId): JsonResponse
     {
         try {
-            $this->_SelfPayService->VerifyClientNumberOrEmail($selfpayId, $request->query('type'));
+            $this->_SelfPayService->VerifyClientNumberOrEmail($selfpayId, $request->query('type'), $request);
 
             return CustomHttpResponse::HttpResponse('Ok', '', 200);
         } catch (\Exception $exception) {
@@ -440,6 +440,20 @@ class SelfPayController extends Controller
             $this->_BookingService->RequestCancelBooking($bookingId);
 
             return CustomHttpResponse::HttpResponse('OK', 'Cancelled request send successfully', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    /*
+     * Send verification email code
+     */
+    public function SendVerificationEmailCode($clientId): JsonResponse
+    {
+        try {
+            $this->_SelfPayService->SendVerificationEmailCode($clientId);
+
+            return CustomHttpResponse::HttpResponse('Code send successfully', [], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
