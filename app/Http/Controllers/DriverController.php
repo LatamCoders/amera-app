@@ -304,7 +304,7 @@ class DriverController extends Controller
         try {
             $this->_DriverService->VerifyDriverNumberOrEmail($driverId, $request->query('type'), $request);
 
-            return CustomHttpResponse::HttpResponse('Ok', '', 200);
+            return CustomHttpResponse::HttpResponse('Email verified successfully', [], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
