@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Events\BookingNotification;
 use App\Events\DriverTracking;
 use App\Mail\RecoveryPassword;
+use App\Mail\VerifyEmail;
 use App\Models\Driver;
 use App\utils\VerifyEmailService;
 use Carbon\Carbon;
@@ -63,6 +64,6 @@ class DriverService
     {
         $client = Driver::where('driver_id', $clientId)->first();
 
-        VerifyEmailService::SendCode($client->email, RecoveryPassword::class, "VerifyEmail.$client->email");
+        VerifyEmailService::SendCode($client->email, VerifyEmail::class, "VerifyEmail.$client->email");
     }
 }
