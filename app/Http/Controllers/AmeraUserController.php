@@ -17,7 +17,7 @@ class AmeraUserController extends Controller
 
     public function __construct(AmeraUserService $ameraUserService, BookingService $bookingService, CorporateAccountService $CorporateAccountService)
     {
-        $this->middleware('auth:users', ['except' => ['Login', 'ValidEmailAndSendCode', 'RecoverPassword', 'ChangePassword']]);
+        $this->middleware('auth:users', ['except' => ['Login', 'ValidEmailAndSendCode', 'ValidateRecoveryCode', 'ChangePassword']]);
         $this->_AmeraUserService = $ameraUserService;
         $this->_BookingService = $bookingService;
         $this->_CorporateAccountService = $CorporateAccountService;
