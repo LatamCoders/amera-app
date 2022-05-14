@@ -13,14 +13,8 @@ class UniqueIdentifier
 
     public static function GenerateRandomPassword($length = 10): string
     {
-        $string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-_*!#$%&/?¡¿';
-        $stringLength = strlen($string);
-        $randomString = '';
+        $string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ*#$%&?';
 
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $string[rand(0, $stringLength - 1)];
-        }
-
-        return $randomString;
+        return substr(str_shuffle($string), 0, $length);
     }
 }
