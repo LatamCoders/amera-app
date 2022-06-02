@@ -4,6 +4,7 @@
             margin: 0;
             padding: 0;
         }
+
         main {
             width: 90%;
             margin: 0 auto;
@@ -46,13 +47,15 @@
             text-align: center;
             margin: 20px 0;
         }
-        a{
+
+        a {
             text-decoration: none !important;
         }
 
         .redirImg:hover {
             cursor: pointer;
         }
+
         .imgGoogle,
         .imgAppstore {
 
@@ -74,8 +77,7 @@
         }
 
 
-
-        @media screen and (min-width: 320px) and (max-width: 502px){
+        @media screen and (min-width: 320px) and (max-width: 502px) {
             .fondo-header {
 
                 background-position: center;
@@ -96,6 +98,7 @@
             .margenesmovil {
                 margin-top: 10px;
             }
+
             .parrafo-terminos {
                 padding: 5px;
             }
@@ -124,11 +127,19 @@
             <p style="padding: 15px">
                 Thank you for booking with Amera! Please find the details of your reservation.
 
-
+            </p>
+            <ul style="text-align: center; list-style: inside; ">
+                <li>Appoinment date and time: {{ \Carbon\Carbon::parse($APPOINMENT_DATETIME)->format('l, F j Y h:i A') }}</li>
+                <li>Suggested pick up time: {{ $PICKUP_TIME }}</li>
+                <li>Surgery type: {{ $SURGERY_TYPE }}</li>
+                <li>From: {{ $FROM }}</li>
+                <li>To: {{ $TO }}</li>
+                <li>Price: {{ $PRICE }}</li>
+            </ul>
+            <p>
                 Have questions? Please connect with one of our care coordinators
                 at 855.263.7215 opt 1 or email us at requests@amerasolutions.com
                 The team at Amera
-
             </p>
             <br>
         </div>
@@ -166,19 +177,19 @@
                 </span>
 
                 <span style="display: inline-block">
-                <a class="redirImg"  style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/F57wVTW/facebook-8.png" width="32">
                 </a>
 
-                <a class="redirImg"  style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/GxwdKrZ/Instagram.png" width="32">
                 </a>
 
-                <a class="redirImg"  style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/1dc2mgB/Whatsaap-8.png" width="32">
                 </a>
 
-                <a class="redirImg"  style="text-decoration: none" href="">
+                <a class="redirImg" style="text-decoration: none" href="">
                     <img style="width: 32px" src="https://i.ibb.co/dB0wKjn/twitter-8.png" width="32">
                 </a>
                     <br><br><br>

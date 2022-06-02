@@ -10,6 +10,7 @@ use App\Models\CorporateAccount;
 use App\Models\Driver;
 use App\Models\DriverDocument;
 use App\Models\Refund;
+use App\Models\SelfPay;
 use App\Models\Vehicle;
 use App\Models\VehicleDocument;
 use App\utils\StatusCodes;
@@ -237,5 +238,43 @@ class AmeraAdminService
         $user->delete();
 
         return 'Booking deleted successfully';
+    }
+
+    public function SelfpayList($type, $clientId)
+    {
+        if ($type == 'all') {
+            return SelfPay::all();
+        }
+
+        return SelfPay::with('CreditCard', 'Booking.driver', 'CorporateAccount')->where('client_id', $clientId)->first();
+    }
+
+    public function DeleteSelfPay($clientId): string
+    {
+        $selfPay = SelfPay::where('client_id', $clientId)->first();
+
+        $selfPay->delete();
+
+        return 'SelfPay deleted successfully';
+
+    }
+
+    public function ModifySelfPay($request, $clientId): string
+    {
+        $selfPay = SelfPay::where('client_id', $clientId)->first();
+
+        $selfPay->name = $request->name;
+        $selfPay->lastname = $request->lastname;
+        $selfPay->address = $request->address;
+        $selfPay->city = $request->city;
+        $selfPay->note = $request->note;
+        $selfPay->birthday = $request->birthday;
+        $selfPay->gender = $request->gender;
+        $selfPay->email = $request->email;
+        $selfPay->phone_number = $request->phone_number;
+
+        $selfPay->save();
+
+        return 'SelfPay modify successfully';
     }
 }

@@ -48,7 +48,7 @@ class DriverController extends Controller
                 $dirverExistente = Driver::where('phone_number', $request->phone_number)->exists();
 
                 if ($dirverExistente) {
-                    return CustomHttpResponse::HttpResponse('Driver exist', '', 200);
+                    return CustomHttpResponse::HttpResponse('Driver already exist', '', 200);
                 }
 
                 $driver = new Driver();
@@ -60,6 +60,8 @@ class DriverController extends Controller
                 $driver->lastname = $request->lastname;
                 $driver->phone_number = $request->phone_number;
                 $driver->email = $request->email;
+                $driver->gender = $request->gender;
+                $driver->birthday = $request->birthday;
                 $driver->is_cna = false;
                 $driver->phone_number_verified_at = Carbon::now();
                 $driver->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $driverId);

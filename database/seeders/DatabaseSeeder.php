@@ -15,8 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(StatusCodeSeed::class);
         $this->call(RoleSeed::class);
+        $this->call(ContactUsSeed::class);
 
         $this->command->info('Status code seed created');
         $this->command->info('Role seed created');
+        $this->command->info('Contact us info created');
     }
 }

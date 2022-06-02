@@ -3,6 +3,7 @@
 use App\Events\testBroadcast;
 use App\Http\Controllers\AmeraAdminController;
 use App\Http\Controllers\AmeraUserController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CorporateAccountController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\SelfPayController;
@@ -269,9 +270,12 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
             Route::post('panel/driver/{driverId}/delete', [AmeraAdminController::class, 'DeleteDriverUser']);
+            Route::post('panel/selfpay/{clientId}/delete', [AmeraAdminController::class, 'DeleteBooking']);
+            Route::post('panel/selfpay/{clientId}/modify', [AmeraAdminController::class, 'ModifySelfPay']);
             Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveTripCancellation']);
             Route::post('panel/booking/{bookingId}/markAsPaid', [AmeraAdminController::class, 'MarkBookingAsPaid']);
             Route::post('panel/booking/{bookingId}/delete', [AmeraAdminController::class, 'DeleteBooking']);
+            Route::post('panel/contactUs', [AmeraAdminController::class, 'SaveContactUs']);
 
             /*
              * Method: get
@@ -280,6 +284,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/booking/list', [AmeraAdminController::class, 'BookingList']);
             Route::get('panel/driver/list', [AmeraAdminController::class, 'DriverList']);
             Route::get('panel/driver/{driverId}/info', [AmeraAdminController::class, 'DriverInfo']);
+            Route::get('panel/selfpay/{clientId?}/info', [AmeraAdminController::class, 'ShowSelfpayList']);
+            Route::get('panel/selfpay/list', [AmeraAdminController::class, 'ShowSelfpayList']);
             Route::get('panel/booking/{bookingId}/info', [AmeraAdminController::class, 'GetBookingInfo']);
             Route::get('panel/ca/{caId}/info', [AmeraAdminController::class, 'GetCorporateAccountInfo']);
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
@@ -289,6 +295,11 @@ Route::group(['prefix' => 'v1'], function () {
 
         });
     });
+
+    /*
+     * Configuration Contact us
+     */
+    Route::get('contactUs', [ContactUsController::class, 'ShowContactUs']);
 
     Route::post('images', [DriverController::class, 'TestImages']);
     Route::get('realtime/{bookingId}', function ($bookingId) {
