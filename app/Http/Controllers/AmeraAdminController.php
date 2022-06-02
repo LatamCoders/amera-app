@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\AmeraAdminService;
 use App\Services\AmeraUserService;
 use App\Services\BookingService;
+use App\Services\ContactUsService;
 use App\Services\CorporateAccountService;
 use App\utils\CustomHttpResponse;
 use Illuminate\Http\JsonResponse;
@@ -16,14 +17,16 @@ class AmeraAdminController extends Controller
     protected $_BookingService;
     protected $_CorporateAccountService;
     protected $_AmeraUserService;
+    protected $_ContactUsService;
 
-    public function __construct(AmeraAdminService $AmeraAdminService, BookingService $bookingService, CorporateAccountService $corporateAccountService, AmeraUserService $ameraUserService)
+    public function __construct(AmeraAdminService $AmeraAdminService, BookingService $bookingService, CorporateAccountService $corporateAccountService, AmeraUserService $ameraUserService, ContactUsService $ContactUsService)
     {
         $this->middleware('auth:users', ['except' => ['AdminLogin', 'AdminRegister']]);
         $this->_AmeraAdminService = $AmeraAdminService;
         $this->_BookingService = $bookingService;
         $this->_CorporateAccountService = $corporateAccountService;
         $this->_AmeraUserService = $ameraUserService;
+        $this->_ContactUsService = $ContactUsService;
     }
 
     public function AdminRegister(Request $request): JsonResponse
@@ -252,6 +255,50 @@ class AmeraAdminController extends Controller
            $res = $this->_AmeraAdminService->DeleteBooking($bookingId);
 
             return CustomHttpResponse::HttpResponse($res, [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function SaveContactUs(Request $request): JsonResponse
+    {
+        try {
+            $this->_ContactUsService->SetContactUs($request);
+
+            return CustomHttpResponse::HttpResponse('Contact Us saved', [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ShowSelfpayList(Request $request, $clientId = null): JsonResponse
+    {
+        try {
+           $res = $this->_AmeraAdminService->SelfpayList($request->query('type'), $clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ModifySelfPay(Request $request, $clientId): JsonResponse
+    {
+        try {
+           $res = $this->_AmeraAdminService->ModifySelfPay($request, $clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function DeleteSelfPay($clientId): JsonResponse
+    {
+        try {
+            $res = $this->_AmeraAdminService->DeleteSelfPay($clientId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }

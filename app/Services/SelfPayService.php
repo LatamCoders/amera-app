@@ -26,7 +26,7 @@ class SelfPayService
         $clienteExistente = SelfPay::where('phone_number', $request->phone_number)->exists();
 
         if ($clienteExistente) {
-            return CustomHttpResponse::HttpResponse('Client exist', '', 400);
+            return CustomHttpResponse::HttpResponse('Client already exist', '', 400);
         }
 
         DB::transaction(function () use ($request, $phoneVerify, $activatedUser) {
