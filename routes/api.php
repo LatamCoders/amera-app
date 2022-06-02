@@ -270,7 +270,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
             Route::post('panel/driver/{driverId}/delete', [AmeraAdminController::class, 'DeleteDriverUser']);
-            Route::post('panel/selfpay/{clientId}/delete', [AmeraAdminController::class, 'DeleteBooking']);
+            Route::post('panel/selfpay/{clientId}/delete', [AmeraAdminController::class, 'DeleteSelfPay']);
             Route::post('panel/selfpay/{clientId}/modify', [AmeraAdminController::class, 'ModifySelfPay']);
             Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveTripCancellation']);
             Route::post('panel/booking/{bookingId}/markAsPaid', [AmeraAdminController::class, 'MarkBookingAsPaid']);
