@@ -136,6 +136,7 @@
                 <li>To: {{ $TO }}</li>
                 <li>Price: {{ $PRICE }}</li>
             </ul>
+            <br>
             <p>
                 Have questions? Please connect with one of our care coordinators
                 at 855.263.7215 opt 1 or email us at requests@amerasolutions.com
