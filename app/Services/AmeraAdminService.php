@@ -275,6 +275,6 @@ class AmeraAdminService
 
         $selfPay->save();
 
-        return 'SelfPay modify successfully';
+        return 'SelfPay modified successfully';
     }
 }

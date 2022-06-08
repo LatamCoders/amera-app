@@ -191,6 +191,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('{driverId}/profile/data', [DriverController::class, 'GetDriverData']);
             Route::post('{driverId}/profile/verify', [DriverController::class, 'VerifyEmailOrNumber']);
             Route::post('{driverId}/profile/verify/sendVerificationCode', [DriverController::class, 'SendVerificationEmailCode']);
+            Route::post('{driverId}/profile/vehicle/updateImages', [DriverController::class, 'UpdateVehiclesImages']);
 
             /*
              * Method: Post

@@ -15,8 +15,10 @@ class AdditionalServicesService
         foreach ($data as $service) {
             $services = new AdditionalService();
 
+            $to = (object)['to' => $service->to, 'coordinate' => $service->to_coordinates];
+
             $services->service = $service->service;
-            $services->to = $service->to;
+            $services->to = json_encode($to);
             $services->time = $service->time;
             $services->price = $service->price;
             $services->booking_id = $bookingId;
