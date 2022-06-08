@@ -369,4 +369,18 @@ class DriverController extends Controller
     {
         $this->_DriverService->SelfPayNotifications($selfPayId, $request->query('selfpay_id'));
     }
+
+    /*
+     * Actualizar imagenes
+     */
+    public function UpdateVehiclesImages(Request $request, $driverId): JsonResponse
+    {
+        try {
+            $res = $this->_DriverService->UpdateDriverDocumentsImages($driverId, $request);
+
+            return CustomHttpResponse::HttpResponse('Ok', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }

@@ -10,6 +10,7 @@ use App\Models\Driver;
 use App\utils\VerifyEmailService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -58,6 +59,50 @@ class DriverService
     public function SelfPayNotifications($selfPayId, $message)
     {
         broadcast(new BookingNotification($selfPayId, $message));
+    }
+
+    public function UpdateDriverDocumentsImages($request, $driverId): string
+    {
+        switch ($request->fileType) {
+            case 'vehicleFrontImageName':
+                $vehicleFrontImageName = "$driverId-vehicle-front-image.{$request->file('vehicle_front_image')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$vehicleFrontImageName");
+                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_front_image'), $vehicleFrontImageName);
+
+                return 'Vehicle front image updated';
+            case 'vehicleRearImage':
+                $vehicleRearImage = "$driverId-vehicle-rear-image.{$request->file('vehicle_rear_image')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$vehicleRearImage");
+                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_rear_image'), $vehicleRearImage);
+
+                return 'Vehicle rear image updated';
+            case 'vehicleSideImage':
+                $vehicleSideImage = "$driverId-vehicle-side-image.{$request->file('vehicle_side_image')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$vehicleSideImage");
+                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_side_image'), $vehicleSideImage);
+
+                return 'Vehicle side image updated';
+            case 'vehicleInteriorImage':
+                $vehicleInteriorImage = "$driverId-vehicle-interior-image.{$request->file('vehicle_interior_image')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$vehicleInteriorImage");
+                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_interior_image'), $vehicleInteriorImage);
+
+                return 'Vehicle interior image updated';
+            case 'driverLicense':
+                $DriverLicense = "$driverId-driver-license.{$request->file('driver_license')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$DriverLicense");
+                Storage::disk('public')->putFileAs('driver', $request->file('driver_license'), $DriverLicense);
+
+                return 'driver licence updated';
+            case 'proofOfInsurance':
+                $ProofOfInsurance = "$driverId-proof-of-insurance.{$request->file('proof_of_insurance')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$ProofOfInsurance");
+                Storage::disk('public')->putFileAs('driver', $request->file('proof_of_insurance'), $ProofOfInsurance);
+
+                return 'driver proof of insurance updated';
+            default:
+                throw new BadRequestException('Invalid option');
+        }
     }
 
     public function SendVerificationEmailCode($clientId)
