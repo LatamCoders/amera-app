@@ -376,7 +376,7 @@ class DriverController extends Controller
     public function UpdateVehiclesImages(Request $request, $driverId): JsonResponse
     {
         try {
-            $res = $this->_DriverService->UpdateDriverDocumentsImages($driverId, $request);
+            $res = $this->_DriverService->UpdateDriverDocumentsImages($request, $driverId);
 
             return CustomHttpResponse::HttpResponse('Ok', $res, 200);
         } catch (\Exception $exception) {

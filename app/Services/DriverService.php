@@ -63,11 +63,11 @@ class DriverService
 
     public function UpdateDriverDocumentsImages($request, $driverId): string
     {
-        switch ($request->fileType) {
-            case 'vehicleFrontImageName':
-                $vehicleFrontImageName = "$driverId-vehicle-front-image.{$request->file('vehicle_front_image')->getClientOriginalExtension()}";
-                Storage::disk('public')->delete("vehicle/$vehicleFrontImageName");
-                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_front_image'), $vehicleFrontImageName);
+        switch ($request->query('file')) {
+            case 'vehicleFrontImage':
+                $vehicleFrontImage = "$driverId-vehicle-front-image.{$request->file('vehicle_front_image')->getClientOriginalExtension()}";
+                Storage::disk('public')->delete("vehicle/$vehicleFrontImage");
+                Storage::disk('public')->putFileAs('vehicle', $request->file('vehicle_front_image'), $vehicleFrontImage);
 
                 return 'Vehicle front image updated';
             case 'vehicleRearImage':
