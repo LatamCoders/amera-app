@@ -267,6 +267,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Panel
              */
             Route::post('panel/users/change-user-status', [AmeraAdminController::class, 'UserStatus']);
+            Route::post('panel/users/{ameraUserId}/changeRol', [AmeraAdminController::class, 'ChangeUserRole']);
             Route::post('panel/ca/{id}/delete', [AmeraAdminController::class, 'DeleteCorporateAccount']);
             Route::post('panel/booking/{bookingId}/assignDriver/{driverId}', [AmeraAdminController::class, 'AssignDriver']);
             Route::post('panel/driver/{driverId}/approve', [AmeraAdminController::class, 'ApproveDocuments']);
@@ -292,6 +293,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('panel/ca/list', [AmeraAdminController::class, 'CorporateAccountList']);
             Route::get('panel/ca/{caUserId}/paymentMethod', [AmeraAdminController::class, 'GetCaPaymentMethod']);
             Route::get('panel/users/list', [AmeraAdminController::class, 'GetUsersList']);
+            Route::get('panel/charges/all', [AmeraAdminController::class, 'ShowAllCharges']);
+            Route::get('panel/charges/{chargeId}/show', [AmeraAdminController::class, 'ShowOneCharge']);
             Route::match(['POST', 'GET'], 'panel/user/{ameraUserId}', [AmeraAdminController::class, 'ModifyUser']);
 
         });

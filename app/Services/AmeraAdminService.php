@@ -217,6 +217,15 @@ class AmeraAdminService
             throw new BadRequestException("This user is not a Corporate Account");
         }
 
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        $stripe->customers->delete(
+            $user->stripe_customer_id,
+            []
+        );
+
         $user->delete();
 
         return 'Corporate Account deleted successfully';
@@ -253,6 +262,15 @@ class AmeraAdminService
     {
         $selfPay = SelfPay::where('client_id', $clientId)->first();
 
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        $stripe->customers->delete(
+            $selfPay->stripe_customer_id,
+            []
+        );
+
         $selfPay->delete();
 
         return 'SelfPay deleted successfully';
@@ -277,4 +295,42 @@ class AmeraAdminService
 
         return 'SelfPay modified successfully';
     }
+
+    public function ShowChargeList(): array
+    {
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        $charges = $stripe->charges->all();
+
+        $iterator = [];
+
+        foreach ($charges->autoPagingIterator() as $charge) {
+            $iterator[] = $charge;
+        }
+
+        return $iterator;
+    }
+
+    public function ShowOneCharge($chargeId): \Stripe\Charge
+    {
+        $stripe = new StripeClient(
+            env('STRIPE_KEY')
+        );
+
+        return $stripe->charges->retrieve($chargeId, []);
+    }
+
+    public function ChangeUserRole($ameraUserId, $role): string
+    {
+        $user = AmeraUser::where('id', $ameraUserId)->first();
+
+        $user->role = $role;
+
+        $user->save();
+
+        return 'User rol updated successfully';
+    }
+
 }
