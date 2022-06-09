@@ -219,7 +219,7 @@ class AmeraAdminController extends Controller
     public function DeleteCorporateAccount($ameraUserId): JsonResponse
     {
         try {
-           $res = $this->_AmeraAdminService->DeleteCaUser($ameraUserId);
+            $res = $this->_AmeraAdminService->DeleteCaUser($ameraUserId);
 
             return CustomHttpResponse::HttpResponse($res, [], 200);
         } catch (\Exception $exception) {
@@ -230,7 +230,7 @@ class AmeraAdminController extends Controller
     public function GetCaPaymentMethod($caUserId): JsonResponse
     {
         try {
-           $res = $this->_CorporateAccountService->GetCaCreditCard($caUserId);
+            $res = $this->_CorporateAccountService->GetCaCreditCard($caUserId);
 
             return CustomHttpResponse::HttpResponse('OK', $res, 200);
         } catch (\Exception $exception) {
@@ -241,7 +241,7 @@ class AmeraAdminController extends Controller
     public function DeleteDriverUser($driverId): JsonResponse
     {
         try {
-           $res = $this->_AmeraAdminService->DeleteDriverUser($driverId);
+            $res = $this->_AmeraAdminService->DeleteDriverUser($driverId);
 
             return CustomHttpResponse::HttpResponse($res, [], 200);
         } catch (\Exception $exception) {
@@ -252,7 +252,7 @@ class AmeraAdminController extends Controller
     public function DeleteBooking($bookingId): JsonResponse
     {
         try {
-           $res = $this->_AmeraAdminService->DeleteBooking($bookingId);
+            $res = $this->_AmeraAdminService->DeleteBooking($bookingId);
 
             return CustomHttpResponse::HttpResponse($res, [], 200);
         } catch (\Exception $exception) {
@@ -274,7 +274,7 @@ class AmeraAdminController extends Controller
     public function ShowSelfpayList(Request $request, $clientId = null): JsonResponse
     {
         try {
-           $res = $this->_AmeraAdminService->SelfpayList($request->query('type'), $clientId);
+            $res = $this->_AmeraAdminService->SelfpayList($request->query('type'), $clientId);
 
             return CustomHttpResponse::HttpResponse('OK', $res, 200);
         } catch (\Exception $exception) {
@@ -285,7 +285,7 @@ class AmeraAdminController extends Controller
     public function ModifySelfPay(Request $request, $clientId): JsonResponse
     {
         try {
-           $res = $this->_AmeraAdminService->ModifySelfPay($request, $clientId);
+            $res = $this->_AmeraAdminService->ModifySelfPay($request, $clientId);
 
             return CustomHttpResponse::HttpResponse('OK', $res, 200);
         } catch (\Exception $exception) {
@@ -299,6 +299,39 @@ class AmeraAdminController extends Controller
             $res = $this->_AmeraAdminService->DeleteSelfPay($clientId);
 
             return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ShowAllCharges(): JsonResponse
+    {
+        try {
+            $res = $this->_AmeraAdminService->ShowChargeList();
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ShowOneCharge($chargeId): JsonResponse
+    {
+        try {
+            $res = $this->_AmeraAdminService->ShowOneCharge($chargeId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ChangeUserRole($ameraUserId, Request $request): JsonResponse
+    {
+        try {
+            $res = $this->_AmeraAdminService->ChangeUserRole($ameraUserId, $request->role);
+
+            return CustomHttpResponse::HttpResponse($res, [], 200);
         } catch (\Exception $exception) {
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
