@@ -168,8 +168,12 @@ class AmeraAdminService
             $stripe = new StripeClient(
                 env('STRIPE_KEY')
             );
+
+            $cobro = ($booking->price / 100) * 50;
+
             $refund_id = $stripe->refunds->create([
                 'charge' => $booking->charge_id,
+                'amount' => $cobro * 100
             ]);
 
             $booking->status = StatusCodes::CANCELLED;
