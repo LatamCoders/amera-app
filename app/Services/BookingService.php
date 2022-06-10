@@ -40,11 +40,12 @@ class BookingService
             $booking->appoinment_datetime = $request->appoinment_datetime;
             $booking->from = json_encode($from);
             $booking->to = json_encode($to);
-            $booking->acility_name = $request->acility_name;
+            $booking->facility_name = $request->facility_name;
             $booking->doctor_name = $request->doctor_name;
             $booking->facility_phone_number = $request->facility_phone_number;
             $booking->approximately_return_time = $request->approximately_return_time;
             $booking->price = $request->price;
+            $booking->service_fee = $request->service_fee;
             $booking->driver_id = $request->driver_id;
             $booking->status = StatusCodes::TRIP_PENDING;
 
