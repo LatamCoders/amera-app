@@ -26,13 +26,14 @@ class CreateBookingsTable extends Migration
             $table->dateTime('appoinment_datetime');
             $table->text('from');
             $table->text('to');
-            $table->string('acility_name', 50);
+            $table->string('facility_name', 50);
             $table->string('doctor_name', 50);
             $table->string('facility_phone_number', 50);
             $table->string('approximately_return_time', 20);
             $table->dateTime('trip_start')->nullable();
             $table->dateTime('trip_end')->nullable();
             $table->double('price');
+            $table->double('service_fee');
             $table->string('charge_id', 100)->nullable();
             $table->boolean('refund')->nullable();
             $table->dateTime('booking_paid_to_driver_at')->nullable();
