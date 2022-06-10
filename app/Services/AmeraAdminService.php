@@ -169,12 +169,17 @@ class AmeraAdminService
                 env('STRIPE_KEY')
             );
 
-            $cobro = ($booking->price / 100) * 50;
+            $hours = \Carbon\Carbon::create($booking->booking_date)->diffInHours(Carbon::now());
 
-            $refund_id = $stripe->refunds->create([
-                'charge' => $booking->charge_id,
-                'amount' => $cobro * 100
-            ]);
+            if ($hours <= 23) {
+                $cobro = ($booking->price / 100) * 50;
+
+                $refund_id = $stripe->refunds->create([
+                    'charge' => $booking->charge_id,
+                    'amount' => $cobro * 100,
+                    'reason' => 'Cancellation fee'
+                ]);
+            }
 
             $booking->status = StatusCodes::CANCELLED;
             $booking->refund = true;
