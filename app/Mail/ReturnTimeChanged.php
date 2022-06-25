@@ -14,17 +14,19 @@ class ReturnTimeChanged extends Mailable
     public $NAME;
     public $RETURN_TIME;
     public $LAST_NAME;
+    public $DRIVER_NAME;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($NAME, $LAST_NAME, $RETURN_TIME)
+    public function __construct($NAME, $LAST_NAME, $RETURN_TIME, $DRIVER_NAME = null)
     {
         $this->NAME = $NAME;
         $this->LAST_NAME = $LAST_NAME;
         $this->RETURN_TIME = $RETURN_TIME;
+        $this->DRIVER_NAME = $DRIVER_NAME;
     }
 
     /**

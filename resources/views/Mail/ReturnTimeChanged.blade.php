@@ -105,10 +105,11 @@
         <div class="fondo-header">
 
         </div>
-        <h1>Hi, {{ $NAME }}</h1>
+        <h1>Hi, {{ $DRIVER_NAME == null ? $NAME : $DRIVER_NAME }}</h1>
         <div style="padding: 5px">
             <p>
-                Your reservation return time has been changed:
+                {{ $DRIVER_NAME == null ? 'Your reservation return time has been changed:' : 'The return time of you assigned trip has been changed:' }}
+
             </p>
             <br>
             <b>Return time: {{ $RETURN_TIME }}</b>

@@ -201,7 +201,7 @@ class BookingService
 
             if ($booking->Driver != null) {
                 Mail::to($booking->SelfPay->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time));
-                Mail::to($booking->Driver->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time));
+                Mail::to($booking->Driver->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time, $booking->Driver->name));
             } else {
                 Mail::to($booking->SelfPay->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time));
             }
