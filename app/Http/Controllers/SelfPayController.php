@@ -471,4 +471,18 @@ class SelfPayController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    /*
+     * Change return time
+     */
+    public function ChangeBookingReturnTime($bookingId, Request $request): JsonResponse
+    {
+        try {
+            $this->_BookingService->UpdateBookingReturnTime($bookingId, $request->return_time);
+
+            return CustomHttpResponse::HttpResponse('Return time changed successfully', [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
