@@ -77,6 +77,9 @@ class SelfPayController extends Controller
 
             if (!$cliente) {
                 return CustomHttpResponse::HttpResponse('User not found', $cliente, 404);
+            } else if ($request->user_device_id != $cliente->user_device_id) {
+                $cliente->user_device_id = $request->user_device_id;
+                $cliente->save();
             }
 
             $token = $auth->fromUser($cliente);
