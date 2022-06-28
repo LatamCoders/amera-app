@@ -20,12 +20,23 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Stripe\StripeClient;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AmeraAdminService
 {
+    protected $_Messaging;
+
+    public function __construct(Messaging $messaging)
+    {
+        $this->_Messaging = $messaging;
+    }
+
     /*
      * Registro de administradores
      */
@@ -91,6 +102,8 @@ class AmeraAdminService
 
         if ($booking->driver_id != $driver->id) {
             $booking->driver_id = $driver->id;
+
+            $this->SendAssignDriverNotification($driver->user_device_id, $driver->id);
 
             $booking->save();
         } else {
@@ -340,6 +353,19 @@ class AmeraAdminService
         $user->save();
 
         return 'User rol updated successfully';
+    }
+
+    private function SendAssignDriverNotification($deviceId, $driverId)
+    {
+        try {
+            $message = CloudMessage::withTarget('token', $deviceId)
+                ->withNotification(['title' => 'Amera', 'body' => 'New trip assignment'])
+                ->withData(['userId' => $driverId]);
+
+            $this->_Messaging->send($message);
+        } catch (MessagingException|FirebaseException $e) {
+            throw new BadRequestException($e);
+        }
     }
 
 }

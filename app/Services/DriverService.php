@@ -126,8 +126,8 @@ class DriverService
             $client = Booking::with('SelfPay')->where('booking_id', $bookingId)->first();
 
             $message = CloudMessage::withTarget('token', $client->SelfPay->user_device_id)
-                ->withNotification(['title' => $title, 'body' => $message]) // optional
-                ->withData(['userId' => $client->id]); // optional
+                ->withNotification(['title' => $title, 'body' => $message])
+                ->withData(['userId' => $client->id]);
 
             $this->_Messaging->send($message);
         } catch (MessagingException|FirebaseException $e) {
