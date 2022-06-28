@@ -6,21 +6,29 @@ use App\Events\BookingNotification;
 use App\Events\DriverTracking;
 use App\Mail\RecoveryPassword;
 use App\Mail\VerifyEmail;
+use App\Models\Booking;
 use App\Models\Driver;
+use App\Models\SelfPay;
 use App\utils\VerifyEmailService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Kreait\Firebase\Contract\Messaging;
+use Kreait\Firebase\Exception\FirebaseException;
+use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class DriverService
 {
     protected $_SmsService;
+    protected $_Messaging;
 
-    public function __construct(SmsService $SmsService)
+    public function __construct(SmsService $SmsService, Messaging $messaging)
     {
         $this->_SmsService = $SmsService;
+        $this->_Messaging = $messaging;
     }
 
     public function VerifyDriverNumberOrEmail($driverId, $verificationType, $request)
@@ -110,5 +118,20 @@ class DriverService
         $client = Driver::where('driver_id', $clientId)->first();
 
         VerifyEmailService::SendCode($client->email, VerifyEmail::class, "VerifyEmail.$client->email");
+    }
+
+    public function SendDriverNotificationToClient($bookingId, $message, $title)
+    {
+        try {
+            $client = Booking::with('SelfPay')->where('booking_id', $bookingId)->first();
+
+            $message = CloudMessage::withTarget('token', $client->SelfPay->user_device_id)
+                ->withNotification(['title' => $title, 'body' => $message]) // optional
+                ->withData(['userId' => $client->id]); // optional
+
+            $this->_Messaging->send($message);
+        } catch (MessagingException|FirebaseException $e) {
+            throw new BadRequestException($e);
+        }
     }
 }
