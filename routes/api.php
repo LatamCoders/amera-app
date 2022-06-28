@@ -133,6 +133,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('{clientId}/profile/payment/delete', [SelfPayController::class, 'DeleteMyPaymentMethod']);
             Route::post('{clientId}/profile/payment/update', [SelfPayController::class, 'UpdateMyPaymentMethod']);
             Route::post('{clientId}/profile/verify/senVerificationCode', [SelfPayController::class, 'SendVerificationEmailCode']);
+            Route::post('{clientId}/firebase', [SelfPayController::class, 'FirebaseTest']);
 
             /*
              * Method: Post
@@ -182,6 +183,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Booking
              */
             Route::post('booking/{bookingId}/trip/{tripAction}', [DriverController::class, 'StartOrEndTrip']);
+            Route::post('booking/{bookingId}/notifications', [DriverController::class, 'SendDriverNotificationToClient']);
 
             /*
              * Method: Post

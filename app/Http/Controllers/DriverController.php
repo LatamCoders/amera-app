@@ -372,4 +372,18 @@ class DriverController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    /*
+     * Firebase notifications
+     */
+    public function SendDriverNotificationToClient(Request $request, $bookingId): JsonResponse
+    {
+        try {
+            $this->_DriverService->SendDriverNotificationToClient($bookingId, $request->message, $request->title);
+
+            return CustomHttpResponse::HttpResponse('Notification send', [], 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }
