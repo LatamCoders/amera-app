@@ -107,7 +107,7 @@
         </div>
         <div style="padding: 5px">
             <p style="font-size: 16px">
-                This is your verification code is, don't share this code with anyone
+                This is your verification code. Don't share this code with anyone
             </p>
             <br>
             <b style="font-size: 30px">{{ $CODE }}</b>
