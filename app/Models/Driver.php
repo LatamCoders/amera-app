@@ -26,6 +26,7 @@ class Driver extends Authenticatable implements JWTSubject
         'is_cna',
         'profile_picture',
         'email_verified_at',
+        'user_device_id',
         'phone_number_verified_at',
     ];
 

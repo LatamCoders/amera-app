@@ -48,6 +48,7 @@ class SelfPayService
             $selfpay->city = $request->city;
             $selfpay->note = $request->note;
             $selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfPayId);
+            $selfpay->user_device_id = $request->user_device_id;
             $selfpay->ca_id = $request->ca_id;
             $selfpay->phone_number_verified_at = $phoneVerify;
             $selfpay->active = $activatedUser;

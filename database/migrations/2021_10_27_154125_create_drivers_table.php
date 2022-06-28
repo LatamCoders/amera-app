@@ -25,6 +25,7 @@ class CreateDriversTable extends Migration
             $table->text('address')->nullable();
             $table->boolean('is_cna');
             $table->text('profile_picture')->nullable();
+            $table->text('user_device_id')->nullable();
             $table->dateTime('email_verified_at')->nullable();
             $table->dateTime('phone_number_verified_at')->nullable();
             $table->timestamps();
