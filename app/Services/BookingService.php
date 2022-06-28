@@ -56,7 +56,7 @@ class BookingService
             if ($request->query('clientType') == null) {
                 $client = SelfPay::where('id', $clientId)->first();
 
-                Mail::to($client->email)->send(new BookingClientDetail($client->name, $request->pickup_time, $request->surgery_type, $request->appoinment_datetime, $request->from, $request->to, $request->price));
+                Mail::to($client->email)->send(new BookingClientDetail($client->name, $client->lastname, $request->pickup_time, $request->surgery_type, $request->appoinment_datetime, $request->from, $request->to, $request->price));
             } else if ($request->query('clientType') == 'reservationCode') {
                 $reservationCode = new ReservationCodeService();
 

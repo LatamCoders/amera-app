@@ -4,6 +4,7 @@
             margin: 0;
             padding: 0;
         }
+
         main {
             width: 90%;
             margin: 0 auto;
@@ -46,7 +47,8 @@
             text-align: center;
             margin: 20px 0;
         }
-        a{
+
+        a {
             text-decoration: none !important;
         }
 
@@ -54,11 +56,14 @@
             cursor: pointer;
         }
 
-        .imgGoogle,
-        .imgAppstore {
+        .imgGoogle {
 
             height: 70px;
             width: auto;
+        }
+
+        .imgAppstore {
+            width: 194px;
         }
 
 
@@ -75,8 +80,7 @@
         }
 
 
-
-        @media screen and (min-width: 320px) and (max-width: 502px){
+        @media screen and (min-width: 320px) and (max-width: 502px) {
             .fondo-header {
 
                 background-position: center;
@@ -97,6 +101,7 @@
             .margenesmovil {
                 margin-top: 10px;
             }
+
             .parrafo-terminos {
                 padding: 5px;
             }
@@ -123,13 +128,18 @@
         <h1>Hi, {{ $NAME }}</h1>
         <div style="padding: 5px">
             <p>
-                Thank you, our credentialing team will review your documents and notify you shortly.
+                Thank you for credentialing with Amera! Your documents are under review with one of our credentialing
+                specialists.
+            </p>
+            <br>
+            <p>
+                Have questions? Email us at hr@amerasolutions.com
             </p>
             <br>
         </div>
         <div style="text-align: center; margin: 30px 0">
             <a class="redirImg" href="">
-                <img class="imgGoogle" src="https://i.ibb.co/wBtNFG5/googleplay.png" alt="logo-google-play">
+                <img class="imgGoogle" src="https://i.ibb.co/bK60xSB/get-it-on-google-play.png" alt="logo-google-play">
             </a>
             <a class="redirImg" href="">
                 <img class="imgAppstore margenesmovil" src="https://i.ibb.co/kGVYmh4/APP-STORE.png"
@@ -142,14 +152,13 @@
         <div class="container-footer" style="text-align: center">
             <div class="container-uno">
                 <span style="display: inline-block; width: 281px;">
-                        <h4 style="text-align: start">Terms Privacy</h4>
-
-                    <p class="parrafo-terminos" style="text-align: start">
+                       <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
                         Austin, Texas Available in
                         Jacksonville & Tampa, Florida
                     </p>
+                    <br><br>
 
                 </span>
 
