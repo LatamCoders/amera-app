@@ -53,11 +53,14 @@
         .redirImg:hover {
             cursor: pointer;
         }
-        .imgGoogle,
-        .imgAppstore {
+        .imgGoogle{
 
             height: 70px;
             width: auto;
+        }
+
+        .imgAppstore {
+            width: 194px;
         }
 
 
@@ -129,7 +132,7 @@
         </div>
         <div style="text-align: center; margin: 30px 0">
             <a class="redirImg" href="">
-                <img class="imgGoogle" src="https://i.ibb.co/wBtNFG5/googleplay.png" alt="logo-google-play">
+                <img class="imgGoogle" src="https://i.ibb.co/bK60xSB/get-it-on-google-play.png" alt="logo-google-play">
             </a>
             <a class="redirImg" href="">
                 <img class="imgAppstore margenesmovil" src="https://i.ibb.co/kGVYmh4/APP-STORE.png"
@@ -142,13 +145,13 @@
         <div class="container-footer" style="text-align: center">
             <div class="container-uno">
                 <span style="display: inline-block; width: 281px;">
-                 <h4 style="text-align: start">Terms Privacy</h4>
-                    <p class="parrafo-terminos" style="text-align: start">
+                <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
                         Austin, Texas Available in
                         Jacksonville & Tampa, Florida
                     </p>
+                    <br><br>
 
                 </span>
 

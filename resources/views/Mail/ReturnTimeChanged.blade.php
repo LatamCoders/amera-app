@@ -108,17 +108,14 @@
         <div class="fondo-header">
 
         </div>
-        <h1>Hi, {{ $name }}</h1>
+        <h1>Hi, {{ $DRIVER_NAME == null ? $NAME : $DRIVER_NAME }}</h1>
         <div style="padding: 5px">
             <p>
-                Your reservation has been successfully scheduled for {{ \Carbon\Carbon::parse($datetime)->format('l, F j Y h:i A') }}. This is your
-                reservation code :
+                {{ $DRIVER_NAME == null ? 'Your reservation return time has been changed:' : 'The return time of you assigned trip has been changed:' }}
+
             </p>
             <br>
-            <b>{{ $code }}</b>
-            <p>
-                Now please download the amera app and login from the following app stores...
-            </p>
+            <b>Return time: {{ $RETURN_TIME }}</b>
         </div>
         <div style="text-align: center; margin: 30px 0">
             <a class="redirImg" href="">
@@ -135,7 +132,7 @@
         <div class="container-footer" style="text-align: center">
             <div class="container-uno">
                 <span style="display: inline-block; width: 281px;">
-                       <p class="parrafo-terminos" style="text-align: start">
+                        <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
                         Austin, Texas Available in

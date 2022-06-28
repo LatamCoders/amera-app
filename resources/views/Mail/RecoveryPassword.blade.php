@@ -120,14 +120,13 @@
         <div class="container-footer" style="text-align: center">
             <div class="container-uno">
                 <span style="display: inline-block; width: 281px;">
-                        <h4 style="text-align: start">Terms Privacy</h4>
-
-                    <p style="text-align: start">
+                        <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
                         Austin, Texas Available in
                         Jacksonville & Tampa, Florida
                     </p>
+                    <br><br>
 
                 </span>
 

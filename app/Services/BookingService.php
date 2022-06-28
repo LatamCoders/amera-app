@@ -6,6 +6,7 @@ use App\Events\BookingNotification;
 use App\Mail\BookingClientDetail;
 use App\Mail\RequestCancelBookingWithFee;
 use App\Mail\RequestCancelBookingWithoutFee;
+use App\Mail\ReturnTimeChanged;
 use App\Models\Booking;
 use App\Models\SelfPay;
 use App\Notifications\StartTrip;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use PHPUnit\Exception;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class BookingService
@@ -54,7 +56,7 @@ class BookingService
             if ($request->query('clientType') == null) {
                 $client = SelfPay::where('id', $clientId)->first();
 
-                Mail::to($client->email)->send(new BookingClientDetail($client->name, $request->pickup_time, $request->surgery_type, $request->appoinment_datetime, $request->from, $request->to, $request->price));
+                Mail::to($client->email)->send(new BookingClientDetail($client->name, $client->lastname, $request->pickup_time, $request->surgery_type, $request->appoinment_datetime, $request->from, $request->to, $request->price));
             } else if ($request->query('clientType') == 'reservationCode') {
                 $reservationCode = new ReservationCodeService();
 
@@ -186,5 +188,30 @@ class BookingService
         $booking->status = StatusCodes::CANCELLATION_PENDING;
 
         $booking->save();
+    }
+
+    public function UpdateBookingReturnTime($bookingId, $returnTime)
+    {
+        try {
+            DB::beginTransaction();
+
+            $booking = Booking::with('Driver', 'SelfPay')->where('id', $bookingId)->first();
+
+            $booking->approximately_return_time = $returnTime;
+
+            if ($booking->Driver != null) {
+                Mail::to($booking->SelfPay->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time));
+                Mail::to($booking->Driver->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time, $booking->Driver->name));
+            } else {
+                Mail::to($booking->SelfPay->email)->send(new ReturnTimeChanged($booking->SelfPay->name, $booking->SelfPay->lastname, $booking->approximately_return_time));
+            }
+
+            $booking->save();
+
+            DB::commit();
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return new BadRequestException($exception);
+        }
     }
 }

@@ -148,6 +148,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('{clientId}/booking/add', [SelfPayController::class, 'AddReserve']);
             Route::post('{clientId}/booking/trip/charge', [SelfPayController::class, 'ChargeClientCard']);
             Route::post('booking/{bookingId}/cancel', [SelfPayController::class, 'CancelBooking']);
+            Route::post('booking/{bookingId}/update-return-time', [SelfPayController::class, 'ChangeBookingReturnTime']);
 
             /*
              * Method: Post
@@ -277,6 +278,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/booking/{bookingId}/cancel', [AmeraAdminController::class, 'ApproveTripCancellation']);
             Route::post('panel/booking/{bookingId}/markAsPaid', [AmeraAdminController::class, 'MarkBookingAsPaid']);
             Route::post('panel/booking/{bookingId}/delete', [AmeraAdminController::class, 'DeleteBooking']);
+            Route::post('panel/booking/{bookingId}/update-return-time', [AmeraAdminController::class, 'ChangeBookingReturnTime']);
             Route::post('panel/contactUs', [AmeraAdminController::class, 'SaveContactUs']);
 
             /*

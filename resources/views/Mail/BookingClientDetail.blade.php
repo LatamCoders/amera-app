@@ -56,11 +56,14 @@
             cursor: pointer;
         }
 
-        .imgGoogle,
-        .imgAppstore {
+        .imgGoogle {
 
             height: 70px;
             width: auto;
+        }
+
+        .imgAppstore {
+            width: 194px;
         }
 
 
@@ -128,25 +131,31 @@
                 Thank you for booking with Amera! Please find the details of your reservation.
 
             </p>
-            <ul style="text-align: center; list-style: inside; ">
-                <li>Appoinment date and time: {{ \Carbon\Carbon::parse($APPOINMENT_DATETIME)->format('l, F j Y h:i A') }}</li>
-                <li>Suggested pick up time: {{ $PICKUP_TIME }}</li>
-                <li>Surgery type: {{ $SURGERY_TYPE }}</li>
-                <li>From: {{ $FROM }}</li>
-                <li>To: {{ $TO }}</li>
-                <li>Price: {{ $PRICE }}</li>
-            </ul>
+            <div>
+                <div style="position: relative; left: 27%;">
+                    <ul style="list-style: inside; ">
+                        <li>Appoinment date and
+                            time: {{ \Carbon\Carbon::parse($APPOINMENT_DATETIME)->format('l, F j Y h:i A') }}</li>
+                        <li>Suggested pick up time: {{ \Carbon\Carbon::parse($PICKUP_TIME)->format('l, F j Y h:i A') }}</li>
+                        <li>Surgery type: {{ $SURGERY_TYPE }}</li>
+                        <li>From: {{ $FROM }}</li>
+                        <li>To: {{ $TO }}</li>
+                        <li>Price: ${{ $PRICE }}</li>
+                    </ul>
+                </div>
+            </div>
             <br>
             <p>
                 Have questions? Please connect with one of our care coordinators
                 at 855.263.7215 opt 1 or email us at requests@amerasolutions.com
-                The team at Amera
             </p>
+            <br>
+            <p>The team at Amera</p>
             <br>
         </div>
         <div style="text-align: center; margin: 30px 0">
             <a class="redirImg" href="">
-                <img class="imgGoogle" src="https://i.ibb.co/wBtNFG5/googleplay.png" alt="logo-google-play">
+                <img class="imgGoogle" src="https://i.ibb.co/bK60xSB/get-it-on-google-play.png" alt="logo-google-play">
             </a>
             <a class="redirImg" href="">
                 <img class="imgAppstore margenesmovil" src="https://i.ibb.co/kGVYmh4/APP-STORE.png"
@@ -159,14 +168,14 @@
         <div class="container-footer" style="text-align: center">
             <div class="container-uno">
                 <span style="display: inline-block; width: 281px;">
-                 <h4 style="text-align: start">Terms Privacy</h4>
+
                     <p class="parrafo-terminos" style="text-align: start">
                         Serving cities in add around
                         Houston, Dallas, San Antonio &
-                        Austin, Texas Available in
+                        Austin, Texa|s Available in
                         Jacksonville & Tampa, Florida
                     </p>
-
+                    <br><br>
                 </span>
 
                 <span class="container-dos" style="display: inline-block;">
