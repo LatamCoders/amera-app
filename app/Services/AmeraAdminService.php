@@ -360,10 +360,10 @@ class AmeraAdminService
         try {
             $message = CloudMessage::withTarget('token', $deviceId)
                 ->withNotification(['title' => 'Amera', 'body' => 'New trip assignment'])
-                ->withData(['userId' => $driverId]);
+                ->withData(['notificationId' => random_int(1000, 9999), 'userId' => $driverId, 'page' => 'page driver']);
 
             $this->_Messaging->send($message);
-        } catch (MessagingException|FirebaseException $e) {
+        } catch (MessagingException|FirebaseException|\Exception $e) {
             throw new BadRequestException($e);
         }
     }
