@@ -207,7 +207,7 @@ Route::group(['prefix' => 'v1'], function () {
              * Method: Post
              * Tracking
              */
-            Route::post('booking/{bookingId}/route/tracking', [DriverController::class, 'DriverRouteTracking']);
+            Route::post('booking/{bookingId}/route/tracking', [DriverController::class, 'DriverRouteTracking'])->middleware('throttle:5000');
 
             /*
              * Method: Post
