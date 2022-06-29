@@ -127,10 +127,10 @@ class DriverService
 
             $message = CloudMessage::withTarget('token', $client->SelfPay->user_device_id)
                 ->withNotification(['title' => $title, 'body' => $message])
-                ->withData(['userId' => $client->id]);
+                ->withData(['userId' => $client->id, 'notificationsId' => random_int(1000, 9999)]);
 
             $this->_Messaging->send($message);
-        } catch (MessagingException|FirebaseException $e) {
+        } catch (MessagingException|FirebaseException|\Exception $e) {
             throw new BadRequestException($e);
         }
     }
