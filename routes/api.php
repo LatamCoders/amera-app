@@ -312,7 +312,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('images', [DriverController::class, 'TestImages']);
     Route::get('realtime/{bookingId}', function ($bookingId) {
         broadcast(new testBroadcast('esto es real', $bookingId));
-        return "Evento enviado";
+        return "Evento enviad";
     });
 
 
