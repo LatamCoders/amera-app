@@ -22,9 +22,9 @@ jobs:
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
-          server: amera.losolivoscartagena.com
-          username: amera_test_user
-          password: amera2022.
-          protocol: ftp
-          port: 21
-          server-dir: /amera.losolivoscartagena.com/
+            server: 172.84.132.178
+            username: api
+            password: heFhlm4iCbHZBPH
+            protocol: ftp
+            port: 21
+            server-dir: /home/api/amera/
