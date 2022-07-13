@@ -27,4 +27,4 @@ jobs:
             password: heFhlm4iCbHZBPH
             protocol: ftp
             port: 21
-            server-dir: /home/api/amera/
+            server-dir: /public_html/
