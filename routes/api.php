@@ -239,7 +239,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/booking/add', [CorporateAccountController::class, 'BookingRegister']);
             Route::post('panel/client/add', [CorporateAccountController::class, 'RegisterCaClient']);
             Route::post('panel/reservationCode/generate', [CorporateAccountController::class, 'ReservationCodeGenerate']);
-
+            Route::post('panel/corporate/{corporateId}/modify', [CorporateAccountController::class, 'ModifyCorporateAccount']);
+            Route::post('panel/corporate/{id}/modifyPersonalInfo', [CorporateAccountController::class, 'ModifyCorporateAccountPersonalInfo']);
             /*
              * Method: Get
              * Panel

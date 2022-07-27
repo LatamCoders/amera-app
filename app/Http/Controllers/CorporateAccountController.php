@@ -139,4 +139,26 @@ class CorporateAccountController extends Controller
             return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
         }
     }
+
+    public function ModifyCorporateAccount(Request $request,$corporateId): JsonResponse
+    {
+        try {
+            $this->_CorporateAccountService->ModifyCorporateAccount($request,$corporateId);
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function ModifyCorporateAccountPersonalInfo(Request $request,$id): JsonResponse
+    {
+        try {
+            $this->_CorporateAccountService->ModifyCorporateAccountPersonalInfo($request,$id);
+
+            return CustomHttpResponse::HttpResponse('OK', '', 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
 }

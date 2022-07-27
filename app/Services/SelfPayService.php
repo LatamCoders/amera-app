@@ -58,10 +58,40 @@ class SelfPayService
             if ($request->number != null) {
                 $this->AddStripePaymentMethod($request, $selfPayId);
             }
-
         });
 
         return 'Client register';
+    }
+
+    public function SelfPayUpdate(Request $request)
+    {
+        $selfpay = SelfPay::where('id', $request->id)->first();
+
+        if ($selfpay === null) {
+            return CustomHttpResponse::HttpResponse('Client does not exist', '', 400);
+        }
+
+        DB::transaction(function () use ($request, $selfpay) {
+            $selfpay->client_id = $request->client_id;
+            $selfpay->name = $request->name;
+            $selfpay->phone_number = $request->phone_number;
+            $selfpay->lastname = $request->lastname;
+            $selfpay->email = $request->email;
+            $selfpay->stripe_customer_id = $request->stripe_customer_id;
+            $selfpay->gender = $request->gender;
+            $selfpay->birthday = $request->birthday;
+            $selfpay->address = $request->address;
+            $selfpay->city = $request->city;
+            $selfpay->note = $request->note;
+            //$selfpay->profile_picture = UploadImage::UploadProfileImage($request->file('profile_picture'), $selfpay->id);
+            $selfpay->user_device_id = $request->user_device_id;
+            $selfpay->phone_number_verified_at = $request->phone_number_verified_at;
+            $selfpay->active = $request->active;
+
+            $selfpay->save();
+        });
+
+        return 'Client Updated';
     }
 
     public function AddStripePaymentMethod($request, $clientId)
@@ -147,7 +177,6 @@ class SelfPayService
             $client->stripe_payment_method_id = null;
             $client->save();
         });
-
     }
 
     public function ModifyCreditCard($request, $clientId)
@@ -167,7 +196,6 @@ class SelfPayService
                 'exp_year' => $request->exp_year,
             ]
         );
-
     }
 
     public function VerifyClientNumberOrEmail($selfpayId, $verificationType, $request)

@@ -87,6 +87,39 @@ class CorporateAccountService
         }
     }
 
+    public function ModifyCorporateAccount($request, $id): string
+    {
+        $data = CorporateAccount::where('id', $id)->first();
+
+        $data->company_legal_name = $request->company_legal_name;
+        $data->dba = $request->dba;
+        $data->tin = $request->tin;
+        $data->office_location_address = $request->office_location_address;
+        $data->billing_address = $request->billing_address;
+        $data->save();
+
+        return 'Record modified successfully';
+    }
+
+    public function ModifyCorporateAccountPersonalInfo($request, $id): string
+    {
+        $data = CorporateAccountPersonalInfo::where('id', $id)->first();
+
+        $data->telephone_number = $request->telephone_number;
+        $data->fax_number = $request->fax_number;
+        $data->email = $request->email;
+        $data->website = $request->website;
+        $data->additional_contact_name = $request->additional_contact_name;
+        $data->additional_contact_number = $request->additional_contact_number;
+        $data->additional_contact_email = $request->additional_contact_email;
+        $data->additional_contact_title = $request->additional_contact_title;
+        //$data->stripe_customer_id = $request->id;
+
+        $data->save();
+
+        return 'Record modified successfully';
+    }
+
     private function AddStripePaymentMethod($request, $clientId, $caId)
     {
         DB::transaction(function () use ($request, $clientId, $caId) {
@@ -192,6 +225,6 @@ class CorporateAccountService
      */
     public function GetCaClientList($caId)
     {
-        return SelfPay::where('ca_id', $caId)->get();
+        return SelfPay::where('ca_id', $caId)->get(); 
     }
 }

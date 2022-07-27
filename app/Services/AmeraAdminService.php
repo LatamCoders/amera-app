@@ -295,7 +295,7 @@ class AmeraAdminService
 
         $selfPay->delete();
 
-        return 'SelfPay deleted successfully';
+        return 'Record deleted successfully';
 
     }
 
@@ -315,7 +315,7 @@ class AmeraAdminService
 
         $selfPay->save();
 
-        return 'SelfPay modified successfully';
+        return 'Record modified successfully';
     }
 
     public function ShowChargeList(): array
