@@ -241,6 +241,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('panel/reservationCode/generate', [CorporateAccountController::class, 'ReservationCodeGenerate']);
             Route::post('panel/corporate/{corporateId}/modify', [CorporateAccountController::class, 'ModifyCorporateAccount']);
             Route::post('panel/corporate/{id}/modifyPersonalInfo', [CorporateAccountController::class, 'ModifyCorporateAccountPersonalInfo']);
+            Route::post('panel/corporate/{clientId}/{caId}/AddStripePaymentMethod', [CorporateAccountController::class, 'AddStripePaymentMethod']);
+            Route::post('panel/corporate/{clientId}/{caId}/UpdateStripePaymentMethod', [CorporateAccountController::class, 'UpdateStripePaymentMethod']);
             /*
              * Method: Get
              * Panel

@@ -126,6 +126,28 @@ class CorporateAccountController extends Controller
         }
     }
 
+    public function UpdateStripePaymentMethod(Request $request, $clientId, $caId): JsonResponse
+    {
+        try {
+            $res = $this->_CorporateAccountService->UpdateStripePaymentMethod($request,$clientId, $caId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
+    public function AddStripePaymentMethod(Request $request, $clientId, $caId): JsonResponse
+    {
+        try {
+            $res = $this->_CorporateAccountService->AddStripePaymentMethod($request,$clientId, $caId);
+
+            return CustomHttpResponse::HttpResponse('OK', $res, 200);
+        } catch (\Exception $exception) {
+            return CustomHttpResponse::HttpResponse('Error', $exception->getMessage(), 500);
+        }
+    }
+
     /*
      * Generate reservation code
      */

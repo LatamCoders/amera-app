@@ -113,14 +113,13 @@ class CorporateAccountService
         $data->additional_contact_number = $request->additional_contact_number;
         $data->additional_contact_email = $request->additional_contact_email;
         $data->additional_contact_title = $request->additional_contact_title;
-        //$data->stripe_customer_id = $request->id;
 
         $data->save();
 
         return 'Record modified successfully';
     }
 
-    private function AddStripePaymentMethod($request, $clientId, $caId)
+    public function AddStripePaymentMethod($request, $clientId, $caId)
     {
         DB::transaction(function () use ($request, $clientId, $caId) {
             $client = new CorportateAccountPaymentMethod();
@@ -150,11 +149,48 @@ class CorporateAccountService
         });
     }
 
+    public function UpdateStripePaymentMethod($request, $clientId, $caId)
+    {
+        DB::transaction(function () use ($request, $clientId, $caId) {
+            $client = CorportateAccountPaymentMethod::where('corporate_account_id',$caId)->first();
+
+            $stripe = new StripeClient(
+                env('STRIPE_KEY')
+            );
+
+            $card_id = $stripe->tokens->create([
+                'card' => [
+                    'number' => $request->cc_number,
+                    'exp_month' => $request->exp_month,
+                    'exp_year' => $request->exp_year,
+                    'cvc' => $request->code_of_cc,
+                    'name' => $request->name_on_cc,
+                ],
+            ]);
+
+            $paymentId = $stripe->customers->createSource(
+                "$clientId",
+                ['source' => $card_id->id]
+            );
+
+            $client->stripe_payment_method_id = $paymentId->id;
+            $client->corporate_account_id = $caId;
+            $client->save();
+
+            return 'Record modified successfully';
+        });
+    }
+
     public function GetCaCreditCard($caId)
     {
         $client = CorporateAccount::with('CorporateAccountPersonalInfo', 'CorporateAccountPaymentMethod')->where('id', $caId)->first();
 
-        return Stripe::GetStripeCreditCard($client->CorporateAccountPersonalInfo->stripe_customer_id, $client->CorporateAccountPaymentMethod->stripe_payment_method_id);
+        if($client->CorporateAccountPaymentMethod()->exists())
+        {
+            return Stripe::GetStripeCreditCard($client->CorporateAccountPersonalInfo->stripe_customer_id, $client->CorporateAccountPaymentMethod->stripe_payment_method_id);
+        }else{
+            return null;
+        }
     }
 
     /*
